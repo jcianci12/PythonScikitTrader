@@ -9,6 +9,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from Simulation.assettracker import AssetTracker
 
 from Simulation.capitaltracker import CapitalTracker
+from config import *
 
 class TrainingAndValidation:
 
@@ -19,8 +20,6 @@ class TrainingAndValidation:
         self.num_train = num_train
         self.len_train = len_train
 
-        self.takeprofit=1.05
-        self.stoploss = 0.95
 
         self.rf_results = []
         self.knn_results = []
@@ -33,7 +32,7 @@ class TrainingAndValidation:
         self.item = AssetTracker()
         self.capital_tracker = CapitalTracker(10000)
 
-    def train_and_cross_validate(self,data):
+    def train_and_cross_validate(self,data,symbol,start,end,interval):
         i = 0
 
         # Models which will be used
@@ -64,11 +63,16 @@ class TrainingAndValidation:
             knn.fit(X_train, y_train)
             ensemble.fit(X_train, y_train)
 
-            joblib.dump(rf, "rf_model.joblib")
-            joblib.dump(knn, "knn_model.joblib")
-            joblib.dump(ensemble, "ensemble_model.joblib")
+            # Create a models directory if it doesn't exist
+            if not os.path.exists("models"):
+                os.makedirs("models")
+            name = f"{symbol}_{interval}_{start}_{end}"
+            # Save the models with the specified naming convention
+            joblib.dump(rf, f"models/{name}_rf.joblib")
+            joblib.dump(knn, f"models/{name}_knn.joblib")
+            joblib.dump(ensemble, f"models/{name}_ensemble.joblib")
+            
             self.models = {"rf":rf,"knn":knn ,"ensemble":ensemble}
-
 
             # get predictions
             rf_prediction = rf.predict(X_test)
@@ -90,15 +94,16 @@ class TrainingAndValidation:
             }
 
             self.results_df = pd.DataFrame(rv)
-            dflength = len(self.results_df)
+            
                     # Iterate over the rows of the results DataFrame
             for index, row in self.results_df.iterrows():
                 print("simulating for row: ",row)
                 self.simulate_trade(data, row)
+                
             # Set the 'Date' column as the index
             self.results_df.set_index("Date", inplace=True)
 
-           
+        
             self.rf_results.append(rf_accuracy)
             self.knn_results.append(knn_accuracy)
             self.ensemble_results.append(ensemble_accuracy)
@@ -182,7 +187,7 @@ class TrainingAndValidation:
             else:
                     # Calculate the quantity of stock purchased based on the investment amount and buy price
                 quantity = investment_amount / current_price
-                result = self.item.purchase(quantity, current_price,current_price*self.takeprofit,current_price*self.stoploss)
+                result = self.item.purchase(quantity, current_price,current_price*SIMTAKEPROFIT,current_price*SIMSTOPLOSS)
 
                 entry = {
                     "Date": date,

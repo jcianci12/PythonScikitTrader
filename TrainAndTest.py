@@ -1,5 +1,6 @@
 # %%
 import datetime
+import glob
 import os
 import time
 import pandas as pd
@@ -86,7 +87,7 @@ def retrain():
     #get the simulated ledger
     print(validator.get_ledger())
 
-    validator.train_and_cross_validate(trainingdata)
+    validator.train_and_cross_validate(trainingdata,symbol,start_date,end_date,INTERVAL)
     print(f"RF Accuracy = {sum(validator.get_rf_results()) / len(validator.get_rf_results())}")
     print(f"KNN Accuracy = {sum(validator.get_knn_results()) / len(validator.get_knn_results())}")
     print(f"Ensemble Accuracy = {sum(validator.get_ensemble_results()) / len(validator.get_ensemble_results())}")
@@ -98,9 +99,20 @@ def is_file_older_than_n_minutes(file_path, n):
         return True
     logger("time is ",time.time(),"|file time is",os.path.getmtime(file_path))
     return time.time() - os.path.getmtime(file_path) > n * 60
+def get_latest_model_file(symbol, interval):
+    # Get a list of all model files that match the symbol and interval
+    model_files = glob.glob(f"models/{symbol}_{interval}_*_*_rf.joblib")
 
+    # Check if there are any matching model files
+    if model_files:
+        # Get the latest model file
+        latest_model_file = max(model_files, key=os.path.getctime)
+        return latest_model_file
+    else:
+        # No matching model files were found
+        return None
 def getconfidencescore(data):
-    model = joblib.load(MODELFILENAME)
+    model = joblib.load(get_latest_model_file(symbol,INTERVAL))
 
     data = data.drop('pred', axis=1)
     # Use the loaded model to make predictions
@@ -129,7 +141,7 @@ def trade_loop():
         data.dropna()
     )  # Some indicators produce NaN values for the first few rows, we just remove them here
     data.tail()
-    if(is_file_older_than_n_minutes(MODELFILENAME,60)):
+    if(is_file_older_than_n_minutes(get_latest_model_file(symbol,INTERVAL),60)):
             
         validator = TrainingAndValidation(symbol)
         #retrain the data
