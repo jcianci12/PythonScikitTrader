@@ -6,7 +6,7 @@ from pybit.unified_trading import HTTP
 import requests
 from KEYS import API_KEY, API_SECRET, TESTNET_API_KEY, TESTNET_API_SECRET
 from config import *
-from interval_map import *
+from functions.interval_map import *
 
 
 def get_session(test=True):

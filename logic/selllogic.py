@@ -1,7 +1,7 @@
 from bybitapi import place_sell_order
 from config import *
-from logger import logger
-from map_range import map_range
+from functions.logger import logger
+from functions.map_range import map_range
 
 
 def selllogic(confidence_score,sellthreshold,btcbalance,btcmarketvalue):

@@ -4,40 +4,19 @@ import os
 import time
 import pandas as pd
 import numpy as np
-from finta import TA
-import matplotlib.pyplot as plt
 
-from sklearn import svm
-from sklearn.ensemble import (
-    RandomForestClassifier,
-    GradientBoostingClassifier,
-    VotingClassifier,
-)
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.metrics import (
-    confusion_matrix,
-    classification_report,
-    mean_squared_error,
-    accuracy_score,
-)
 
 import joblib
-from assettracker import AssetTracker
-from buylogic import buylogic
-from bybitapi import fetch_bybit_data_v5, get_market_bid_price, get_wallet_balance, place_buy_order, place_sell_order
-from capitaltracker import CapitalTracker
-from map_range import map_range
-from INDICATORS import INDICATORS
+from logic.buylogic import buylogic
+from bybitapi import fetch_bybit_data_v5, get_market_bid_price, get_wallet_balance
 
-from cross_validation import ModelValidator
+from TrainingandValidation import TrainingAndValidation
 from datetime import datetime, timedelta
-import uuid
 
-from clock import call_decide_every_n_seconds
+from functions.clock import call_decide_every_n_seconds
 from config import *
-from logger import logger
-from selllogic import selllogic
+from functions.logger import logger
+from logic.selllogic import selllogic
 
 
 # %%
@@ -101,7 +80,7 @@ def retrain():
     )  # Some indicators produce NaN values for the first few rows, we just remove them here
     
     trainingdata.tail()
-    validator = ModelValidator(symbol)
+    validator = TrainingAndValidation(symbol)
     #retrain the data
     logger("retraining...")
     #get the simulated ledger
@@ -152,7 +131,7 @@ def trade_loop():
     data.tail()
     if(is_file_older_than_n_minutes(MODELFILENAME,60)):
             
-        validator = ModelValidator(symbol)
+        validator = TrainingAndValidation(symbol)
         #retrain the data
         retrain()
     #get the simulated ledger

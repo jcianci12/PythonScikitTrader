@@ -6,11 +6,11 @@ from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
-from assettracker import AssetTracker
+from Simulation.assettracker import AssetTracker
 
-from capitaltracker import CapitalTracker
+from Simulation.capitaltracker import CapitalTracker
 
-class ModelValidator:
+class TrainingAndValidation:
 
 
     def __init__(self, stock_name, num_train=10, len_train=40):

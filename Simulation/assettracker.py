@@ -1,4 +1,3 @@
-from capitaltracker import CapitalTracker
 
 class Asset:
     def __init__(self, quantity, purchase_price, take_profit, stop_loss):
