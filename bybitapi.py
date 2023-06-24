@@ -1,5 +1,6 @@
 import datetime
 import decimal
+from logging import Logger
 import uuid
 import pandas as pd
 from pybit.unified_trading import HTTP
@@ -7,6 +8,7 @@ import requests
 from KEYS import API_KEY, API_SECRET, TESTNET_API_KEY, TESTNET_API_SECRET
 from config import *
 from functions.interval_map import *
+from functions.logger import logger
 
 
 def get_session(test=True):
@@ -153,64 +155,68 @@ def get_market_ask_price(test, symbol):
 # get_market_ask_price(True, "BTCUSDT")
 # %%
 
-import pybit
-
-
 def place_buy_order(
     testmode, symbol,walletcoin, take_profit_percent, stop_loss_percent, capitalpercent
 ):
-    session = get_session(testmode)
-    # Get the market data
-    market_data = get_market_ask_price(testmode, symbol=symbol)
-    # Get the market price
-    market_price = float(market_data)
-    # Get the capital
-    capital = float(get_wallet_balance(testmode, walletcoin))
-    # min =a if a < b else b
-    take_profit_price =  None if take_profit_percent ==None else  (market_price * (1 + take_profit_percent / 100))
-    stop_loss_price =None if stop_loss_percent ==None else   (market_price * (1 - stop_loss_percent / 100))
-    # note this is the amount of money we want to spend!
-    qty = capital * (capitalpercent / 100)
-    qtyf = format(qty, ".5f")
-    print("placing buy order of ",symbol, "qty:" ,qty)
-    response = session.place_order(
-        category="spot",
-        symbol=symbol,
-        side="Buy",
-        orderType="Market",
-        qty=qtyf,
-        timeInForce="GTC",
-        takeProfit=take_profit_price,
-        stopLoss=stop_loss_price,
-        orderLinkId=str(uuid.uuid4()),
-    )
+    try:
+        session = get_session(testmode)
+        # Get the market data
+        market_data = get_market_ask_price(testmode, symbol=symbol)
+        # Get the market price
+        market_price = float(market_data)
+        # Get the capital
+        capital = float(get_wallet_balance(testmode, walletcoin))
+        # min =a if a < b else b
+        take_profit_price =  None if take_profit_percent ==None else  (market_price * (1 + take_profit_percent / 100))
+        stop_loss_price =None if stop_loss_percent ==None else   (market_price * (1 - stop_loss_percent / 100))
+        # note this is the amount of money we want to spend!
+        qty = capital * (capitalpercent / 100)
+        qtyf = format(qty, ".5f")
+        print("placing buy order of ",symbol, "qty:" ,qty)
+        response = session.place_order(
+            category="spot",
+            symbol=symbol,
+            side="Buy",
+            orderType="Market",
+            qty=qtyf,
+            timeInForce="GTC",
+            takeProfit=take_profit_price,
+            stopLoss=stop_loss_price,
+            orderLinkId=str(uuid.uuid4()),
+        )
+    except Exception as e:
+        logger(f"the error: {e}")
+        raise e
     return response
 
 
 def place_sell_order(testmode, capitalsymbol, marketsymbol, capitalpercent):
-    session = get_session(testmode)
-    # Get the market data
-    market_data = get_market_bid_price(testmode, symbol=marketsymbol)
-    # Get the market price
-    balance = decimal.Decimal(get_wallet_balance(testmode,capitalsymbol))
-    # value = decimal.Decimal(get_market_bid_price(testmode,marketsymbol))
-      # note this is the amount of money we want to spend!
-    qty = ( decimal.Decimal(capitalpercent) / 100)*balance
-    qty_rounded = qty.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
+    try:
+        session = get_session(testmode)
+        # Get the market data
+        market_data = get_market_bid_price(testmode, symbol=marketsymbol)
+        # Get the market price
+        balance = decimal.Decimal(get_wallet_balance(testmode,capitalsymbol))
+        # value = decimal.Decimal(get_market_bid_price(testmode,marketsymbol))
+          # note this is the amount of money we want to spend!
+        qty = ( decimal.Decimal(capitalpercent) / 100)*balance
+        qty_rounded = qty.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
 
-    # qtyf = format(qty,".5f" )
-    response = session.place_order(
-        category="spot",
-        symbol=marketsymbol,
-        side="Sell",
-        orderType="Market",
-        qty=str(qty_rounded),
-        timeInForce="GTC",
-        orderLinkId=str(uuid.uuid4()),
-    )
+        # qtyf = format(qty,".5f" )
+        response = session.place_order(
+            category="spot",
+            symbol=marketsymbol,
+            side="Sell",
+            orderType="Market",
+            qty=str(qty_rounded),
+            timeInForce="GTC",
+            orderLinkId=str(uuid.uuid4()),
+        )
+    except Exception as e:
+        Logger(f"the error: {e}")
+        raise e
     
     return response
-
 
 # %%
 def Test_Buy_and_Sell():

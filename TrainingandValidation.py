@@ -1,3 +1,4 @@
+from logging import Logger
 import os
 import joblib
 from matplotlib import pyplot as plt
@@ -10,6 +11,7 @@ from Simulation.assettracker import AssetTracker
 
 from Simulation.capitaltracker import CapitalTracker
 from config import *
+from get_latest_model_file import compare_dates, get_latest_model_file
 
 class TrainingAndValidation:
 
@@ -59,11 +61,25 @@ class TrainingAndValidation:
             rf.fit(X_train, y_train)
             knn.fit(X_train, y_train)
             ensemble.fit(X_train, y_train)
+            
+            
+            # Get the latest model file
+            latest_model_file = get_latest_model_file(symbol, interval)
+            #compare dates.
+            # Logger("compare dates:", compare_dates(latest_model_file,data))
+            if latest_model_file:
+                # Extract the start and end dates from the file name
+                file_name = os.path.basename(latest_model_file)
+                parts = file_name.split("_")
+                start = parts[2]
+                end = parts[3]
 
             # Create a models directory if it doesn't exist
             if not os.path.exists("models"):
                 os.makedirs("models")
+
             name = f"{symbol}_{interval}_{start}_{end}"
+
             # Save the models with the specified naming convention
             joblib.dump(rf, f"models/{name}_rf.joblib")
             joblib.dump(knn, f"models/{name}_knn.joblib")

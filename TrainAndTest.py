@@ -107,7 +107,7 @@ def getconfidencescore(data):
     # Use the loaded model to make predictions
 
     prediction = model.predict(data)
-    logger("prediction",prediction)
+    # logger("prediction",prediction)
     # Calculate the mean of the binary values
     confidence_score = np.mean(prediction)
     print("The decicision value is ",confidence_score)
@@ -150,6 +150,8 @@ def trade_loop():
 
     # Print the final output
     logger("Recieved confidence signal of:", confidence_score)
+    if(confidence_score==1 or confidence_score ==0 or confidence_score ==0.5): # if its 1 or 0 or 0.5 something went wrong, retrain.
+        trade_loop() 
     if(confidence_score>BUYTHRESHOLD):
         buylogic(confidence_score,BUYTHRESHOLD,usdtbalance)
     elif(confidence_score<SELLTHRESHOLD):
