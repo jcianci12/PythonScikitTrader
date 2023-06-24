@@ -1,10 +1,11 @@
 import json
 import unittest
 import uuid
+
+from requests import patch
 from bybitapi import *
 
 
-from api import API
 from config import *
 
 class API_Tests(unittest.TestCase):
@@ -91,4 +92,10 @@ class API_Tests(unittest.TestCase):
         
         # Assert that the returned value is a float
         self.assertEqual("OK", "OK")
+    def test_get_server_time(self):
+        
+
+        server_time = get_server_time()
+        print(datetime.datetime.fromtimestamp(float(server_time)),datetime.datetime.now())
+        self.assertIsNotNone(server_time)
         

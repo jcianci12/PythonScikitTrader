@@ -98,7 +98,7 @@ def get_wallet_balance(test, coin):
     print("fetching balance on coin ", coin)
     http = get_session(test)
 
-    response = http.get_wallet_balance(accountType="SPOT", coin=coin)
+    response = http.get_wallet_balance(accountType="SPOT", coin=coin,)
     coins = response["result"]["list"][0]["coin"]
 
     for c in coins:
@@ -260,3 +260,10 @@ def cancel_all(test, coin):
     session = get_session(test)
     response = session.cancel_all_orders(category="spot", settleCoin=coin)
     return response
+
+def get_server_time():
+    response = requests.get('https://api.bybit.com/v2/public/time')
+    data = response.json()
+    server_time = data['time_now']
+    logger("server time is:" ,server_time)
+    return server_time

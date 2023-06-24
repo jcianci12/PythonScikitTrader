@@ -14,7 +14,7 @@ from bybitapi import fetch_bybit_data_v5, get_market_bid_price, get_wallet_balan
 from TrainingandValidation import TrainingAndValidation
 from datetime import datetime, timedelta
 
-from functions.clock import call_decide_every_n_seconds
+from functions.clock import call_decide_every_n_seconds, sync_system_clock
 from config import *
 from functions.logger import logger
 from logic.selllogic import selllogic
@@ -115,7 +115,8 @@ def getconfidencescore(data):
     return confidence_score
 
 def trade_loop():
-    logger("the time is:",datetime.now())
+    logger("Starting loop")
+    sync_system_clock()
     category = 'spot'
     end_date = datetime.now()
     start_date = end_date -timedelta(DATALENGTHFORTRADINGINDAYS)
