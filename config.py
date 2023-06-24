@@ -1,0 +1,28 @@
+
+BASE_URL = "https://api.bybit.com"
+
+TESTNET_BASE_URL = "https://api-testnet.bybit.com"
+
+WEBSOCKET_BASE_URL = "wss://stream.bybit.com/realtime"
+
+
+PERCENTOFCAPITAL = 0.02 # in percent
+TEST=True
+MAXBUYPERCENTOFCAPITAL = 2
+MAXSELLPERCENTOFCAPITAL = 2
+
+MINIMUMTRANSACTIONSIZE = 10
+
+BUYTHRESHOLD = 0.6
+SELLTHRESHOLD = 0.4
+
+DATALENGTHFORTRAININGINDAYS = 5
+DATALENGTHFORTRADINGINDAYS = 5
+
+MODELFILENAME = 'ensemble_model.joblib'
+
+INTERVAL = '5'
+
+
+
+
