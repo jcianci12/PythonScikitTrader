@@ -78,7 +78,7 @@ def fetch_bybit_data_v5(test,start_date, end_date, symbol, interval, category):
 
     # Convert the data to a DataFrame
     df_new = pd.DataFrame(data, columns=['open_time', 'open', 'high', 'low', 'close', 'volume', 'turnover'])
-    df_new['timestamp'] = pd.to_datetime(df_new['open_time'].astype(str), unit='ms')
+    df_new['timestamp'] = pd.to_datetime(df_new['open_time'], unit='ms')
     df_new.set_index('timestamp', inplace=True)
     df_new.sort_values(by=['open_time'], inplace=True)
 

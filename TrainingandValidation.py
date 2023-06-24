@@ -14,26 +14,23 @@ from config import *
 class TrainingAndValidation:
 
 
-    def __init__(self, stock_name, num_train=10, len_train=40):
-        self.stock_name = stock_name
+    def __init__(self):
 
-        self.num_train = num_train
-        self.len_train = len_train
-
-
-        self.rf_results = []
-        self.knn_results = []
-        self.ensemble_results = []
-
+        self.stock_name = "BTCUSDT"
         self.ledger = []
-
-        self.models = {}
 
         self.item = AssetTracker()
         self.capital_tracker = CapitalTracker(10000)
 
     def train_and_cross_validate(self,data,symbol,start,end,interval):
         i = 0
+        self.num_train = 10
+        self.len_train = 40
+
+       # Lists to store the results from each model\n",
+        self.knn_results = []
+        self.rf_results = []
+        self.ensemble_results = []
 
         # Models which will be used
         rf = RandomForestClassifier()
