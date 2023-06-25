@@ -14,10 +14,12 @@ from bybitapi import fetch_bybit_data_v5, get_market_bid_price, get_wallet_balan
 from TrainingandValidation import TrainingAndValidation
 from datetime import datetime, timedelta
 
-from functions.clock import call_decide_every_n_seconds, sync_system_clock
+from functions.clock import call_decide_every_n_seconds
 from config import *
-from functions.logger import logger
+from functions.logger import logger, plot_graph
 from logic.selllogic import selllogic
+
+import multiprocessing as mp
 
 
 # %%
@@ -66,6 +68,7 @@ def _produce_movement_indicators(data, window):
 
 # # Retrain the model using the latest data
 def retrain():
+    validator = TrainingAndValidation()
     category = 'spot'
     end_date = datetime.now()
     start_date = end_date -timedelta(DATALENGTHFORTRAININGINDAYS)
@@ -116,7 +119,6 @@ def getconfidencescore(data):
 
 def trade_loop():
     logger("Starting loop")
-    sync_system_clock()
     category = 'spot'
     end_date = datetime.now()
     start_date = end_date -timedelta(DATALENGTHFORTRADINGINDAYS)
@@ -136,11 +138,12 @@ def trade_loop():
 
     if(ALWAYSRETRAIN or  is_file_older_than_n_minutes(get_latest_model_file(symbol,INTERVAL),60)):
             
-        validator = TrainingAndValidation()
+        
         #retrain the data
         retrain()
+
     #get the simulated ledger
-        print(validator.get_ledger())
+        # print(validator.get_ledger())
 
     #call the trade decider.
         
@@ -148,18 +151,21 @@ def trade_loop():
     usdtbalance = float(get_wallet_balance(TEST,"USDT"))
     btcbalance = float(get_wallet_balance(TEST,"BTC"))
     btcmarketvalue = float(get_market_bid_price(TEST,"BTCUSDT"))
-
+    balance = (float(usdtbalance) + (btcbalance *   btcmarketvalue))
+    logger("Balance: ",balance)
     # Print the final output
     logger("Recieved confidence signal of:", confidence_score)
     if(confidence_score==1 or confidence_score ==0 or confidence_score ==0.5): # if its 1 or 0 or 0.5 something went wrong, retrain.
-        trade_loop() 
-    if(confidence_score>BUYTHRESHOLD):
-        buylogic(confidence_score,BUYTHRESHOLD,usdtbalance)
-    elif(confidence_score<SELLTHRESHOLD):
-        selllogic(confidence_score,SELLTHRESHOLD,btcbalance,btcmarketvalue)
+        retrain() 
     else:
-        logger(str("Didnt act"))
-    logger("Balance is ",(float(usdtbalance) + (btcbalance *   btcmarketvalue)))
+        if(confidence_score>BUYTHRESHOLD):
+            buylogic(confidence_score,BUYTHRESHOLD,usdtbalance)
+        elif(confidence_score<SELLTHRESHOLD):
+            selllogic(confidence_score,SELLTHRESHOLD,btcbalance,btcmarketvalue)
+        else:
+            logger(str("Didnt act"))
+
+    plot_graph(btcmarketvalue, confidence_score, balance,"performance.png")
 
 call_decide_every_n_seconds(300, trade_loop)
 

@@ -19,4 +19,12 @@ RUN pip install matplotlib
 RUN pip install scikit-learn
 RUN pip install pybit
 
+# Install ntp and cron packages
+RUN conda install -c conda-forge crontab
+# # Set up cron job to sync clock every 60 minutes
+# RUN echo '0 * * * * root ntpdate -s time.nist.gov' > /etc/cron.d/sync-clock && chmod 0644 /etc/cron.d/sync-clock
+# RUN crontab -l | { cat; echo "0 * * * * root ntpdate -s time.nist.gov"; } | crontab -
+# # Start cron daemon
+# CMD cron && tail -f /dev/null
+
 ENTRYPOINT ["tail", "-f", "/dev/null"]

@@ -1,9 +1,79 @@
 import datetime
 
 def logger(*args):
-    now = datetime.datetime.now()
+    now = datetime.now()
     message = ' '.join(map(str, args))
     log_message = f'{now}: {message}'
     print("logging",log_message)
     with open('log.txt', 'a') as file:
         file.write(log_message + '\n')
+
+import csv
+import os
+from datetime import datetime
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+
+def plot_graph(btc_price, confidence_signal, current_balance, filename):
+    # Check if the performance.csv file exists
+    if not os.path.exists('performance.csv'):
+        # If the file doesn't exist, create it and write the header row
+        with open('performance.csv', 'w') as f:
+            writer = csv.writer(f)
+            writer.writerow(['Datetime', 'BTC Price', 'Confidence Signal', 'Current Balance'])
+    
+    # Get the current datetime value
+    current_datetime = datetime.now()
+    
+    # Append the data to the performance.csv file
+    with open('performance.csv', 'a') as f:
+        writer = csv.writer(f)
+        writer.writerow([current_datetime, btc_price, confidence_signal, current_balance])
+    
+    # Read the data from the performance.csv file
+    with open('performance.csv', 'r') as f:
+        reader = csv.reader(f)
+        header = next(reader)
+        data = [row for row in reader]
+    
+    # Extract the data from the CSV file
+    datetime_values = [datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f') for row in data]
+    btc_price = [float(row[1]) for row in data]
+    confidence_signal = [float(row[2]) for row in data]
+    current_balance = [float(row[3]) for row in data]
+    
+    # Create a figure and three subplots
+    fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
+    
+    # Plot the BTC price data on the first subplot
+    ax1.plot(datetime_values, btc_price, label='BTC Price')
+    
+    # Plot the confidence signal data on the second subplot
+    ax2.plot(datetime_values, confidence_signal, label='Confidence Signal', color='g')
+    
+    # Plot the current balance data on the third subplot
+    ax3.plot(datetime_values, current_balance, label='Current Balance', color='r')
+    
+    # Format the x-axis of each subplot to display datetime values
+    ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
+    ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
+    ax3.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
+    
+    # Add labels and title to each subplot
+    ax1.set_xlabel('Datetime')
+    ax1.set_ylabel('BTC Price')
+    ax2.set_xlabel('Datetime')
+    ax2.set_ylabel('Confidence Signal')
+    ax3.set_xlabel('Datetime')
+    ax3.set_ylabel('Current Balance')
+    
+    # Add a legend to each subplot
+    ax1.legend()
+    ax2.legend()
+    ax3.legend()
+    
+    # Save the plot to a file
+    plt.savefig(filename)
+    
+    # Show the plot
+    plt.show()
