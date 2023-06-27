@@ -8,7 +8,7 @@ import uuid
 import pandas as pd
 from pybit.unified_trading import HTTP
 import requests
-from KEYS import API_KEY, API_SECRET, TESTNET_API_KEY, TESTNET_API_SECRET
+from KEYS import API_KEY, API_SECRET
 from config import *
 from functions.interval_map import *
 from functions.logger import logger
@@ -18,9 +18,9 @@ def get_session(test=True):
 
     http = HTTP(testnet=False, api_key="...", api_secret="...")
     http.testnet = test
-    http.endpoint = TESTNET_BASE_URL if test else BASE_URL
-    http.api_key = TESTNET_API_KEY if test else API_KEY
-    http.api_secret = TESTNET_API_SECRET if test else API_SECRET
+    http.endpoint = BASE_URL
+    http.api_key = API_KEY
+    http.api_secret = API_SECRET
     return http
 
 def convert_interval_to_timespan(interval):
@@ -103,7 +103,7 @@ def get_wallet_balance(test, coin):
     print("fetching balance on coin ", coin)
     http = get_session(test)
 
-    response = http.get_wallet_balance(accountType="SPOT", coin=coin,)
+    response = http.get_wallet_balance(accountType=ACCOUNT_TYPE, coin=coin,)
     coins = response["result"]["list"][0]["coin"]
 
     for c in coins:
@@ -119,8 +119,8 @@ def get_wallet_balance(test, coin):
 def get_wallet_balance_new(test, coin):
     print(f"fetching balance on coin {coin}")
 
-    api_key = TESTNET_API_KEY if test else API_KEY
-    secret = TESTNET_API_SECRET if test else API_SECRET
+    api_key = API_KEY
+    secret = API_SECRET
 
     timestamp = int(time.time() * 1000)
     recv_window = 20000
