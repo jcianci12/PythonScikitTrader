@@ -1,5 +1,6 @@
-API_KEY = "XXXX"
-API_SECRET = "XXXX"
+from config import TEST
 
-TESTNET_API_KEY = "XXXX"
-TESTNET_API_SECRET = "XXXX"
+
+API_KEY = "xxxx" if TEST else "xxxx"
+
+TESTNET_API_KEY = "xxxx" if TEST else "xxxx"
