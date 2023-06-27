@@ -11,6 +11,7 @@ from Simulation.assettracker import AssetTracker
 
 from Simulation.capitaltracker import CapitalTracker
 from config import *
+from functions.logger import plot_graph
 from get_latest_model_file import compare_dates, get_latest_model_file
 
 class TrainingAndValidation:
@@ -20,6 +21,7 @@ class TrainingAndValidation:
 
         self.stock_name = "BTCUSDT"
         self.ledger = []
+
 
         self.item = AssetTracker()
         self.capital_tracker = CapitalTracker(10000)
@@ -112,6 +114,7 @@ class TrainingAndValidation:
             for index, row in self.results_df.iterrows():
                 print("simulating for row: ",row)
                 self.simulate_trade(data, row)
+
                 
             # Set the 'Date' column as the index
             self.results_df.set_index("Date", inplace=True)
@@ -156,6 +159,7 @@ class TrainingAndValidation:
 
         # Get the value of the stock at the buy date
         current_price = data.loc[date, "close"]
+        portfolio_value = self.capital_tracker.capital + (self.item.get_total_asset_quantity() * current_price)
 
         entry = {}
         triggered_assets = self.item.monitor_prices(current_price)
@@ -174,7 +178,7 @@ class TrainingAndValidation:
                             "Action": "Sell",
                             "Stock": self.stock_name,
                             "Transaction Amount": asset.quantity*current_price,
-                            "Portfolio Value": self.capital_tracker.capital + (self.item.get_total_asset_quantity() * current_price),
+                            "Portfolio Value": portfolio_value,
 
                             "Quantity": asset.quantity,
                             "Sell_Price": current_price,
@@ -201,13 +205,12 @@ class TrainingAndValidation:
                     # Calculate the quantity of stock purchased based on the investment amount and buy price
                 quantity = investment_amount / current_price
                 result = self.item.purchase(quantity, current_price,current_price*SIMTAKEPROFIT,current_price*SIMSTOPLOSS)
-
                 entry = {
                     "Date": date,
                     "Action": "Buy",
                     "Stock": self.stock_name,
                     "Transaction Amount": investment_amount,
-                    "Portfolio Value": self.capital_tracker.capital + (self.item.get_total_asset_quantity() * current_price),
+                    "Portfolio Value": portfolio_value,
                     "Quantity": quantity,
                     "Buy_Price": current_price,
                     "Balance": self.capital_tracker.capital,
@@ -216,44 +219,28 @@ class TrainingAndValidation:
                 }
                 # Update the ledger with the trade details
                 self.ledger.append(entry)
+        plot_graph(current_price,ensemble_prediction,portfolio_value,'backtest.png','backtest.csv',30)
 
-        ledger_df = pd.DataFrame(
-            columns=["Date", "Action", "Stock", "Quantity", "Price", "Balance"]
-        )
+
+        # ledger_df = pd.DataFrame(
+        #     columns=["Date", "Action", "Stock", "Quantity", "Price", "Balance"]
+        # )
         # Convert the ledger list to a DataFrame
-        ledger_df = pd.DataFrame(self.ledger)
+        # ledger_df = pd.DataFrame(self.ledger)
 
         # print(ledger_df)
-        # self.append_to_csv(ledger_df)
+        # self.write_backtest_data(ledger_df)
         # self.ledger_df.append(ledger_df)
         # self.plot_data(ledger_df)
 
     def getLedgerdf(self):
         return  pd.DataFrame( self.ledger)
 
-    def append_to_csv(self,data):
-        file_exists = os.path.isfile('ledger.csv')
-        df = pd.DataFrame(data)
-        with open('ledger.csv', 'a', newline='') as file:
-            if not file_exists:
-                df.to_csv(file, index=False)
-            else:
-                df.to_csv(file, index=False, header=False)
+    def save_dataframe(self,dataframe):
+        dataframe.to_csv('backtest.csv', index=False)
+    
 
 
-
-
-
-    def plot_data(self,data):
-        df = pd.DataFrame(data, columns=['Date', 'Action', 'Stock', 'Transaction Amount', 'Portfolio Value'])
-        df['Date'] = pd.to_datetime(df['Date'])
-        df_buy = df[df['Action'] == 'Buy']
-        df_sell = df[df['Action'] == 'Sell']
-        plt.plot(df_buy['Date'], df_buy['Portfolio Value'], 'go', label='Buy')
-        plt.plot(df_sell['Date'], df_sell['Portfolio Value'], 'ro', label='Sell')
-        plt.legend()
-        plt.show()
-        plt.savefig('ledger.png')
 
 
 

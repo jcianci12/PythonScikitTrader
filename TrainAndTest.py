@@ -51,19 +51,19 @@ def _exponential_smooth(data, alpha):
 
 
 # %%
-def _produce_movement_indicators(data, window):
+# %%
+def _produce_movement_indicators(data):
     """
     Function that produces the 'truth' values
     At a given row, it looks 'window' rows ahead to see if the price increased (1) or decreased (0)
     :param window: number of days, or rows to look ahead to see what the price did
     """
 
-    prediction = data.shift(-window)["close"] >= data["close"]
-    prediction = prediction.iloc[:-window]
+    prediction = data.shift(-LOOKAHEADVALUE)["close"] >= data["close"]
+    prediction = prediction.iloc[:-LOOKAHEADVALUE]
     data["pred"] = prediction.astype(int)
 
     return data
-
 #%%
 
 # # Retrain the model using the latest data
@@ -77,7 +77,7 @@ def retrain():
     #smooth the data
     trainingdata = _exponential_smooth(trainingdata,0.65)
     #produce indicators
-    trainingdata = _produce_movement_indicators(trainingdata,window=15)
+    trainingdata = _produce_movement_indicators(trainingdata)
     #drop na data
     trainingdata = (
         trainingdata.dropna()
@@ -88,12 +88,16 @@ def retrain():
     #retrain the data
     logger("retraining...")
     #get the simulated ledger
-    print(validator.get_ledger())
+
 
     validator.train_and_cross_validate(trainingdata,symbol,start_date,end_date,INTERVAL)
     print(f"RF Accuracy = {sum(validator.get_rf_results()) / len(validator.get_rf_results())}")
     print(f"KNN Accuracy = {sum(validator.get_knn_results()) / len(validator.get_knn_results())}")
     print(f"Ensemble Accuracy = {sum(validator.get_ensemble_results()) / len(validator.get_ensemble_results())}")
+
+    print(validator.get_ledger())
+    ledger = validator.get_ledger()
+    validator.save_dataframe(ledger)
 
 def is_file_older_than_n_minutes(file_path, n):
     if ((file_path==None) or not os.path.exists(file_path)  ):
@@ -129,7 +133,7 @@ def trade_loop():
     #smooth the data
     data = _exponential_smooth(data,0.65)
     #produce indicators
-    data = _produce_movement_indicators(data,window=15)
+    data = _produce_movement_indicators(data)
     #drop na data
     data = (
         data.dropna()
@@ -165,7 +169,8 @@ def trade_loop():
         else:
             logger(str("Didnt act"))
 
-    plot_graph(btcmarketvalue, confidence_score, balance,"performance.png")
+    plot_graph(btcmarketvalue, confidence_score, balance,"performance.png","performance.csv",30)
+
 
 call_decide_every_n_seconds(300, trade_loop)
 

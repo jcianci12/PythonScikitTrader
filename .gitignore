@@ -2,3 +2,5 @@ KEYS.py
 *.joblib
 
 __pycache__/
+*.pyc
+*.csv
