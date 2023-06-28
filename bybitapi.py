@@ -229,16 +229,18 @@ def place_buy_order(
 def place_sell_order(testmode, capitalsymbol, marketsymbol, capitalpercent):
     try:
         session = get_session(testmode)
-        # Get the market data
         market_data = get_market_bid_price(testmode, symbol=marketsymbol)
-        # Get the market price
         balance = decimal.Decimal(get_wallet_balance(testmode,capitalsymbol))
-        # value = decimal.Decimal(get_market_bid_price(testmode,marketsymbol))
-          # note this is the amount of money we want to spend!
         qty = ( decimal.Decimal(capitalpercent) / 100)*balance
         qty_rounded = qty.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
 
-        # qtyf = format(qty,".5f" )
+        # Check if qty_rounded is less than the minimum order quantity
+        min_qty = decimal.Decimal('0.001')
+        if qty_rounded < min_qty:
+            logger(f"Sale of {qty_rounded} was below minimum amount.")
+            qty_rounded = min_qty
+            return None
+
         response = session.place_order(
             category="spot",
             symbol=marketsymbol,
@@ -253,6 +255,8 @@ def place_sell_order(testmode, capitalsymbol, marketsymbol, capitalpercent):
         raise e
     
     return response
+
+
 
 # %%
 def Test_Buy_and_Sell():
