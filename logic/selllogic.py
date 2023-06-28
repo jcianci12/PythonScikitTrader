@@ -8,7 +8,7 @@ def selllogic(confidence_score,sellthreshold,btcbalance,btcmarketvalue):
     capitalsymbol = "BTC"
     marketsymbol = "BTCUSDT"
     minsellamount = 0.2 #dont wanna sell too low an amount.
-    capitalpercent = map_range(confidence_score,0,sellthreshold,minsellamount,MAXSELLPERCENTOFCAPITAL)
+    capitalpercent = map_range(confidence_score,0,sellthreshold,MAXSELLPERCENTOFCAPITAL,minsellamount)
         
     transactionamount = (capitalpercent * btcbalance)*btcmarketvalue
     if(transactionamount>MINIMUMTRANSACTIONSIZE):
