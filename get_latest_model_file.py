@@ -3,10 +3,14 @@ import os
 
 import pandas as pd
 
+def get_model_filename(symbol,interval,startdate,enddate,modelname):
+    return f"{symbol}_{interval}_{str(startdate)}_{str(enddate)}_{modelname}.joblib"
 
-def get_latest_model_file(symbol, interval):
+def get_latest_model_filename(symbol, interval,startdate,enddate,modelname):
     # Get a list of all model files that match the symbol and interval
-    model_files = glob.glob(f"models/{symbol}_{interval}_*_*_rf.joblib")
+
+    model_files = glob.glob(f"models/{symbol}_{interval}_*_*_ensemble.joblib")
+
 
     # Check if there are any matching model files
     if model_files:

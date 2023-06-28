@@ -7,7 +7,7 @@ import numpy as np
 
 
 import joblib
-from get_latest_model_file import get_latest_model_file
+from get_latest_model_file import get_latest_model_filename, get_model_filename
 from logic.buylogic import buylogic
 from bybitapi import fetch_bybit_data_v5, get_market_bid_price, get_wallet_balance
 
@@ -107,9 +107,9 @@ def is_file_older_than_n_minutes(file_path, n):
     logger("time is ",time.time(),"|file time is",os.path.getmtime(file_path))
     return time.time() - os.path.getmtime(file_path) > n * 60
 
-def getconfidencescore(data):
-    model = joblib.load(get_latest_model_file(symbol,INTERVAL))
-    
+def getconfidencescore(data,start_date,end_date,modelname):
+    model = joblib.load(get_latest_model_filename(symbol,INTERVAL,start_date,end_date,modelname))
+
     data = data.drop('pred', axis=1)
     # Use the loaded model to make predictions
 
@@ -139,7 +139,7 @@ def trade_loop():
     )  # Some indicators produce NaN values for the first few rows, we just remove them here
     data.tail()
 
-    if(ALWAYSRETRAIN or  is_file_older_than_n_minutes(get_latest_model_file(symbol,INTERVAL),60)):
+    if(ALWAYSRETRAIN or  is_file_older_than_n_minutes(get_latest_model_filename(symbol,INTERVAL,start_date,end_date,"ensemble"),60)):
             
         
         #retrain the data
@@ -150,7 +150,7 @@ def trade_loop():
 
     #call the trade decider.
         
-    confidence_score = getconfidencescore(data)
+    confidence_score = getconfidencescore(data,start_date,end_date,"ensemble")
     usdtbalance = float(get_wallet_balance(TEST,"USDT"))
     btcbalance = float(get_wallet_balance(TEST,"BTC"))
     btcmarketvalue = float(get_market_bid_price(TEST,"BTCUSDT"))

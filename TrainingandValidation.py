@@ -1,4 +1,3 @@
-from logging import Logger
 import os
 import joblib
 from matplotlib import pyplot as plt
@@ -11,8 +10,8 @@ from Simulation.assettracker import AssetTracker
 
 from Simulation.capitaltracker import CapitalTracker
 from config import *
-from functions.logger import plot_graph
-from get_latest_model_file import compare_dates, get_latest_model_file
+from functions.logger import plot_graph, logger
+from get_latest_model_file import compare_dates, get_latest_model_filename, get_model_filename
 
 class TrainingAndValidation:
 
@@ -26,12 +25,12 @@ class TrainingAndValidation:
         self.item = AssetTracker()
         self.capital_tracker = CapitalTracker(10000)
 
-    def train_and_cross_validate(self,data,symbol,start,end,interval):
+    def train_and_cross_validate(self, data, symbol, start, end, interval):
         i = 0
         self.num_train = 10
         self.len_train = 40
 
-       # Lists to store the results from each model\n",
+        # Lists to store the results from each model
         self.knn_results = []
         self.rf_results = []
         self.ensemble_results = []
@@ -43,7 +42,7 @@ class TrainingAndValidation:
         # Create a tuple list of our models
         estimators = [("knn", knn), ("rf", rf)]
         ensemble = VotingClassifier(estimators, voting="soft")
-
+        logger("Starting training")
         while True:
             # Partition the data into chunks of size len_train every num_train days
             df = data.iloc[i * self.num_train : (i * self.num_train) + self.len_train]
@@ -63,31 +62,6 @@ class TrainingAndValidation:
             rf.fit(X_train, y_train)
             knn.fit(X_train, y_train)
             ensemble.fit(X_train, y_train)
-            
-            
-            # Get the latest model file
-            latest_model_file = get_latest_model_file(symbol, interval)
-            #compare dates.
-            # Logger("compare dates:", compare_dates(latest_model_file,data))
-            if latest_model_file:
-                # Extract the start and end dates from the file name
-                file_name = os.path.basename(latest_model_file)
-                parts = file_name.split("_")
-                start = parts[2]
-                end = parts[3]
-
-            # Create a models directory if it doesn't exist
-            if not os.path.exists("models"):
-                os.makedirs("models")
-
-            name = f"{symbol}_{interval}_{start}_{end}"
-
-            # Save the models with the specified naming convention
-            joblib.dump(rf, f"models/{name}_rf.joblib")
-            joblib.dump(knn, f"models/{name}_knn.joblib")
-            joblib.dump(ensemble, f"models/{name}_ensemble.joblib")
-            
-            self.models = {"rf":rf,"knn":knn ,"ensemble":ensemble}
 
             # get predictions
             rf_prediction = rf.predict(X_test)
@@ -109,22 +83,41 @@ class TrainingAndValidation:
             }
 
             self.results_df = pd.DataFrame(rv)
-            
-                    # Iterate over the rows of the results DataFrame
-            for index, row in self.results_df.iterrows():
-                print("simulating for row: ",row)
-                self.simulate_trade(data, row)
 
-                
             # Set the 'Date' column as the index
             self.results_df.set_index("Date", inplace=True)
-
-        
+            
             self.rf_results.append(rf_accuracy)
             self.knn_results.append(knn_accuracy)
             self.ensemble_results.append(ensemble_accuracy)
-            
 
+            print("done",pd.to_datetime(X_test.index))
+            
+        # Get the latest model file
+        latest_model_file = get_latest_model_filename(symbol, interval,start,end,"ensemble")
+        
+        if latest_model_file:
+            # Extract the start and end dates from the file name
+            file_name = os.path.basename(latest_model_file)
+            parts = file_name.split("_")
+            start = parts[2]
+            end = parts[3]
+
+        self.models = {"rf": rf, "knn": knn, "ensemble": ensemble}
+        self.save_models(self.models, symbol, interval, start, end)
+
+        logger("Finished training")
+
+
+
+    def save_models(self, models, symbol, interval, start, end):
+        # Create a models directory if it doesn't exist
+        if not os.path.exists("models"):
+            os.makedirs("models")
+
+        # Save the models with the specified naming convention
+        for model_name, model in models.items():
+            joblib.dump(model, f"models/{get_model_filename(symbol,interval,start,end,'ensemble')}" )
 
 
     def get_results_df(self):
@@ -219,7 +212,8 @@ class TrainingAndValidation:
                 }
                 # Update the ledger with the trade details
                 self.ledger.append(entry)
-        plot_graph(current_price,ensemble_prediction,portfolio_value,'backtest.png','backtest.csv',30)
+                if(PLOTBACKTEST):
+                    plot_graph(current_price,ensemble_prediction,portfolio_value,'backtest.png','backtest.csv',30)
 
 
         # ledger_df = pd.DataFrame(
