@@ -91,18 +91,8 @@ class TrainingAndValidation:
             self.knn_results.append(knn_accuracy)
             self.ensemble_results.append(ensemble_accuracy)
 
-            print("done",pd.to_datetime(X_test.index))
-            
-        # Get the latest model file
-        latest_model_file = get_latest_model_filename(symbol, interval,start,end,"ensemble")
-        
-        if latest_model_file:
-            # Extract the start and end dates from the file name
-            file_name = os.path.basename(latest_model_file)
-            parts = file_name.split("_")
-            start = parts[2]
-            end = parts[3]
-
+            print("done",pd.to_datetime(X_test.index))            
+       
         self.models = {"rf": rf, "knn": knn, "ensemble": ensemble}
         self.save_models(self.models, symbol, interval, start, end)
 
@@ -117,7 +107,9 @@ class TrainingAndValidation:
 
         # Save the models with the specified naming convention
         for model_name, model in models.items():
-            joblib.dump(model, f"models/{get_model_filename(symbol,interval,start,end,'ensemble')}" )
+            filename = get_model_filename(symbol,interval,start,end,model_name)
+            logger("saving model file as ",filename)
+            joblib.dump(model, f"models/{filename}" )
 
 
     def get_results_df(self):

@@ -108,7 +108,9 @@ def is_file_older_than_n_minutes(file_path, n):
     return time.time() - os.path.getmtime(file_path) > n * 60
 
 def getconfidencescore(data,start_date,end_date,modelname):
-    model = joblib.load(get_latest_model_filename(symbol,INTERVAL,start_date,end_date,modelname))
+    filename = get_latest_model_filename(symbol,INTERVAL,start_date,end_date,modelname)
+    logger("Loading model from ", filename)
+    model = joblib.load(filename)
 
     data = data.drop('pred', axis=1)
     # Use the loaded model to make predictions

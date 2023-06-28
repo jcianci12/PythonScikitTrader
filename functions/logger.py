@@ -1,12 +1,15 @@
 import datetime
 
+from config import TEST
+
 def logger(*args):
     now = datetime.now()
     message = ' '.join(map(str, args))
-    log_message = f'{now}: {message}'
+    training = "TRAINING MODE " if TEST else "REAL MODE"
+    log_message = f'{now}: {training} {message}'
     print("logging",log_message)
     with open('log.txt', 'a') as file:
-        file.write(log_message + '\n')
+        file.write(   log_message + '\n')
 
 import csv
 import os
