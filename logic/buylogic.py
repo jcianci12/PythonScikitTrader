@@ -8,7 +8,7 @@ def buylogic(confidence_score,buythreshold,usdtbalance):
     
     minbuyamount = 0.2 #dont wanna buy too low an amount.
     capitalpercent = map_range(confidence_score,buythreshold,1,minbuyamount,MAXBUYPERCENTOFCAPITAL)
-    transactionamount = (capitalpercent * usdtbalance)
+    transactionamount = ((capitalpercent/100) * usdtbalance)
     
     if(transactionamount>MINIMUMTRANSACTIONSIZE):
         logger("Decided to buy %", capitalpercent , " of USDT balance. |USDT balance: ",usdtbalance," | Market value: ",transactionamount , "transaction amount:",  transactionamount)
