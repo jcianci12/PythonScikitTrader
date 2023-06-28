@@ -126,9 +126,8 @@ def trade_loop():
     category = 'spot'
     end_date = datetime.now()
     start_date = end_date -timedelta(DATALENGTHFORTRADINGINDAYS)
-    category = 'spot'
     #fetch the kline (historical data)
-    data = fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",INTERVAL,category)
+    data = fetch_bybit_data_v5(TEST,start_date,end_date,"BTCUSDT",INTERVAL,category)
     # data = old_fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",interval,category)
     #smooth the data
     data = _exponential_smooth(data,0.65)
@@ -171,6 +170,10 @@ def trade_loop():
 
     plot_graph(btcmarketvalue, confidence_score, balance,"performance.png","performance.csv",30)
 
+
+if (FORCERETRAINATSTART):
+    logger("Force retrain at start set to true, retraining.")
+    retrain()
 
 call_decide_every_n_seconds(300, trade_loop)
 
