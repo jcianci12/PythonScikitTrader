@@ -17,7 +17,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
-def plot_graph(btc_price, confidence_signal, portfolio_balance, chartfilename,csvfilename, viewwindow):
+def plot_graph(btc_price, confidence_signal, portfolio_balance,usdtbalance,btcbalance, chartfilename,csvfilename, viewwindow):
     if(viewwindow==None):
         viewwindow = 10000
     # Check if the performance.csv file exists
@@ -25,7 +25,7 @@ def plot_graph(btc_price, confidence_signal, portfolio_balance, chartfilename,cs
         # If the file doesn't exist, create it and write the header row
         with open(csvfilename, 'w') as f:
             writer = csv.writer(f)
-            writer.writerow(['Datetime', 'BTC Price', 'Confidence Signal', 'Current Balance'])
+            writer.writerow(['Datetime', 'BTC Price', 'Confidence Signal', 'Portfolio','USDT','BTC'])
     
     # Get the current datetime value
     current_datetime = datetime.now()
@@ -33,7 +33,7 @@ def plot_graph(btc_price, confidence_signal, portfolio_balance, chartfilename,cs
     # Append the data to the performance.csv file
     with open(csvfilename, 'a') as f:
         writer = csv.writer(f)
-        writer.writerow([current_datetime, btc_price, confidence_signal, portfolio_balance])
+        writer.writerow([current_datetime, btc_price, confidence_signal, portfolio_balance,usdtbalance,btcbalance])
     
     # Read the data from the performance.csv file
     with open(csvfilename, 'r') as f:
@@ -46,6 +46,9 @@ def plot_graph(btc_price, confidence_signal, portfolio_balance, chartfilename,cs
     btc_price = [float(row[1]) for row in data]
     confidence_signal = [float(row[2]) for row in data]
     portfolio_balance = [float(row[3]) for row in data]
+    usdtbalance = [float(row[4]) for row in data]
+    btcbalance = [float(row[5]) for row in data]
+
     
     # Create a figure and three subplots
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1)
@@ -58,11 +61,13 @@ def plot_graph(btc_price, confidence_signal, portfolio_balance, chartfilename,cs
     
     # Plot the current balance data on the third subplot
     ax3.plot(datetime_values[-viewwindow:], portfolio_balance[-viewwindow:], label='Current Balance', color='r')
+    ax3.plot(datetime_values[-viewwindow:], usdtbalance[-viewwindow:], label='USDT Balance', color='b')
+    ax3.plot(datetime_values[-viewwindow:], btcbalance[-viewwindow:], label='BTC Balance', color='g')
     
     # Format the x-axis of each subplot to display datetime values
-    ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
-    ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
-    ax3.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
+    ax1.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    ax2.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    ax3.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
 
     
     # Add labels and title to each subplot
@@ -80,6 +85,6 @@ def plot_graph(btc_price, confidence_signal, portfolio_balance, chartfilename,cs
     
     # Save the plot to a file
     plt.savefig(chartfilename)
+    plt.close()
     
-    # Show the plot
-    plt.show()
+

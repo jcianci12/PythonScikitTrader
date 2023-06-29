@@ -156,8 +156,8 @@ def trade_loop():
     usdtbalance = float(get_wallet_balance(TEST,"USDT"))
     btcbalance = float(get_wallet_balance(TEST,"BTC"))
     btcmarketvalue = float(get_market_bid_price(TEST,"BTCUSDT"))
-    balance = (float(usdtbalance) + (btcbalance *   btcmarketvalue))
-    logger("Balance: ",balance)
+    portfolio_balance = (float(usdtbalance) + (btcbalance *   btcmarketvalue))
+    logger("Portfolio: ",portfolio_balance,"BTC:",btcbalance,"USDT:",usdtbalance)
     # Print the final output
     logger("Recieved confidence signal of:", confidence_score)
     if(confidence_score==1 or confidence_score ==0 or confidence_score ==0.5): # if its 1 or 0 or 0.5 something went wrong, retrain.
@@ -170,7 +170,7 @@ def trade_loop():
         else:
             logger(str("Didnt act"))
 
-    plot_graph(btcmarketvalue, confidence_score, balance,"performance.png","performance.csv",30)
+    plot_graph(btcmarketvalue, confidence_score, portfolio_balance,usdtbalance,btcbalance,"performance.png","performance.csv",30)
 
 
 if (FORCERETRAINATSTART):

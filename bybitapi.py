@@ -14,13 +14,25 @@ from functions.interval_map import *
 from functions.logger import logger
 
 
-def get_session(test=True):
+DELAY = 5
+TEST_URL = 'https://www.google.com'
 
+def get_session(test=True):
     http = HTTP(testnet=False, api_key="...", api_secret="...")
     http.testnet = test
     http.endpoint = BASE_URL
     http.api_key = API_KEY
     http.api_secret = API_SECRET
+
+    # Check for connection
+    while True:
+        try:
+            requests.get(TEST_URL)
+            break
+        except requests.exceptions.RequestException:
+            logger(f"Connection down... retrying in {DELAY} seconds")
+            time.sleep(DELAY)
+
     return http
 
 def convert_interval_to_timespan(interval):
@@ -192,7 +204,7 @@ def get_market_ask_price(test, symbol):
 # %%
 
 def place_buy_order(
-    testmode, symbol,walletcoin, take_profit_percent, stop_loss_percent, capitalpercent
+    testmode, symbol,capitalsymbol, take_profit_percent, stop_loss_percent, capitalpercent
 ):
     try:
         session = get_session(testmode)
@@ -201,20 +213,29 @@ def place_buy_order(
         # Get the market price
         market_price = float(market_data)
         # Get the capital
-        capital = float(get_wallet_balance(testmode, walletcoin))
+        balance = decimal.Decimal(get_wallet_balance(testmode,capitalsymbol))
         # min =a if a < b else b
         take_profit_price =  None if take_profit_percent ==None else  (market_price * (1 + take_profit_percent / 100))
         stop_loss_price =None if stop_loss_percent ==None else   (market_price * (1 - stop_loss_percent / 100))
         # note this is the amount of money we want to spend!
-        qty = capital * (capitalpercent / 100)
-        qtyf = format(qty, ".5f")
+        qty = ( decimal.Decimal(capitalpercent) / 100)*balance
+        # qtyf = format(qty, ".5f")
+        qty_rounded = qty.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
+
+        # Check if qty_rounded is less than the minimum order quantity
+        min_qty = decimal.Decimal('0.000001')
+        if qty_rounded < min_qty:
+            logger(f"Sale of {qty_rounded} was below minimum amount.")
+            qty_rounded = min_qty
+            return None
+
         print("placing buy order of ",symbol, "qty:" ,qty)
         response = session.place_order(
             category="spot",
             symbol=symbol,
             side="Buy",
             orderType="Market",
-            qty=qtyf,
+            qty=str(qty_rounded),
             timeInForce="GTC",
             takeProfit=take_profit_price,
             stopLoss=stop_loss_price,
@@ -229,13 +250,13 @@ def place_buy_order(
 def place_sell_order(testmode, capitalsymbol, marketsymbol, capitalpercent):
     try:
         session = get_session(testmode)
-        market_data = get_market_bid_price(testmode, symbol=marketsymbol)
         balance = decimal.Decimal(get_wallet_balance(testmode,capitalsymbol))
+        # balance = balance * decimal.Decimal(get_market_bid_price(TEST,marketsymbol))
         qty = ( decimal.Decimal(capitalpercent) / 100)*balance
         qty_rounded = qty.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
 
         # Check if qty_rounded is less than the minimum order quantity
-        min_qty = decimal.Decimal('0.001')
+        min_qty = decimal.Decimal('0.000001')
         if qty_rounded < min_qty:
             logger(f"Sale of {qty_rounded} was below minimum amount.")
             qty_rounded = min_qty
