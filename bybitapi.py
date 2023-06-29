@@ -274,12 +274,32 @@ def place_sell_order(testmode, capitalsymbol, marketsymbol, qty):
 
 
 
-# %%
 def Test_Buy_and_Sell():
-    # place order using 2 percent of capital
-    buy = place_buy_order(True, "BTCUSDT","USDT", 5, 5, 2)
-    # sell 100% of the coin just purchased
-    sell = place_sell_order(True, "BTC", "BTCUSDT", 100)
+    """
+    Function to test buying and selling.
+    """
+    # Get the USDT balance
+    usdtbalance = decimal.Decimal(get_wallet_balance(True, "USDT"))
+    
+    # Calculate the quantity to buy (2% of USDT balance)
+    qty = (2 / 100) * usdtbalance
+    qty_rounded = qty.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
+    
+    # Check if qty_rounded is less than the minimum order quantity
+    min_qty = decimal.Decimal('0.000001')
+    if qty_rounded < min_qty:
+        logger(f"Sale of {qty_rounded} was below minimum amount.")
+        qty_rounded = min_qty
+    
+    # Place a buy order using 2% of USDT balance
+    buy = place_buy_order(True, "BTCUSDT", "USDT", 5, 5, qty_rounded)
+    
+    # Get the BTC balance
+    btcbalance = decimal.Decimal(get_wallet_balance(True, "BTC"))
+    
+    # Place a sell order for 100% of the BTC balance
+    sell = place_sell_order(True, "BTC", "BTCUSDT", btcbalance)
+    
     return sell, buy
 
 

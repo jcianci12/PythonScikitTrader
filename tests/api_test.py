@@ -43,10 +43,15 @@ class API_Tests(unittest.TestCase):
         # Assert that the returned value is a float
         self.assertEqual("OK", "OK")
 
+
+
     def test_Buy_Sell(self):
         response = Test_Buy_and_Sell()
         print (response)
         self.assertTrue(True)
+
+# %%
+
 
     def test_USDT_balance(self):
         symbol = "USDT"
