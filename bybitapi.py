@@ -203,39 +203,37 @@ def get_market_ask_price(test, symbol):
 # get_market_ask_price(True, "BTCUSDT")
 # %%
 
-def place_buy_order(
-    testmode, symbol,capitalsymbol, take_profit_percent, stop_loss_percent, capitalpercent
-):
+def place_buy_order(testmode, symbol, capitalsymbol, take_profit_percent, stop_loss_percent, qty):
+    """
+    Function to place a buy order.
+    :param testmode: Boolean indicating if test mode is enabled.
+    :param symbol: The symbol for the market asset.
+    :param capitalsymbol: The symbol for the capital asset.
+    :param take_profit_percent: The take profit percentage for the order.
+    :param stop_loss_percent: The stop loss percentage for the order.
+    :param qty: The quantity to buy.
+    """
     try:
         session = get_session(testmode)
+        
         # Get the market data
         market_data = get_market_ask_price(testmode, symbol=symbol)
+        
         # Get the market price
         market_price = float(market_data)
-        # Get the capital
-        balance = decimal.Decimal(get_wallet_balance(testmode,capitalsymbol))
-        # min =a if a < b else b
-        take_profit_price =  None if take_profit_percent ==None else  (market_price * (1 + take_profit_percent / 100))
-        stop_loss_price =None if stop_loss_percent ==None else   (market_price * (1 - stop_loss_percent / 100))
-        # note this is the amount of money we want to spend!
-        qty = ( decimal.Decimal(capitalpercent) / 100)*balance
-        # qtyf = format(qty, ".5f")
-        qty_rounded = qty.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
-
-        # Check if qty_rounded is less than the minimum order quantity
-        min_qty = decimal.Decimal('0.000001')
-        if qty_rounded < min_qty:
-            logger(f"Sale of {qty_rounded} was below minimum amount.")
-            qty_rounded = min_qty
-            return None
-
-        print("placing buy order of ",symbol, "qty:" ,qty)
+        
+        # Calculate the take profit and stop loss prices
+        take_profit_price = None if take_profit_percent == None else (market_price * (1 + take_profit_percent / 100))
+        stop_loss_price = None if stop_loss_percent == None else (market_price * (1 - stop_loss_percent / 100))
+        
+        print("placing buy order of ", symbol, "qty:", qty)
+        
         response = session.place_order(
             category="spot",
             symbol=symbol,
             side="Buy",
             orderType="Market",
-            qty=str(qty_rounded),
+            qty=str(qty),
             timeInForce="GTC",
             takeProfit=take_profit_price,
             stopLoss=stop_loss_price,
@@ -244,37 +242,34 @@ def place_buy_order(
     except Exception as e:
         logger(f"the error: {e}")
         raise e
+
     return response
 
 
-def place_sell_order(testmode, capitalsymbol, marketsymbol, capitalpercent):
+def place_sell_order(testmode, capitalsymbol, marketsymbol, qty):
+    """
+    Function to place a sell order.
+    :param testmode: Boolean indicating if test mode is enabled.
+    :param capitalsymbol: The symbol for the capital asset.
+    :param marketsymbol: The symbol for the market asset.
+    :param qty: The quantity to sell.
+    """
     try:
         session = get_session(testmode)
-        balance = decimal.Decimal(get_wallet_balance(testmode,capitalsymbol))
-        # balance = balance * decimal.Decimal(get_market_bid_price(TEST,marketsymbol))
-        qty = ( decimal.Decimal(capitalpercent) / 100)*balance
-        qty_rounded = qty.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
-
-        # Check if qty_rounded is less than the minimum order quantity
-        min_qty = decimal.Decimal('0.000001')
-        if qty_rounded < min_qty:
-            logger(f"Sale of {qty_rounded} was below minimum amount.")
-            qty_rounded = min_qty
-            return None
-
+        
         response = session.place_order(
             category="spot",
             symbol=marketsymbol,
             side="Sell",
             orderType="Market",
-            qty=str(qty_rounded),
+            qty=str(qty),
             timeInForce="GTC",
             orderLinkId=str(uuid.uuid4()),
         )
     except Exception as e:
         Logger(f"the error: {e}")
         raise e
-    
+
     return response
 
 
