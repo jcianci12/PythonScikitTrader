@@ -126,39 +126,6 @@ def get_wallet_balance(test, coin):
     print(f"No wallet balance found for coin: {coin}")
     return "0"
 
-
-
-def get_wallet_balance_new(test, coin):
-    print(f"fetching balance on coin {coin}")
-
-    api_key = API_KEY
-    secret = API_SECRET
-
-    timestamp = int(time.time() * 1000)
-    recv_window = 20000
-
-    query_string = f'coin={coin}&timestamp={timestamp}&recv_window={recv_window}'
-    signature = hmac.new(bytes(secret, 'utf-8'), bytes(query_string, 'utf-8'), hashlib.sha256).hexdigest()
-
-    url = f'https://api-testnet.bybit.com/v5/account/wallet-balance?{query_string}&sign={signature}'
-
-    headers = {
-        'X-BAPI-API-KEY': api_key,
-        'X-BAPI-TIMESTAMP': str(timestamp),
-        'X-BAPI-RECV-WINDOW': str(recv_window),
-        'X-BAPI-SIGN': signature
-    }
-
-    response = requests.get(url, headers=headers)
-    data = response.json()
-    coins = data['result'][coin]
-
-    wallet_balance = coins['wallet_balance']
-    print(f"current wallet balance is: {wallet_balance}")
-    return str(wallet_balance)
-
-
-
 # %%
 def get_market_bid_price(test, symbol):
     from pybit.unified_trading import HTTP
