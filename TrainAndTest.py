@@ -10,7 +10,7 @@ import numpy as np
 import joblib
 from get_latest_model_file import get_latest_model_filename, get_model_filename
 from logic.buylogic import buylogic
-from bybitapi import fetch_bybit_data_v5, get_market_bid_price, get_wallet_balance
+from bybitapi import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_wallet_balance
 
 from TrainingandValidation import TrainingAndValidation
 from datetime import datetime, timedelta
@@ -95,6 +95,7 @@ def retrain():
     print(f"RF Accuracy = {sum(validator.get_rf_results()) / len(validator.get_rf_results())}")
     print(f"KNN Accuracy = {sum(validator.get_knn_results()) / len(validator.get_knn_results())}")
     print(f"Ensemble Accuracy = {sum(validator.get_ensemble_results()) / len(validator.get_ensemble_results())}")
+    logger("Acccuracy from last test:" ,f"Ensemble Accuracy = {sum(validator.get_ensemble_results()) / len(validator.get_ensemble_results())}")
 
     print(validator.get_ledger())
     ledger = validator.get_ledger()
@@ -156,8 +157,10 @@ def trade_loop():
     confidence_score = getconfidencescore(data,start_date,end_date,"ensemble")
     usdtbalance = decimal.Decimal(get_wallet_balance(TEST,"USDT"))
     btcbalance = decimal.Decimal(get_wallet_balance(TEST,"BTC"))
-    btcmarketvalue = decimal.Decimal(get_market_bid_price(TEST,"BTCUSDT"))
-    portfolio_balance = (decimal.Decimal(usdtbalance) + (btcbalance *   btcmarketvalue))
+    bid_price = decimal.Decimal(get_market_bid_price(TEST,"BTCUSDT"))
+    ask_price = decimal.Decimal(get_market_ask_price(TEST,"BTCUSDT"))
+
+    portfolio_balance = (decimal.Decimal(usdtbalance) + (btcbalance *   bid_price))
     logger("Portfolio: ",portfolio_balance,"BTC:",btcbalance,"USDT:",usdtbalance)
     # Print the final output
     logger("Recieved confidence signal of:", confidence_score)
@@ -167,11 +170,11 @@ def trade_loop():
         if(confidence_score>BUYTHRESHOLD):
             buylogic(confidence_score,usdtbalance)
         elif(confidence_score<SELLTHRESHOLD):
-            selllogic(confidence_score,btcbalance,btcmarketvalue)
+            selllogic(confidence_score,btcbalance,bid_price)
         else:
             logger(str("Didnt act"))
 
-    plot_graph(btcmarketvalue, confidence_score, portfolio_balance,usdtbalance,btcbalance,"performance.png","performance.csv",30)
+    plot_graph(bid_price, confidence_score, portfolio_balance,usdtbalance,btcbalance,"performance.png","performance.csv",30)
 
 
 if (FORCERETRAINATSTART):

@@ -5,7 +5,7 @@ from functions.logger import logger
 from functions.map_range import map_range
 
 
-def buylogic(self,confidence_score,  usdtbalance):
+def buylogic(confidence_score,  usdtbalance):
     """
     Function to determine if a buy order should be placed based on the confidence score and other parameters.
     :param confidence_score: The confidence score for the buy decision.
@@ -16,12 +16,13 @@ def buylogic(self,confidence_score,  usdtbalance):
     
     # Calculate the percentage of capital to buy based on the confidence score
     capitalpercent = map_range(confidence_score, BUYTHRESHOLD, 1, minbuyamount, MAXBUYPERCENTOFCAPITAL)
-    
+    capitalpercent = decimal.Decimal(capitalpercent)
+    buyamountinbtc = usdtbalance*(capitalpercent/100)
     # Calculate the transaction amount
-    transactionamount =    ((capitalpercent / 100) * usdtbalance)/float(get_market_bid_price(TEST,"BTCUSDT"))
+    transactionamount =    buyamountinbtc*decimal.Decimal(get_market_bid_price(TEST,"BTCUSDT"))
     
     logger("Decided to buy %", capitalpercent, " of USDT balance. |USDT balance: ", usdtbalance,
-           " | Market value: ", transactionamount, "transaction amount:", transactionamount)
+           " | BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", transactionamount)
     min_qty = getminimumtransactionamount()
     # Check if the transaction amount is greater than the minimum transaction size
     if transactionamount > min_qty:

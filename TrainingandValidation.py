@@ -87,7 +87,8 @@ class TrainingAndValidation:
             # Iterate over the rows of the results DataFrame. We could do something with the generated rows like simulate a trade.
             for index, row in self.results_df.iterrows():
                 print("simulating for row: ",row)
-                self.simulate_trade(data, row)
+                if(SIMULATETRADE==True):
+                    self.simulate_trade(data, row)
 
             # Set the 'Date' column as the index
             self.results_df.set_index("Date", inplace=True)
@@ -97,7 +98,8 @@ class TrainingAndValidation:
             self.ensemble_results.append(ensemble_accuracy)
 
             print("done",pd.to_datetime(X_test.index)) 
-            self.simulate_trade(data,row)           
+            if(SIMULATETRADE==True):
+                self.simulate_trade(data,row)           
        
         self.models = {"rf": rf, "knn": knn, "ensemble": ensemble}
         self.save_models(self.models, symbol, interval, start, end)
@@ -210,7 +212,7 @@ class TrainingAndValidation:
                 }
                 # Update the ledger with the trade details
                 self.ledger.append(entry)
-        if(PLOTBACKTEST):
+        if(PLOTBACKTEST==True):
             plot_graph(current_price,ensemble_prediction,portfolio_value,0,0,'backtest.png','backtest.csv',30)
        
 
