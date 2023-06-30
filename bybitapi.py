@@ -223,9 +223,9 @@ def place_buy_order(
         qty_rounded = qty.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
 
         # Check if qty_rounded is less than the minimum order quantity
-        min_qty = decimal.Decimal('0.000001')
+        min_qty = decimal.Decimal('0.000048')*decimal.Decimal(market_price)
         if qty_rounded < min_qty:
-            logger(f"Sale of {qty_rounded} was below minimum amount.")
+            logger(f"Buy of {qty_rounded} was below minimum amount.")
             qty_rounded = min_qty
             return None
 
