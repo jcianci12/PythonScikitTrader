@@ -174,7 +174,7 @@ def trade_loop():
         else:
             logger(str("Didnt act"))
 
-    plot_graph(bid_price, confidence_score, portfolio_balance,usdtbalance,btcbalance,"performance.png","performance.csv",30)
+    plot_graph(bid_price, confidence_score, portfolio_balance,usdtbalance,btcbalance*bid_price,"performance.png","performance.csv",30)
 
 
 if (FORCERETRAINATSTART):
