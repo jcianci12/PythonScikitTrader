@@ -7,6 +7,8 @@ from bybitapi import *
 
 
 from config import *
+from logic.buylogic import buylogic
+from logic.selllogic import selllogic
 
 class API_Tests(unittest.TestCase):
 
@@ -45,12 +47,73 @@ class API_Tests(unittest.TestCase):
 
 
 
-    def test_Buy_Sell(self):
-        response = Test_Buy_and_Sell()
-        print (response)
-        self.assertTrue(True)
+    def test_Buy(self):
+        """
+        Function to test buying.
+        """
+        # Get the USDT balance
+        usdtbalance = float(get_wallet_balance(TEST, "USDT"))
+        
+        # Calculate the quantity to buy (2% of USDT balance)
+        qty = (2 / 100) * usdtbalance
+        qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
+        
+        # Place a buy order using 2% of USDT balance
+        buy = place_buy_order(TEST, "BTCUSDT", "USDT", 5, 5, qty_rounded)
+        
+        # Assert that the buy order was successful
+        assert buy['retCode'] == 0, f"Buy order failed: {buy}"
 
-# %%
+
+
+    def test_Sell(self):
+        """
+        Function to test selling.
+        """
+        # Get the BTC balance
+        btcbalance = decimal.Decimal(get_wallet_balance(True, "BTC"))
+        
+        # Place a sell order for 100% of the BTC balance
+        sell = place_sell_order(True, "BTC", "BTCUSDT", btcbalance)
+        
+        # Assert that the sell order was successful
+        if sell is not None:
+            assert sell['status'] == 'FILLED', f"Sell order failed: {sell}"
+        else:
+            logger("Sell order not placed due to minimum quantity requirement.")
+            assert sell is None
+
+    def test_buylogic(self):
+        """
+        Function to test the buylogic function.
+        """
+        # Set the confidence score, buythreshold, and usdtbalance values
+        confidence_score = 0.85
+        buythreshold = BUYTHRESHOLD
+        usdtbalance = 100
+        
+        # Call the buylogic function and assert that no exceptions were raised
+        try:
+            buylogic(confidence_score, buythreshold, usdtbalance)
+        except Exception as e:
+            self.fail(f"buylogic raised an exception: {e}")
+
+    def test_selllogic(self):
+        """
+        Function to test the selllogic function.
+        """
+        # Set the confidence score, sellthreshold, btcbalance, and btcmarketvalue values
+        confidence_score = 0.15
+        btcbalance = get_wallet_balance(TEST,"BTCUSDT")
+        btcmarketvalue = get_market_bid_price(TEST,"BTCUSDT")
+        
+        # Call the selllogic function and assert that no exceptions were raised
+        try:
+            selllogic(confidence_score, btcbalance, btcmarketvalue)
+        except Exception as e:
+            self.fail(f"selllogic raised an exception: {e}")
+
+
 
 
     def test_USDT_balance(self):

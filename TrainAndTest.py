@@ -1,5 +1,6 @@
 # %%
 import datetime
+import decimal
 import os
 import time
 import pandas as pd
@@ -153,10 +154,10 @@ def trade_loop():
     #call the trade decider.
         
     confidence_score = getconfidencescore(data,start_date,end_date,"ensemble")
-    usdtbalance = float(get_wallet_balance(TEST,"USDT"))
-    btcbalance = float(get_wallet_balance(TEST,"BTC"))
-    btcmarketvalue = float(get_market_bid_price(TEST,"BTCUSDT"))
-    portfolio_balance = (float(usdtbalance) + (btcbalance *   btcmarketvalue))
+    usdtbalance = decimal.Decimal(get_wallet_balance(TEST,"USDT"))
+    btcbalance = decimal.Decimal(get_wallet_balance(TEST,"BTC"))
+    btcmarketvalue = decimal.Decimal(get_market_bid_price(TEST,"BTCUSDT"))
+    portfolio_balance = (decimal.Decimal(usdtbalance) + (btcbalance *   btcmarketvalue))
     logger("Portfolio: ",portfolio_balance,"BTC:",btcbalance,"USDT:",usdtbalance)
     # Print the final output
     logger("Recieved confidence signal of:", confidence_score)
@@ -164,9 +165,9 @@ def trade_loop():
         retrain() 
     else:
         if(confidence_score>BUYTHRESHOLD):
-            buylogic(confidence_score,BUYTHRESHOLD,usdtbalance)
+            buylogic(confidence_score,usdtbalance)
         elif(confidence_score<SELLTHRESHOLD):
-            selllogic(confidence_score,SELLTHRESHOLD,btcbalance,btcmarketvalue)
+            selllogic(confidence_score,btcbalance,btcmarketvalue)
         else:
             logger(str("Didnt act"))
 

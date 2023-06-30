@@ -193,6 +193,12 @@ def place_buy_order(testmode, symbol, capitalsymbol, take_profit_percent, stop_l
         take_profit_price = None if take_profit_percent == None else (market_price * (1 + take_profit_percent / 100))
         stop_loss_price = None if stop_loss_percent == None else (market_price * (1 - stop_loss_percent / 100))
         
+        # Check if qty is less than the minimum order quantity
+        min_qty = 0.000001
+        if qty < min_qty:
+            logger(f"Sale of {qty} was below minimum amount.")
+            qty = min_qty
+        
         print("placing buy order of ", symbol, "qty:", qty)
         
         response = session.place_order(
@@ -213,7 +219,9 @@ def place_buy_order(testmode, symbol, capitalsymbol, take_profit_percent, stop_l
     return response
 
 
-def place_sell_order(testmode, capitalsymbol, marketsymbol, qty):
+
+
+def place_sell_order(testmode,  marketsymbol, qty):
     """
     Function to place a sell order.
     :param testmode: Boolean indicating if test mode is enabled.
@@ -224,12 +232,23 @@ def place_sell_order(testmode, capitalsymbol, marketsymbol, qty):
     try:
         session = get_session(testmode)
         
+        # Check if qty is less than the minimum order quantity
+        min_qty = 0.000001
+        qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
+
+        if qty_rounded < min_qty:
+            logger(f"Sale of {qty} was below minimum amount.")
+            qty_rounded = min_qty
+            return None
+        
+
+
         response = session.place_order(
             category="spot",
             symbol=marketsymbol,
             side="Sell",
             orderType="Market",
-            qty=str(qty),
+            qty=str(qty_rounded),
             timeInForce="GTC",
             orderLinkId=str(uuid.uuid4()),
         )
@@ -241,33 +260,8 @@ def place_sell_order(testmode, capitalsymbol, marketsymbol, qty):
 
 
 
-def Test_Buy_and_Sell():
-    """
-    Function to test buying and selling.
-    """
-    # Get the USDT balance
-    usdtbalance = decimal.Decimal(get_wallet_balance(True, "USDT"))
-    
-    # Calculate the quantity to buy (2% of USDT balance)
-    qty = (2 / 100) * usdtbalance
-    qty_rounded = qty.quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
-    
-    # Check if qty_rounded is less than the minimum order quantity
-    min_qty = decimal.Decimal('0.000001')
-    if qty_rounded < min_qty:
-        logger(f"Sale of {qty_rounded} was below minimum amount.")
-        qty_rounded = min_qty
-    
-    # Place a buy order using 2% of USDT balance
-    buy = place_buy_order(True, "BTCUSDT", "USDT", 5, 5, qty_rounded)
-    
-    # Get the BTC balance
-    btcbalance = decimal.Decimal(get_wallet_balance(True, "BTC"))
-    
-    # Place a sell order for 100% of the BTC balance
-    sell = place_sell_order(True, "BTC", "BTCUSDT", btcbalance)
-    
-    return sell, buy
+
+
 
 
 def fetch_bybit_current_orders():

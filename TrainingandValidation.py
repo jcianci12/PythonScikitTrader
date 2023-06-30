@@ -84,6 +84,11 @@ class TrainingAndValidation:
 
             self.results_df = pd.DataFrame(rv)
 
+            # Iterate over the rows of the results DataFrame. We could do something with the generated rows like simulate a trade.
+            for index, row in self.results_df.iterrows():
+                print("simulating for row: ",row)
+                self.simulate_trade(data, row)
+
             # Set the 'Date' column as the index
             self.results_df.set_index("Date", inplace=True)
             
@@ -91,7 +96,8 @@ class TrainingAndValidation:
             self.knn_results.append(knn_accuracy)
             self.ensemble_results.append(ensemble_accuracy)
 
-            print("done",pd.to_datetime(X_test.index))            
+            print("done",pd.to_datetime(X_test.index)) 
+            self.simulate_trade(data,row)           
        
         self.models = {"rf": rf, "knn": knn, "ensemble": ensemble}
         self.save_models(self.models, symbol, interval, start, end)
@@ -189,7 +195,7 @@ class TrainingAndValidation:
             else:
                     # Calculate the quantity of stock purchased based on the investment amount and buy price
                 quantity = investment_amount / current_price
-                result = self.item.purchase(quantity, current_price,current_price*SIMTAKEPROFIT,current_price*SIMSTOPLOSS)
+                result = self.item.purchase(quantity, current_price,current_price*TAKEPROFIT,current_price*STOPLOSS)
                 entry = {
                     "Date": date,
                     "Action": "Buy",
@@ -204,9 +210,9 @@ class TrainingAndValidation:
                 }
                 # Update the ledger with the trade details
                 self.ledger.append(entry)
-                if(PLOTBACKTEST):
-                    plot_graph(current_price,ensemble_prediction,portfolio_value,0,0,'backtest.png','backtest.csv',30)
-
+        if(PLOTBACKTEST):
+            plot_graph(current_price,ensemble_prediction,portfolio_value,0,0,'backtest.png','backtest.csv',30)
+       
 
         # ledger_df = pd.DataFrame(
         #     columns=["Date", "Action", "Stock", "Quantity", "Price", "Balance"]
