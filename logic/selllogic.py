@@ -18,32 +18,29 @@ def selllogic(confidence_score, btcbalance, btcmarketvalue):
     btcbalanceUSDT = btcmarketvalue * btcbalance
     # Calculate the percentage of capital to sell based on the confidence score
 
-         
-
-    tradeamount = map_range(confidence_score, 0, SELLTHRESHOLD, float(getminimumtransactionamountinusdt(marketsymbol)),float(getmaxtransactionsizeinusdt(btcbalanceUSDT)))
-
+    tradeamount = map_range(confidence_score, 0, SELLTHRESHOLD, float(getminimumtransactionamountinusdt(marketsymbol)),float(getmaxtransactionsizeinusdt(btcbalance,btcmarketvalue)))
+    tradeamount = decimal.Decimal(tradeamount) /btcmarketvalue
     # Calculate the transaction amount
     # Calculate the quantity to sell
-    qty_rounded = decimal.Decimal(tradeamount)/btcmarketvalue
-        
-    # Check if the transaction amount is greater than the minimum transaction size
-    if qty_rounded > getminimumtransactionamountinusdt(marketsymbol):   
-
-        logger("Decided to sell %", tradeamount, " of BTC balance. |BTC balance: ", btcbalance,
-            " | Market value: ", btcmarketvalue, "transaction amount:", tradeamount)
+    logger("Decided to sell ", tradeamount, " of BTC balance of: ", btcbalanceUSDT,
+        " | Market value: ", btcmarketvalue, "USDT transaction amount:", tradeamount)
             
+    # Check if the transaction amount is greater than the minimum transaction size
+    if tradeamount > getminimumtransactionamountinbtc():   
+
+        
         # Place the sell order
-        response = place_sell_order(TEST,  marketsymbol, qty_rounded)            
+        response = place_sell_order(TEST,  marketsymbol, tradeamount)            
     else:
-        logger("Not enough ", capitalsymbol, " balance is:", btcbalance)
+        logger("Not enough ", capitalsymbol, " balance is:", btcbalanceUSDT)
 
 def getminimumtransactionamountinusdt(marketsymbol):
     return decimal.Decimal(MINIMUMBTCTRANSACTIONSIZE)*decimal.Decimal(get_market_bid_price(TEST,marketsymbol))
 
-def getminimumtransactionamountinbtc(marketsymbol):
+def getminimumtransactionamountinbtc():
     return decimal.Decimal(MINIMUMBTCTRANSACTIONSIZE)
 
-def getmaxtransactionsizeinusdt(btcbalanceinusdt):
-    return (decimal.Decimal(MAXBUYPERCENTOFCAPITAL)/100)*btcbalanceinusdt
+def getmaxtransactionsizeinusdt(btcbalance,btcmarketvalue):
+    return ((decimal.Decimal(MAXBUYPERCENTOFCAPITAL)/100)*btcbalance)*btcmarketvalue
 
 
