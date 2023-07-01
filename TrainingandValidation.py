@@ -213,7 +213,7 @@ class TrainingAndValidation:
                 # Update the ledger with the trade details
                 self.ledger.append(entry)
         if(PLOTBACKTEST==True):
-            plot_graph(current_price,ensemble_prediction,portfolio_value,0,0,'backtest.png','backtest.csv',30)
+            plot_graph(current_price,ensemble_prediction,portfolio_value,0,0,'backtest.png','backtest.csv',GRAPHVIEWWINDOW)
        
 
         # ledger_df = pd.DataFrame(

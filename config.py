@@ -2,7 +2,7 @@
 import decimal
 
 
-TEST=True
+TEST=False
 
 BASE_URL = "https://api-testnet.bybit.com" if TEST else "https://api.bybit.com"
 
@@ -11,7 +11,6 @@ WEBSOCKET_BASE_URL = "wss://stream.bybit.com/realtime"
 ACCOUNT_TYPE = "SPOT" if TEST else "UNIFIED"
 
 
-PERCENTOFCAPITAL = 0.02 # in percent
 
 
 
@@ -42,5 +41,7 @@ LOOKAHEADVALUE = 2
 PLOTBACKTEST = False
 PLOTPROGRESS = True
 SIMULATETRADE = False
+
+GRAPHVIEWWINDOW = 96
 
 
