@@ -1,19 +1,46 @@
-from bybitapi import place_sell_order
+import decimal
+from bybitapi import get_market_bid_price, place_sell_order
 from config import *
 from functions.logger import logger
 from functions.map_range import map_range
 
 
-def selllogic(confidence_score,sellthreshold,btcbalance,btcmarketvalue):
+def selllogic(confidence_score, btcbalance, btcmarketvalue):
+    """
+    Function to determine if a sell order should be placed based on the confidence score and other parameters.
+    :param confidence_score: The confidence score for the sell decision.
+    :param sellthreshold: The threshold for the confidence score to trigger a sell.
+    :param btcbalance: The current balance of BTC.
+    :param btcmarketvalue: The current market value of BTC.
+    """
     capitalsymbol = "BTC"
     marketsymbol = "BTCUSDT"
-    minsellamount = 0 #dont wanna sell too low an amount.
-    capitalpercent = map_range(confidence_score,0,sellthreshold,MAXSELLPERCENTOFCAPITAL,minsellamount)
+    btcbalanceUSDT = btcmarketvalue * btcbalance
+    # Calculate the percentage of capital to sell based on the confidence score
+
+    tradeamount = map_range(confidence_score, 0, SELLTHRESHOLD, float(getminimumtransactionamountinusdt(marketsymbol)),float(getmaxtransactionsizeinusdt(btcbalance,btcmarketvalue)))
+    tradeamount = decimal.Decimal(tradeamount) /btcmarketvalue
+    # Calculate the transaction amount
+    # Calculate the quantity to sell
+    logger("Decided to sell ", tradeamount, " of BTC balance of: ", btcbalanceUSDT,
+        " | Market value: ", btcmarketvalue, "USDT transaction amount:", tradeamount)
+            
+    # Check if the transaction amount is greater than the minimum transaction size
+    if tradeamount > getminimumtransactionamountinbtc():   
+
         
-    transactionamount = (capitalpercent * btcbalance)*btcmarketvalue
-    if(transactionamount>MINIMUMTRANSACTIONSIZE):
-        logger("Decided to sell %", capitalpercent , " of BTC balance. |BTC balance: ",btcbalance," | Market value: ",btcmarketvalue , "transaction amount:" , transactionamount)
-        response = place_sell_order(TEST, capitalsymbol, marketsymbol, 1)
-        print(response)
+        # Place the sell order
+        response = place_sell_order(TEST,  marketsymbol, tradeamount)            
     else:
-        logger("Not enough ",capitalsymbol," balance is:" ,btcmarketvalue)
+        logger("Not enough ", capitalsymbol, " balance is:", btcbalanceUSDT)
+
+def getminimumtransactionamountinusdt(marketsymbol):
+    return decimal.Decimal(MINIMUMBTCTRANSACTIONSIZE)*decimal.Decimal(get_market_bid_price(TEST,marketsymbol))
+
+def getminimumtransactionamountinbtc():
+    return decimal.Decimal(MINIMUMBTCTRANSACTIONSIZE)
+
+def getmaxtransactionsizeinusdt(btcbalance,btcmarketvalue):
+    return ((decimal.Decimal(MAXBUYPERCENTOFCAPITAL)/100)*btcbalance)*btcmarketvalue
+
+

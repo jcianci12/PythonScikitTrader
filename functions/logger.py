@@ -17,7 +17,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
-def plot_graph(btc_price, confidence_signal, portfolio_balance,usdtbalance,btcbalance, chartfilename,csvfilename, viewwindow):
+def plot_graph(btc_price, confidence_signal, portfolio_balance,usdtbalance,btcbalanceUSDT, chartfilename,csvfilename, viewwindow):
     if(viewwindow==None):
         viewwindow = 10000
     # Check if the performance.csv file exists
@@ -33,7 +33,7 @@ def plot_graph(btc_price, confidence_signal, portfolio_balance,usdtbalance,btcba
     # Append the data to the performance.csv file
     with open(csvfilename, 'a') as f:
         writer = csv.writer(f)
-        writer.writerow([current_datetime, btc_price, confidence_signal, portfolio_balance,usdtbalance,btcbalance])
+        writer.writerow([current_datetime, btc_price, confidence_signal, portfolio_balance,usdtbalance,btcbalanceUSDT])
     
     # Read the data from the performance.csv file
     with open(csvfilename, 'r') as f:
@@ -47,7 +47,7 @@ def plot_graph(btc_price, confidence_signal, portfolio_balance,usdtbalance,btcba
     confidence_signal = [float(row[2]) for row in data]
     portfolio_balance = [float(row[3]) for row in data]
     usdtbalance = [float(row[4]) for row in data]
-    btcbalance = [float(row[5]) for row in data]
+    btcbalanceUSDT = [float(row[5]) for row in data]
 
     
     # Create a figure and three subplots
@@ -62,7 +62,7 @@ def plot_graph(btc_price, confidence_signal, portfolio_balance,usdtbalance,btcba
     # Plot the current balance data on the third subplot
     ax3.plot(datetime_values[-viewwindow:], portfolio_balance[-viewwindow:], label='Current Balance', color='r')
     ax3.plot(datetime_values[-viewwindow:], usdtbalance[-viewwindow:], label='USDT Balance', color='b')
-    ax3.plot(datetime_values[-viewwindow:], btcbalance[-viewwindow:], label='BTC Balance', color='g')
+    ax3.plot(datetime_values[-viewwindow:], btcbalanceUSDT[-viewwindow:], label='BTC Balance', color='g')
     
     # Format the x-axis of each subplot to display datetime values
     ax1.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))

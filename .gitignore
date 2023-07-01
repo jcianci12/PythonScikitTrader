@@ -4,3 +4,5 @@ KEYS.py
 __pycache__/
 *.pyc
 *.csv
+*.png
+*.txt
