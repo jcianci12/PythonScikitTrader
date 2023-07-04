@@ -1,3 +1,4 @@
+import glob
 import os
 import joblib
 from matplotlib import pyplot as plt
@@ -102,6 +103,8 @@ class TrainingAndValidation:
                 self.simulate_trade(data,row)           
        
         self.models = {"rf": rf, "knn": knn, "ensemble": ensemble}
+        self.clean_up_models("models/")
+
         self.save_models(self.models, symbol, interval, start, end)
 
         logger("Finished training")
@@ -118,6 +121,14 @@ class TrainingAndValidation:
             filename = get_model_filename(symbol,interval,start,end,model_name)
             logger("saving model file as ",filename)
             joblib.dump(model, f"models/{filename}" )
+
+    def clean_up_models(self,directory):
+        files = glob.glob(directory)
+        logger(f"found {files.count()} files, cleaning.")
+
+        for file in files:
+            if os.path.exists(file):
+                os.remove(file)
 
 
     def get_results_df(self):
