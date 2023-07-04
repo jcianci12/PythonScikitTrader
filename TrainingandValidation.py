@@ -124,7 +124,7 @@ class TrainingAndValidation:
 
     def clean_up_models(self,directory):
         files = glob.glob(directory)
-        logger(f"found {files.count()} files, cleaning.")
+        logger(f"found {len(files)} files, cleaning.")
 
         for file in files:
             if os.path.exists(file):
