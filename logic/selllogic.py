@@ -18,7 +18,7 @@ def selllogic(confidence_score, btcbalance, btcmarketvalue):
     btcbalanceUSDT = btcmarketvalue * btcbalance
     # Calculate the percentage of capital to sell based on the confidence score
 
-    tradeamount = map_range(confidence_score, 0, SELLTHRESHOLD, float(getmaxtransactionsizeinusdt(btcbalance,btcmarketvalue)) ,float(getminimumtransactionamountinusdt(marketsymbol)))
+    tradeamount = map_range(confidence_score, 0, SELLTHRESHOLD,float(getmaxtransactionsizeinusdt(btcbalance,btcmarketvalue)), float(getminimumtransactionamountinusdt(marketsymbol)))
     tradeamount = decimal.Decimal(tradeamount) /btcmarketvalue
     # Calculate the transaction amount
     # Calculate the quantity to sell

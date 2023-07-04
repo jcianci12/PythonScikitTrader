@@ -8,6 +8,7 @@ import numpy as np
 
 
 import joblib
+from functions.map_range import map_range
 from get_latest_model_file import get_latest_model_filename, get_model_filename
 from logic.buylogic import buylogic
 from bybitapi import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_wallet_balance
@@ -60,11 +61,11 @@ def _produce_movement_indicators(data):
     :param window: number of days, or rows to look ahead to see what the price did
     """
 
-    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= data["close"]
+    predictionup = data.shift(-LOOKAHEADVALUE)["close"]+5 >= data["close"]
     predictionup = predictionup.iloc[:-LOOKAHEADVALUE]
     data["pred"] = predictionup.astype(int)
 
-    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= data["close"]
+    predictiondec = data.shift(-LOOKAHEADVALUE)["close"]-5 <= data["close"]
     predictiondec = predictiondec.iloc[:-LOOKAHEADVALUE]
     data["preddec"] = predictiondec.astype(int)
 
@@ -161,7 +162,7 @@ def trade_loop():
     #call the trade decider.
         
     confidence_scoreinc = getconfidencescore(data,start_date,end_date,"ensembleinc")
-    confidence_scoredec = getconfidencescore(data,start_date,end_date,"ensembledec")
+    confidence_scoredec = map_range(getconfidencescore(data,start_date,end_date,"ensembledec"),0,1,1,0)
 
     usdtbalance = decimal.Decimal(get_wallet_balance(TEST,"USDT"))
     btcbalance = decimal.Decimal(get_wallet_balance(TEST,"BTC"))
@@ -172,19 +173,17 @@ def trade_loop():
     logger("Portfolio: ",portfolio_balance,"BTC:",btcbalance,"USDT:",usdtbalance)
     # Print the final output
     logger("buy signal:", confidence_scoreinc,"sell signal:",confidence_scoredec)
-    average = (confidence_scoredec+confidence_scoreinc)/2
 
     if(confidence_scoreinc==1 or confidence_scoreinc ==0 or confidence_scoreinc ==0.5): # if its 1 or 0 or 0.5 something went wrong, retrain.
         retrain() 
     else:
-        if(confidence_scoreinc>BUYTHRESHOLD and confidence_scoredec<SELLTHRESHOLD):
+        if(confidence_scoreinc>BUYTHRESHOLD and confidence_scoredec>SELLTHRESHOLD):
             buylogic(confidence_scoreinc,usdtbalance)
-        elif(confidence_scoreinc<BUYTHRESHOLD and confidence_scoredec>SELLTHRESHOLD):
-            selllogic(confidence_scoreinc,btcbalance,bid_price)
+        elif(confidence_scoreinc<BUYTHRESHOLD and confidence_scoredec<SELLTHRESHOLD):
+            selllogic(confidence_scoredec,btcbalance,bid_price)
         else:
             logger(str("Didnt act"))
-    logger(average)
-    plot_graph(bid_price, average, portfolio_balance,usdtbalance,btcbalance*bid_price,"performance.png","performance.csv",GRAPHVIEWWINDOW)
+    plot_graph(bid_price, confidence_scoreinc,confidence_scoredec, portfolio_balance,usdtbalance,btcbalance*bid_price,"performance.png","performance.csv",GRAPHVIEWWINDOW)
 
 
 if (FORCERETRAINATSTART):
