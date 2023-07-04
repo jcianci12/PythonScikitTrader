@@ -1,5 +1,6 @@
 import glob
 import os
+import shutil
 import joblib
 from matplotlib import pyplot as plt
 import pandas as pd
@@ -103,7 +104,7 @@ class TrainingAndValidation:
                 self.simulate_trade(data,row)           
        
         self.models = {"rf": rf, "knn": knn, "ensemble": ensemble}
-        self.clean_up_models("models/")
+        self.clean_up_models("models")
 
         self.save_models(self.models, symbol, interval, start, end)
 
@@ -123,12 +124,15 @@ class TrainingAndValidation:
             joblib.dump(model, f"models/{filename}" )
 
     def clean_up_models(self,directory):
-        files = glob.glob(directory)
-        logger(f"found {len(files)} files, cleaning.")
-
-        for file in files:
-            if os.path.exists(file):
-                os.remove(file)
+        for filename in os.listdir(directory):
+            file_path = os.path.join(directory, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
 
 
     def get_results_df(self):
