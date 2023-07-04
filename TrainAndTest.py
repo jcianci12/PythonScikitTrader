@@ -60,9 +60,13 @@ def _produce_movement_indicators(data):
     :param window: number of days, or rows to look ahead to see what the price did
     """
 
-    prediction = data.shift(-LOOKAHEADVALUE)["close"] >= data["close"]
-    prediction = prediction.iloc[:-LOOKAHEADVALUE]
-    data["pred"] = prediction.astype(int)
+    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= data["close"]
+    predictionup = predictionup.iloc[:-LOOKAHEADVALUE]
+    data["pred"] = predictionup.astype(int)
+
+    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= data["close"]
+    predictiondec = predictiondec.iloc[:-LOOKAHEADVALUE]
+    data["preddec"] = predictiondec.astype(int)
 
     return data
 #%%
@@ -92,14 +96,14 @@ def retrain():
 
 
     validator.train_and_cross_validate(trainingdata,symbol,start_date,end_date,INTERVAL)
-    print(f"RF Accuracy = {sum(validator.get_rf_results()) / len(validator.get_rf_results())}")
-    print(f"KNN Accuracy = {sum(validator.get_knn_results()) / len(validator.get_knn_results())}")
-    print(f"Ensemble Accuracy = {sum(validator.get_ensemble_results()) / len(validator.get_ensemble_results())}")
-    logger("Acccuracy from last test:" ,f"Ensemble Accuracy = {sum(validator.get_ensemble_results()) / len(validator.get_ensemble_results())}")
+    # print(f"RF Accuracy = {sum(validator.get_rf_results()) / len(validator.get_rf_results())}")
+    # print(f"KNN Accuracy = {sum(validator.get_knn_results()) / len(validator.get_knn_results())}")
+    # print(f"Ensemble Accuracy = {sum(validator.get_ensemble_results()) / len(validator.get_ensemble_results())}")
+    # logger("Acccuracy from last test:" ,f"Ensemble Accuracy = {sum(validator.get_ensemble_results()) / len(validator.get_ensemble_results())}")
 
-    print(validator.get_ledger())
-    ledger = validator.get_ledger()
-    validator.save_dataframe(ledger)
+    # print(validator.get_ledger())
+    # ledger = validator.get_ledger()
+    # validator.save_dataframe(ledger)
 
 def is_file_older_than_n_minutes(file_path, n):
     if ((file_path==None) or not os.path.exists(file_path)  ):
@@ -115,6 +119,8 @@ def getconfidencescore(data,start_date,end_date,modelname):
     model = joblib.load(filename)
 
     data = data.drop('pred', axis=1)
+    data = data.drop('preddec', axis=1)
+
     # Use the loaded model to make predictions
 
     prediction = model.predict(data)
@@ -143,7 +149,7 @@ def trade_loop():
     )  # Some indicators produce NaN values for the first few rows, we just remove them here
     data.tail()
 
-    if(ALWAYSRETRAIN or  is_file_older_than_n_minutes(get_latest_model_filename(symbol,INTERVAL,start_date,end_date,"ensemble"),60)):
+    if(ALWAYSRETRAIN or  is_file_older_than_n_minutes(get_latest_model_filename(symbol,INTERVAL,start_date,end_date,"ensembleinc"),60)):
             
         
         #retrain the data
@@ -154,7 +160,9 @@ def trade_loop():
 
     #call the trade decider.
         
-    confidence_score = getconfidencescore(data,start_date,end_date,"ensemble")
+    confidence_scoreinc = getconfidencescore(data,start_date,end_date,"ensembleinc")
+    confidence_scoredec = getconfidencescore(data,start_date,end_date,"ensembledec")
+
     usdtbalance = decimal.Decimal(get_wallet_balance(TEST,"USDT"))
     btcbalance = decimal.Decimal(get_wallet_balance(TEST,"BTC"))
     bid_price = decimal.Decimal(get_market_bid_price(TEST,"BTCUSDT"))
@@ -163,18 +171,20 @@ def trade_loop():
     portfolio_balance = (decimal.Decimal(usdtbalance) + (btcbalance *   bid_price))
     logger("Portfolio: ",portfolio_balance,"BTC:",btcbalance,"USDT:",usdtbalance)
     # Print the final output
-    logger("Recieved confidence signal of:", confidence_score)
-    if(confidence_score==1 or confidence_score ==0 or confidence_score ==0.5): # if its 1 or 0 or 0.5 something went wrong, retrain.
+    logger("buy signal:", confidence_scoreinc,"sell signal:",confidence_scoredec)
+    average = (confidence_scoredec+confidence_scoreinc)/2
+
+    if(confidence_scoreinc==1 or confidence_scoreinc ==0 or confidence_scoreinc ==0.5): # if its 1 or 0 or 0.5 something went wrong, retrain.
         retrain() 
     else:
-        if(confidence_score>BUYTHRESHOLD):
-            buylogic(confidence_score,usdtbalance)
-        elif(confidence_score<SELLTHRESHOLD):
-            selllogic(confidence_score,btcbalance,bid_price)
+        if(confidence_scoreinc>BUYTHRESHOLD and confidence_scoredec<SELLTHRESHOLD):
+            buylogic(confidence_scoreinc,usdtbalance)
+        elif(confidence_scoreinc<BUYTHRESHOLD and confidence_scoredec>SELLTHRESHOLD):
+            selllogic(confidence_scoreinc,btcbalance,bid_price)
         else:
             logger(str("Didnt act"))
-
-    plot_graph(bid_price, confidence_score, portfolio_balance,usdtbalance,btcbalance*bid_price,"performance.png","performance.csv",GRAPHVIEWWINDOW)
+    logger(average)
+    plot_graph(bid_price, average, portfolio_balance,usdtbalance,btcbalance*bid_price,"performance.png","performance.csv",GRAPHVIEWWINDOW)
 
 
 if (FORCERETRAINATSTART):

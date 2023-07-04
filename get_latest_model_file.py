@@ -9,7 +9,7 @@ def get_model_filename(symbol,interval,startdate,enddate,modelname):
 def get_latest_model_filename(symbol, interval,startdate,enddate,modelname):
     # Get a list of all model files that match the symbol and interval
 
-    model_files = glob.glob(f"models/{symbol}_{interval}_*_*_ensemble.joblib")
+    model_files = glob.glob(f"models/{symbol}_{interval}_*_*_{modelname}.joblib")
 
 
     # Check if there are any matching model files

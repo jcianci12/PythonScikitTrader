@@ -38,12 +38,19 @@ class TrainingAndValidation:
         self.ensemble_results = []
 
         # Models which will be used
-        rf = RandomForestClassifier()
-        knn = KNeighborsClassifier()
+        rfinc = RandomForestClassifier()
+        knninc = KNeighborsClassifier()
+
+        rfdec = RandomForestClassifier()
+        knndec = KNeighborsClassifier()
 
         # Create a tuple list of our models
-        estimators = [("knn", knn), ("rf", rf)]
-        ensemble = VotingClassifier(estimators, voting="soft")
+        estimatorsinc = [("knninc", knninc), ("rfinc", rfinc)]
+        estimatorsdec = [("rfdec",rfdec),("knndec",knndec)]
+
+        ensembleinc = VotingClassifier(estimatorsinc, voting="soft")
+        ensembledec = VotingClassifier(estimatorsdec, voting="soft")
+
         logger("Starting training")
         while True:
             # Partition the data into chunks of size len_train every num_train days
@@ -52,8 +59,10 @@ class TrainingAndValidation:
 
             if len(df) < 40:
                 break
+#increase
+
             y = df["pred"]
-            features = [x for x in df.columns if x not in ["pred"]]
+            features = [x for x in df.columns if x not in ["pred","preddec"]]
             X = df[features]
 
             X_train, X_test, y_train, y_test = train_test_split(
@@ -61,49 +70,42 @@ class TrainingAndValidation:
             )
 
             # fit models
-            rf.fit(X_train, y_train)
-            knn.fit(X_train, y_train)
-            ensemble.fit(X_train, y_train)
+            rfinc.fit(X_train, y_train)
+            knninc.fit(X_train, y_train)
+            ensembleinc.fit(X_train, y_train)
 
-            # get predictions
-            rf_prediction = rf.predict(X_test)
-            knn_prediction = knn.predict(X_test)
-            ensemble_prediction = ensemble.predict(X_test)
+            # # get predictions
+            # rf_prediction = rfinc.predict(X_test)
+            # knn_prediction = knninc.predict(X_test)
+            # ensemble_prediction = ensembleinc.predict(X_test)
 
-            # determine accuracy and append to results
-            rf_accuracy = accuracy_score(y_test.values, rf_prediction)
-            knn_accuracy = accuracy_score(y_test.values, knn_prediction)
-            ensemble_accuracy = accuracy_score(y_test.values, ensemble_prediction)
 
-            # Create a DataFrame to store the results
-            rv = {
-                "Date": pd.to_datetime(X_test.index),
-                "RF Prediction": rf_prediction.astype(int),
-                "KNN Prediction": knn_prediction.astype(int),
-                "Ensemble Prediction": ensemble_prediction.astype(int),
-                "Actual": y_test.values.astype(int),
-            }
+#decrease
+            y = df["preddec"]
+            features = [x for x in df.columns if x not in ["pred","preddec"]]
+            X = df[features]
 
-            self.results_df = pd.DataFrame(rv)
+            X_train, X_test, y_train, y_test = train_test_split(
+                X, y, train_size=7 * len(X) // 10, shuffle=False
+            )
 
-            # Iterate over the rows of the results DataFrame. We could do something with the generated rows like simulate a trade.
-            for index, row in self.results_df.iterrows():
-                print("simulating for row: ",row)
-                if(SIMULATETRADE==True):
-                    self.simulate_trade(data, row)
+            # fit models
+            rfdec.fit(X_train, y_train)
+            knndec.fit(X_train, y_train)
+            ensembledec.fit(X_train, y_train)
 
-            # Set the 'Date' column as the index
-            self.results_df.set_index("Date", inplace=True)
-            
-            self.rf_results.append(rf_accuracy)
-            self.knn_results.append(knn_accuracy)
-            self.ensemble_results.append(ensemble_accuracy)
+            # # get predictions
+            # rf_prediction = rfdec.predict(X_test)
+            # knn_prediction = knndec.predict(X_test)
+            # ensemble_prediction = ensembledec.predict(X_test)
+            print(X_train.index[0])            
 
-            print("done",pd.to_datetime(X_test.index)) 
-            if(SIMULATETRADE==True):
-                self.simulate_trade(data,row)           
+
+         
+
+                 
        
-        self.models = {"rf": rf, "knn": knn, "ensemble": ensemble}
+        self.models = {"rfinc": rfinc, "knninc": knninc, "ensembleinc": ensembleinc,"rf":rfdec,"knninc":knndec,"ensembledec":ensembledec}
         self.clean_up_models("models")
 
         self.save_models(self.models, symbol, interval, start, end)
