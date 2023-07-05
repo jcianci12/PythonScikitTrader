@@ -1,4 +1,5 @@
 # PythonScikitTrader
+Thanks for checking out my project!
 
 What this project does:
 - Demonstrates how to interface with the bybit exchange (sometimes the bybit documentation was a bit sparse - there is some trial and error in here)
