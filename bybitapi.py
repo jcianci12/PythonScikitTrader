@@ -193,7 +193,7 @@ def place_buy_order(testmode, symbol, capitalsymbol, takeprofitprice, stoplosspr
         stop_loss_price = None if stoplossprice == None else (market_price + stoplossprice)
         
         # Check if qty is less than the minimum order quantity
-        min_qty = 0.000001
+        min_qty = MINIMUMBTCTRANSACTIONSIZE
         if qty < min_qty:
             logger(f"Sale of {qty} was below minimum amount.")
             qty = min_qty

@@ -61,11 +61,11 @@ def _produce_movement_indicators(data):
     :param window: number of days, or rows to look ahead to see what the price did
     """
 
-    predictionup = data.shift(-LOOKAHEADVALUE)["close"]+5 >= data["close"]
+    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= data["close"]
     predictionup = predictionup.iloc[:-LOOKAHEADVALUE]
     data["pred"] = predictionup.astype(int)
 
-    predictiondec = data.shift(-LOOKAHEADVALUE)["close"]-5 <= data["close"]
+    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= data["close"]
     predictiondec = predictiondec.iloc[:-LOOKAHEADVALUE]
     data["preddec"] = predictiondec.astype(int)
 
