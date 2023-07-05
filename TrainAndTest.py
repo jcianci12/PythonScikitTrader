@@ -176,11 +176,7 @@ def trade_loop():
     plot_graph(bid_price, confidence_scoreinc,confidence_scoredec, portfolio_balance,usdtbalance,btcbalance*bid_price,"performance.png","performance.csv",GRAPHVIEWWINDOW)
 
 
-if (FORCERETRAINATSTART):
-    logger("Force retrain at start set to true, retraining.")
-    retrain()
 
-call_decide_every_n_seconds(300, trade_loop)
 
 
 
