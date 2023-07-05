@@ -1,0 +1,4 @@
+TODO:
+[x] Delete old files
+[x] Train on price increase and decrease.
+[ ] Incorporate backtesting.py
