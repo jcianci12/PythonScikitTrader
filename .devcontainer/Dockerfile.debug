@@ -18,6 +18,8 @@ RUN pip install numpy
 RUN pip install matplotlib
 RUN pip install scikit-learn
 RUN pip install pybit
+RUN pip install backtesting
+
 
 # Install ntp and cron packages
 RUN conda install -c conda-forge crontab
