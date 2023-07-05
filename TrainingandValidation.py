@@ -13,6 +13,7 @@ from Simulation.assettracker import AssetTracker
 from Simulation.capitaltracker import CapitalTracker
 from config import *
 from functions.logger import plot_graph, logger
+from functions.modelmanagement import ModelManagement
 from get_latest_model_file import compare_dates, get_latest_model_filename, get_model_filename
 
 class TrainingAndValidation:
@@ -33,9 +34,13 @@ class TrainingAndValidation:
         self.len_train = 40
 
         # Lists to store the results from each model
-        self.knn_results = []
-        self.rf_results = []
-        self.ensemble_results = []
+        self.knn_resultsinc = []
+        self.rf_resultsinc = []
+        self.ensemble_resultsinc = []
+
+        self.knn_resultsdec = []
+        self.rf_resultsdec = []
+        self.ensemble_resultsdec = []
 
         # Models which will be used
         rfinc = RandomForestClassifier()
@@ -65,7 +70,7 @@ class TrainingAndValidation:
             features = [x for x in df.columns if x not in ["pred","preddec"]]
             X = df[features]
 
-            X_train, X_test, y_train, y_test = train_test_split(
+            X_train, X_test, y_train, y_testinc = train_test_split(
                 X, y, train_size=7 * len(X) // 10, shuffle=False
             )
 
@@ -74,18 +79,25 @@ class TrainingAndValidation:
             knninc.fit(X_train, y_train)
             ensembleinc.fit(X_train, y_train)
 
-            # # get predictions
-            # rf_prediction = rfinc.predict(X_test)
-            # knn_prediction = knninc.predict(X_test)
-            # ensemble_prediction = ensembleinc.predict(X_test)
+            # get predictions
+            rf_predictioninc = rfinc.predict(X_test)
+            knn_predictioninc = knninc.predict(X_test)
+            ensemble_predictioninc = ensembleinc.predict(X_test)
+            rf_accuracyinc = accuracy_score(y_testinc.values, rf_predictioninc)
+            knn_accuracyinc = accuracy_score(y_testinc.values, knn_predictioninc)
+            ensemble_accuracyinc = accuracy_score(y_testinc.values, ensemble_predictioninc)
 
+            
+            self.rf_resultsinc.append(rf_accuracyinc)
+            self.knn_resultsinc.append(knn_accuracyinc)
+            self.ensemble_resultsinc.append(ensemble_accuracyinc)
 
 #decrease
             y = df["preddec"]
             features = [x for x in df.columns if x not in ["pred","preddec"]]
             X = df[features]
 
-            X_train, X_test, y_train, y_test = train_test_split(
+            X_train, X_test, y_train, y_testdec = train_test_split(
                 X, y, train_size=7 * len(X) // 10, shuffle=False
             )
 
@@ -95,46 +107,38 @@ class TrainingAndValidation:
             ensembledec.fit(X_train, y_train)
 
             # # get predictions
-            # rf_prediction = rfdec.predict(X_test)
-            # knn_prediction = knndec.predict(X_test)
-            # ensemble_prediction = ensembledec.predict(X_test)
+            rf_predictiondec = rfdec.predict(X_test)
+            knn_predictiondec = knndec.predict(X_test)
+            ensemble_predictiondec = ensembledec.predict(X_test)
+# determine accuracy and append to results
+            rf_accuracydec = accuracy_score(y_testdec.values, rf_predictiondec)
+            knn_accuracydec = accuracy_score(y_testdec.values, knn_predictiondec)
+            ensemble_accuracydec = accuracy_score(y_testdec.values, ensemble_predictiondec)
+
+            
+            self.rf_resultsdec.append(rf_accuracydec)
+            self.knn_resultsdec.append(knn_accuracydec)
+            self.ensemble_resultsdec.append(ensemble_accuracydec)
+        
+       
+
+
             print(X_train.index[0])            
 
-
+        logger(f"Ensemble Accuracy Inc = {sum(self.get_ensemble_resultsinc()) / len(self.get_ensemble_resultsinc())}")
+        logger(f"Ensemble Accuracy Dec = {sum(self.get_ensemble_resultsdec()) / len(self.get_ensemble_resultsdec())}")
          
-
-                 
        
         self.models = {"rfinc": rfinc, "knninc": knninc, "ensembleinc": ensembleinc,"rf":rfdec,"knninc":knndec,"ensembledec":ensembledec}
-        self.clean_up_models("models")
-
-        self.save_models(self.models, symbol, interval, start, end)
+        mm = ModelManagement()
+        mm.clean_up_models("models")
+        mm.save_models(self.models, symbol, interval, start, end)
 
         logger("Finished training")
 
 
 
-    def save_models(self, models, symbol, interval, start, end):
-        # Create a models directory if it doesn't exist
-        if not os.path.exists("models"):
-            os.makedirs("models")
 
-        # Save the models with the specified naming convention
-        for model_name, model in models.items():
-            filename = get_model_filename(symbol,interval,start,end,model_name)
-            logger("saving model file as ",filename)
-            joblib.dump(model, f"models/{filename}" )
-
-    def clean_up_models(self,directory):
-        for filename in os.listdir(directory):
-            file_path = os.path.join(directory, filename)
-            try:
-                if os.path.isfile(file_path) or os.path.islink(file_path):
-                    os.unlink(file_path)
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-            except Exception as e:
-                print('Failed to delete %s. Reason: %s' % (file_path, e))
 
 
     def get_results_df(self):
@@ -147,9 +151,11 @@ class TrainingAndValidation:
     def get_knn_results(self):
         return self.knn_results
 
-    def get_ensemble_results(self):
-        return self.ensemble_results
-    
+    def get_ensemble_resultsinc(self):
+        return self.ensemble_resultsinc
+
+    def get_ensemble_resultsdec(self):
+        return self.ensemble_resultsdec
 
     # def calculate_kelly_investment(  risk_fraction,minimumfraction):
     # kelly_fraction = item.getSuccessRatio() - (1 - item.getSuccessRatio() ) / risk_fraction
@@ -158,91 +164,7 @@ class TrainingAndValidation:
     # return capital_tracker.capital * kelly_fraction
 
     
-    def simulate_trade(self,data, row: pd.Series):
-    
-        date: pd.Timestamp = row["Date"]
-        rf_prediction: int = row["RF Prediction"]
-        knn_prediction: int = row["KNN Prediction"]
-        ensemble_prediction: int = row["Ensemble Prediction"]
-        actual_value: int = row["Actual"]
-        # Win_Probability: int = row['Risk Score']
 
-        # Get the value of the stock at the buy date
-        current_price = data.loc[date, "close"]
-        portfolio_value = self.capital_tracker.capital + (self.item.get_total_asset_quantity() * current_price)
-
-        entry = {}
-        triggered_assets = self.item.monitor_prices(current_price)
-
-
-            # return triggered_assets
-        for asset in triggered_assets:
-        # Sell the assets
-            result = self.item.sell(asset.quantity, current_price)
-            if not result:
-                print(result)
-            else:
-                spend_result = self.capital_tracker.earn(asset.quantity*current_price)
-                entry = {
-                            "Date": date,
-                            "Action": "Sell",
-                            "Stock": self.stock_name,
-                            "Transaction Amount": asset.quantity*current_price,
-                            "Portfolio Value": portfolio_value,
-
-                            "Quantity": asset.quantity,
-                            "Sell_Price": current_price,
-                            "Balance": self.capital_tracker.capital,
-                            "Stock_Balance": self.item.get_total_asset_quantity(),
-                            "Avg profit": self.item.average_profit,
-                        }
-                        # Update the ledger with the trade details
-                self.ledger.append(entry)
-
-
-
-        if ensemble_prediction == 1:
-            # Calculate the investment amount based on available balance, risk percentage, and trade confidence
-            # investment_amount =calculate_kelly_investment(risk_percentage,0.01)  # Use a portion of the balance based on the risk percentage
-            investment_amount =self.capital_tracker.capital*0.02  # Use a portion of the balance based on the risk percentage
-
-            spend_result = self.capital_tracker.spend(investment_amount)
-
-            if not spend_result:
-                print(spend_result)
-                return
-            else:
-                    # Calculate the quantity of stock purchased based on the investment amount and buy price
-                quantity = investment_amount / current_price
-                result = self.item.purchase(quantity, current_price,current_price*TAKEPROFIT,current_price*STOPLOSS)
-                entry = {
-                    "Date": date,
-                    "Action": "Buy",
-                    "Stock": self.stock_name,
-                    "Transaction Amount": investment_amount,
-                    "Portfolio Value": portfolio_value,
-                    "Quantity": quantity,
-                    "Buy_Price": current_price,
-                    "Balance": self.capital_tracker.capital,
-                    "Stock_Balance": self.item.get_total_asset_quantity(),
-                    "Avg profit": self.item.average_profit,
-                }
-                # Update the ledger with the trade details
-                self.ledger.append(entry)
-        if(PLOTBACKTEST==True):
-            plot_graph(current_price,ensemble_prediction,portfolio_value,0,0,'backtest.png','backtest.csv',GRAPHVIEWWINDOW)
-       
-
-        # ledger_df = pd.DataFrame(
-        #     columns=["Date", "Action", "Stock", "Quantity", "Price", "Balance"]
-        # )
-        # Convert the ledger list to a DataFrame
-        # ledger_df = pd.DataFrame(self.ledger)
-
-        # print(ledger_df)
-        # self.write_backtest_data(ledger_df)
-        # self.ledger_df.append(ledger_df)
-        # self.plot_data(ledger_df)
 
     def getLedgerdf(self):
         return  pd.DataFrame( self.ledger)

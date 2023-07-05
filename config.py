@@ -2,7 +2,7 @@
 import decimal
 
 
-TEST=False
+TEST=True
 
 BASE_URL = "https://api-testnet.bybit.com" if TEST else "https://api.bybit.com"
 

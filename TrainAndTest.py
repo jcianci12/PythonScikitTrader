@@ -89,7 +89,7 @@ def retrain():
         trainingdata.dropna()
     )  # Some indicators produce NaN values for the first few rows, we just remove them here
     
-    trainingdata.tail()
+    # trainingdata.tail()
     validator = TrainingAndValidation()
     #retrain the data
     logger("retraining...")
@@ -97,14 +97,10 @@ def retrain():
 
 
     validator.train_and_cross_validate(trainingdata,symbol,start_date,end_date,INTERVAL)
-    # print(f"RF Accuracy = {sum(validator.get_rf_results()) / len(validator.get_rf_results())}")
-    # print(f"KNN Accuracy = {sum(validator.get_knn_results()) / len(validator.get_knn_results())}")
-    # print(f"Ensemble Accuracy = {sum(validator.get_ensemble_results()) / len(validator.get_ensemble_results())}")
-    # logger("Acccuracy from last test:" ,f"Ensemble Accuracy = {sum(validator.get_ensemble_results()) / len(validator.get_ensemble_results())}")
+    logger(f"Ensemble Accuracy inc = {sum(validator.get_ensemble_resultsinc()) / len(validator.get_ensemble_resultsinc())}")
+    logger(f"Ensemble Accuracy dec = {sum(validator.get_ensemble_resultsdec()) / len(validator.get_ensemble_resultsdec())}")
 
-    # print(validator.get_ledger())
-    # ledger = validator.get_ledger()
-    # validator.save_dataframe(ledger)
+   
 
 def is_file_older_than_n_minutes(file_path, n):
     if ((file_path==None) or not os.path.exists(file_path)  ):
@@ -134,9 +130,15 @@ def getconfidencescore(data,start_date,end_date,modelname):
 
 def trade_loop():
     logger("Starting loop")
-    category = 'spot'
+
     end_date = datetime.now()
+    start_date = end_date -timedelta(DATALENGTHFORTRAININGINDAYS)
+    category = 'spot'
+    if(ALWAYSRETRAIN or  is_file_older_than_n_minutes(get_latest_model_filename(symbol,INTERVAL,start_date,end_date,"ensembleinc"),60)):
+        #retrain the data
+        retrain()
     start_date = end_date -timedelta(DATALENGTHFORTRADINGINDAYS)
+
     #fetch the kline (historical data)
     data = fetch_bybit_data_v5(TEST,start_date,end_date,"BTCUSDT",INTERVAL,category)
     # data = old_fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",interval,category)
@@ -149,18 +151,6 @@ def trade_loop():
         data.dropna()
     )  # Some indicators produce NaN values for the first few rows, we just remove them here
     data.tail()
-
-    if(ALWAYSRETRAIN or  is_file_older_than_n_minutes(get_latest_model_filename(symbol,INTERVAL,start_date,end_date,"ensembleinc"),60)):
-            
-        
-        #retrain the data
-        retrain()
-
-    #get the simulated ledger
-        # print(validator.get_ledger())
-
-    #call the trade decider.
-        
     confidence_scoreinc = getconfidencescore(data,start_date,end_date,"ensembleinc")
     confidence_scoredec = map_range(getconfidencescore(data,start_date,end_date,"ensembledec"),0,1,1,0)
 
