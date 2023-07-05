@@ -22,7 +22,7 @@ What I would love this project to do:
 Startup guide (how im doing it on a windows machine)
 - Get vscode
 - Clone this project from vscode
-- You should get an option pop up after clonine - something to the effect - would you like to open this in a container?
+- You should get an option pop up after cloning - something to the effect - would you like to open this in a container?
 - Click reopen in container
 - Once that is done, add a KEYS.py file and use the KEYS Template.py as a starting guide.
 - Open train and test and top right you should have the option to run/run and debug. Click that
