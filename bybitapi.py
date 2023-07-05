@@ -170,7 +170,7 @@ def get_market_ask_price(test, symbol):
 # get_market_ask_price(True, "BTCUSDT")
 # %%
 
-def place_buy_order(testmode, symbol, capitalsymbol, take_profit_percent, stop_loss_percent, qty):
+def place_buy_order(testmode, symbol, capitalsymbol, takeprofitprice, stoplossprice, qty):
     """
     Function to place a buy order.
     :param testmode: Boolean indicating if test mode is enabled.
@@ -188,10 +188,9 @@ def place_buy_order(testmode, symbol, capitalsymbol, take_profit_percent, stop_l
         
         # Get the market price
         market_price = float(market_data)
-        
         # Calculate the take profit and stop loss prices
-        take_profit_price = None if take_profit_percent == None else (market_price * (1 + take_profit_percent / 100))
-        stop_loss_price = None if stop_loss_percent == None else (market_price * (1 - stop_loss_percent / 100))
+        take_profit_price = None if takeprofitprice == None else (market_price + takeprofitprice)
+        stop_loss_price = None if stoplossprice == None else (market_price + stoplossprice)
         
         # Check if qty is less than the minimum order quantity
         min_qty = 0.000001
@@ -199,8 +198,8 @@ def place_buy_order(testmode, symbol, capitalsymbol, take_profit_percent, stop_l
             logger(f"Sale of {qty} was below minimum amount.")
             qty = min_qty
         
-        print("placing buy order of ", symbol, "qty:", qty)
-        
+        logger("placing buy order of ", symbol, "qty:", qty,"market price",market_price,"take profit",takeprofitprice,"stop loss",stoplossprice)
+
         response = session.place_order(
             category="spot",
             symbol=symbol,

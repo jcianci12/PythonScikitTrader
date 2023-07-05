@@ -2,3 +2,5 @@ TODO:
 [x] Delete old files
 [x] Train on price increase and decrease.
 [ ] Incorporate backtesting.py
+[ ] The model is trained to predict on a price rise in n days. We should save the order in a list of completed orders, and when the order reaches the predicted training date, we should sell, or check to see if we are in the black and sell
+[x] Start testing with tp and sl on orders.

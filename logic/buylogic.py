@@ -12,7 +12,6 @@ def buylogic(confidence_score,  usdtbalance):
     :param buythreshold: The threshold for the confidence score to trigger a buy.
     :param usdtbalance: The current balance of USDT.
     """
-    minbuyamount = 0.2  # don't want to buy too low an amount.
     
     # Calculate the percentage of capital to buy based on the confidence score
     capitalpercent = map_range(confidence_score, BUYTHRESHOLD, 1, float(getminimumtransactionamount()), MAXBUYPERCENTOFCAPITAL)
@@ -22,7 +21,7 @@ def buylogic(confidence_score,  usdtbalance):
     transactionamount =    buyamountinbtc*decimal.Decimal(get_market_bid_price(TEST,"BTCUSDT"))
     
     logger("Decided to buy %", capitalpercent, " of USDT balance. |USDT balance: ", usdtbalance,
-           " | BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", transactionamount)
+           " | BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", transactionamount,)
     min_qty = getminimumtransactionamount()
     # Check if the transaction amount is greater than the minimum transaction size
     if transactionamount > min_qty:
