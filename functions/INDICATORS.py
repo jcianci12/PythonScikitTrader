@@ -4,7 +4,7 @@ INDICATORS = [
     "MACD",
     "STOCH",
     "ADL",
-    # "ATR",
+    "ATR",
     "MOM",
     "MFI",
     "ROC",
