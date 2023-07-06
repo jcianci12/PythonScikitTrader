@@ -119,11 +119,12 @@ def getconfidencescore(data,start_date,end_date,modelname):
     data = data.drop('preddec', axis=1)
 
     # Use the loaded model to make predictions
-
+    data = data.tail(1)
     prediction = model.predict(data)
+
     # logger("prediction",prediction)
     # Calculate the mean of the binary values
-    confidence_score = prediction[0]
+    confidence_score = prediction
     print("The decicision value is ",confidence_score)
 
     return confidence_score
@@ -150,10 +151,8 @@ def trade_loop():
     data = (
         data.dropna()
     )  # Some indicators produce NaN values for the first few rows, we just remove them here
-    data.tail()
-    conf = getconfidencescore(data,start_date,end_date,"ensembleinc")
-    confidence_scoreinc = conf[0]
-    confidence_scoredec = map_range(conf[1],0,1,1,0)
+    confidence_scoreinc = getconfidencescore(data,start_date,end_date,"ensembleinc")[0]
+    confidence_scoredec = map_range(getconfidencescore(data,start_date,end_date,"ensembledec")[0],0,1,1,0)
 
     usdtbalance = decimal.Decimal(get_wallet_balance(TEST,"USDT"))
     btcbalance = decimal.Decimal(get_wallet_balance(TEST,"BTC"))
