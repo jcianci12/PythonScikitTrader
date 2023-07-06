@@ -42,6 +42,7 @@ class Train():
 bt = Backtest(GOOG, SmaCross,
               cash=100000, commission=.002,
               exclusive_orders=True)
+
 output = bt.run()
 bt.plot()
 

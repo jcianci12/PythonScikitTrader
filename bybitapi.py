@@ -72,7 +72,7 @@ def fetch_bybit_data_v5(test,start_date, end_date, symbol, interval, category):
         start_ts = int(interval_start * 1000)
         end_ts = int(interval_end * 1000)
 
-        print(f"Fetching historical data from {datetime.datetime.fromtimestamp(interval_start)} to {datetime.datetime.fromtimestamp(interval_end)}")
+        # print(f"Fetching historical data from {datetime.datetime.fromtimestamp(interval_start)} to {datetime.datetime.fromtimestamp(interval_end)}")
 
         params = {
             'symbol': symbol,
@@ -100,7 +100,7 @@ def fetch_bybit_data_v5(test,start_date, end_date, symbol, interval, category):
     df_new.set_index('timestamp', inplace=True)
     df_new.sort_values(by=['open_time'], inplace=True)
 
-    print("returning new")
+    # print("returning new")
     print(df_new)
     df_new.to_csv("new.csv")
     df_new = df_new[~df_new.index.duplicated(keep='first')]
