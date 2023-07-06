@@ -101,7 +101,7 @@ def fetch_bybit_data_v5(test,start_date, end_date, symbol, interval, category):
     df_new.sort_values(by=['open_time'], inplace=True)
 
     # print("returning new")
-    print(df_new)
+    # print(df_new)
     df_new.to_csv("new.csv")
     df_new = df_new[~df_new.index.duplicated(keep='first')]
 
