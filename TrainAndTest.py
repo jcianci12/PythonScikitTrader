@@ -85,14 +85,10 @@ def is_file_older_than_n_minutes(file_path, n):
     logger("time is ",time.time(),"|file time is",os.path.getmtime(file_path))
     return time.time() - os.path.getmtime(file_path) > n * 60
 
-def getconfidencescore(data,modelname):
-    
-    filename = get_latest_model_filename(symbol,INTERVAL,modelname)
-    logger("Loading model from ", filename)
-    model = joblib.load(filename)
 
 
-#we only want the last row to predict on
+def giveCOnfidenceFromModel(data,model):
+    #we only want the last row to predict on
     data = data.tail(1)
     prediction = model.predict(data)
     # logger("prediction",prediction)
@@ -101,23 +97,33 @@ def getconfidencescore(data,modelname):
 
     return prediction[0]
 
+
+def loadmodel(symbol,modelname):
+    
+    filename = get_latest_model_filename(symbol,INTERVAL,modelname)
+    logger("Loading model from ", filename)
+    model = joblib.load(filename)
+    return model
+
 def trade_loop():
     logger("Starting loop")
 
     end_date = datetime.now()
     start_date = end_date -timedelta(DATALENGTHFORTRAININGINDAYS)
     category = 'spot'
+    symbol ='BTCUSDT'
     if(ALWAYSRETRAIN or  is_file_older_than_n_minutes(get_latest_model_filename(symbol,INTERVAL,"ensembleinc"),60)):
         #retrain the data
         retrain(start_date,end_date)
     start_date = end_date -timedelta(DATALENGTHFORTRADINGINDAYS)
 
     #fetch the kline (historical data)
-    data = fetch_bybit_data_v5(TEST,start_date,end_date,"BTCUSDT",INTERVAL,category)
+    data = fetch_bybit_data_v5(TEST,start_date,end_date,symbol,INTERVAL,category)
     # data = old_fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",interval,category)
     #smooth the data
-    confinc = getconfidencescore(data,"ensembleinc")
-    confdec = getconfidencescore(data,"ensembledec")
+    confinc =     giveCOnfidenceFromModel(data,loadmodel(symbol,"ensembleinc"))
+
+    confdec = giveCOnfidenceFromModel(data,loadmodel(symbol,"ensembledec"))
 
     confidence_scoreinc = confinc
     confidence_scoredec = confdec
@@ -144,24 +150,24 @@ def trade_loop():
         logger(str("Didnt act"))
 
     plot_graph(bid_price, confidence_scoreinc,confidence_scoredec, portfolio_balance,usdtbalance,btcbalance*bid_price,"performance.png","performance.csv",GRAPHVIEWWINDOW)
-if (TESTRETRAINATSTART):
-    logger("Testing retrain function.")
-    end_date = datetime.now()
-    start_date = end_date-timedelta(0.4)
-    retrain(end_date=datetime.now(),start_date=start_date)
-    logger("Testing prediction")
-    data = fetch_bybit_data_v5(TEST,start_date,end_date,"BTCUSDT",INTERVAL,'spot')
-    confinc = getconfidencescore(data,"ensembleinc")
-    confdec = getconfidencescore(data,"ensembledec")
-    logger("prediction is:",confinc,confdec)
+# if (TESTRETRAINATSTART):
+#     logger("Testing retrain function.")
+#     end_date = datetime.now()
+#     start_date = end_date-timedelta(0.4)
+#     retrain(end_date=datetime.now(),start_date=start_date)
+#     logger("Testing prediction")
+#     data = fetch_bybit_data_v5(TEST,start_date,end_date,"BTCUSDT",INTERVAL,'spot')
+#     confinc = loadmodel(data,"ensembleinc")
+#     confdec = loadmodel(data,"ensembledec")
+#     logger("prediction is:",confinc,confdec)
 
-    logger("Done. Claning up models...")
-    mm = ModelManagement()
-    mm.clean_up_models("models")
-    logger("Done.")
+#     logger("Done. Claning up models...")
+#     mm = ModelManagement()
+#     mm.clean_up_models("models")
+#     logger("Done.")
 
 
-call_decide_every_n_seconds(300, trade_loop)
+# call_decide_every_n_seconds(300, trade_loop)
 
 
 

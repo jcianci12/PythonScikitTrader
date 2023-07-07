@@ -3,8 +3,8 @@ import shutil
 
 import joblib
 
-from get_latest_model_file import get_model_filename
 from functions.logger import plot_graph, logger
+from get_latest_model_file import get_model_filename
 
 
 class ModelManagement:
