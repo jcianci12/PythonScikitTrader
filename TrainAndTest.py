@@ -93,7 +93,9 @@ def getconfidencescore(data,modelname):
 
 
 #we only want the last row to predict on
-    data = data.tail(1)
+    
+    data = data.drop('pred', axis=1) 
+    data = data.drop('preddec',axis=1)
     prediction = model.predict(data)
     # logger("prediction",prediction)
     # Calculate the mean of the binary values
@@ -116,6 +118,8 @@ def trade_loop():
     data = fetch_bybit_data_v5(TEST,start_date,end_date,"BTCUSDT",INTERVAL,category)
     # data = old_fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",interval,category)
     #smooth the data
+    data = prep_data(data)
+    data = data.tail(1)
     confinc = getconfidencescore(data,"ensembleinc")
     confdec = getconfidencescore(data,"ensembledec")
 
@@ -147,7 +151,7 @@ def trade_loop():
 if (TESTRETRAINATSTART):
     logger("Testing retrain function.")
     end_date = datetime.now()
-    start_date = end_date-timedelta(0.4)
+    start_date = end_date-timedelta(1)
     retrain(end_date=datetime.now(),start_date=start_date)
     logger("Testing prediction")
     data = fetch_bybit_data_v5(TEST,start_date,end_date,"BTCUSDT",INTERVAL,'spot')
