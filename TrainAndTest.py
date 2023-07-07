@@ -9,6 +9,7 @@ import numpy as np
 
 import joblib
 from functions.map_range import map_range
+from functions.modelmanagement import ModelManagement
 from get_latest_model_file import get_latest_model_filename, get_model_filename
 from logic.buylogic import buylogic
 from bybitapi import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_wallet_balance
@@ -23,12 +24,14 @@ from logic.selllogic import selllogic
 
 import multiprocessing as mp
 
+from prep_data import prep_data
+
 
 # %%
 """
 Defining some constants for data mining
 """
-pd.set_option("display.max_rows", 50)
+pd.set_option("display.max_rows", 5)
 
 # DATE_RANGE = datetime.timedelta(days=11)  # The number of days of historical data to retrieve
 # TIMEFRAME = TimeFrame(1, TimeFrameUnit.Hour)  # Sample rate of historical data
@@ -42,52 +45,24 @@ symbol = "BTCUSD"
 test = True
 days = 2
 
-def _exponential_smooth(data, alpha):
-    """
-    Function that exponentially smooths dataset so values are less 'rigid'
-    :param alpha: weight factor to weight recent values more
-    """
 
-    return data.ewm(alpha=alpha).mean()
 
 
 
 # %%
 # %%
-def _produce_movement_indicators(data):
-    """
-    Function that produces the 'truth' values
-    At a given row, it looks 'window' rows ahead to see if the price increased (1) or decreased (0)
-    :param window: number of days, or rows to look ahead to see what the price did
-    """
 
-    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= data["close"]
-    predictionup = predictionup.iloc[:-LOOKAHEADVALUE]
-    data["pred"] = predictionup.astype(int)
-
-    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= data["close"]
-    predictiondec = predictiondec.iloc[:-LOOKAHEADVALUE]
-    data["preddec"] = predictiondec.astype(int)
-
-    return data
 #%%
 
 # # Retrain the model using the latest data
-def retrain():
+def retrain(start_date,end_date):
     validator = TrainingAndValidation()
     category = 'spot'
-    end_date = datetime.now()
-    start_date = end_date -timedelta(DATALENGTHFORTRAININGINDAYS)
+ 
     #fetch the kline (historical data)
     trainingdata = fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",INTERVAL,category)
     #smooth the data
-    trainingdata = _exponential_smooth(trainingdata,0.65)
-    #produce indicators
-    trainingdata = _produce_movement_indicators(trainingdata)
-    #drop na data
-    trainingdata = (
-        trainingdata.dropna()
-    )  # Some indicators produce NaN values for the first few rows, we just remove them here
+    trainingdata = prep_data(trainingdata)
     
     # trainingdata.tail()
     validator = TrainingAndValidation()
@@ -110,23 +85,21 @@ def is_file_older_than_n_minutes(file_path, n):
     logger("time is ",time.time(),"|file time is",os.path.getmtime(file_path))
     return time.time() - os.path.getmtime(file_path) > n * 60
 
-def getconfidencescore(data,start_date,end_date,modelname):
-    filename = get_latest_model_filename(symbol,INTERVAL,start_date,end_date,modelname)
+def getconfidencescore(data,modelname):
+    
+    filename = get_latest_model_filename(symbol,INTERVAL,modelname)
     logger("Loading model from ", filename)
     model = joblib.load(filename)
 
-    data = data.drop('pred', axis=1)
-    data = data.drop('preddec', axis=1)
 
-    # Use the loaded model to make predictions
-
+#we only want the last row to predict on
+    data = data.tail(1)
     prediction = model.predict(data)
     # logger("prediction",prediction)
     # Calculate the mean of the binary values
-    confidence_score = prediction[0]
-    print("The decicision value is ",confidence_score)
+    print("The decicision value is ",prediction)
 
-    return confidence_score
+    return prediction[0]
 
 def trade_loop():
     logger("Starting loop")
@@ -134,26 +107,23 @@ def trade_loop():
     end_date = datetime.now()
     start_date = end_date -timedelta(DATALENGTHFORTRAININGINDAYS)
     category = 'spot'
-    if(ALWAYSRETRAIN or  is_file_older_than_n_minutes(get_latest_model_filename(symbol,INTERVAL,start_date,end_date,"ensembleinc"),60)):
+    if(ALWAYSRETRAIN or  is_file_older_than_n_minutes(get_latest_model_filename(symbol,INTERVAL,"ensembleinc"),60)):
         #retrain the data
-        retrain()
+        retrain(start_date,end_date)
     start_date = end_date -timedelta(DATALENGTHFORTRADINGINDAYS)
 
     #fetch the kline (historical data)
     data = fetch_bybit_data_v5(TEST,start_date,end_date,"BTCUSDT",INTERVAL,category)
     # data = old_fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",interval,category)
     #smooth the data
-    data = _exponential_smooth(data,0.65)
-    #produce indicators
-    data = _produce_movement_indicators(data)
-    #drop na data
-    data = (
-        data.dropna()
-    )  # Some indicators produce NaN values for the first few rows, we just remove them here
-    data.tail()
-    conf = getconfidencescore(data,start_date,end_date,"ensembleinc")
-    confidence_scoreinc = conf[0]
-    confidence_scoredec = map_range(conf[1],0,1,1,0)
+    confinc = getconfidencescore(data,"ensembleinc")
+    confdec = getconfidencescore(data,"ensembledec")
+
+    confidence_scoreinc = confinc
+    confidence_scoredec = confdec
+
+    confidence_scoreinc = confinc
+    confidence_scoredec = confdec
 
     usdtbalance = decimal.Decimal(get_wallet_balance(TEST,"USDT"))
     btcbalance = decimal.Decimal(get_wallet_balance(TEST,"BTC"))
@@ -165,21 +135,31 @@ def trade_loop():
     # Print the final output
     logger("buy signal:", confidence_scoreinc,"sell signal:",confidence_scoredec)
 
-    if(confidence_scoreinc==1 or confidence_scoreinc ==0 or confidence_scoreinc ==0.5): # if its 1 or 0 or 0.5 something went wrong, retrain.
-        retrain() 
+    
+    if(confidence_scoreinc==1 and confidence_scoredec==0):
+        buylogic(1,usdtbalance)
+    elif(confidence_scoreinc==0 and confidence_scoredec==1):
+        selllogic(1,btcbalance,bid_price)
     else:
-        if(confidence_scoreinc>BUYTHRESHOLD and confidence_scoredec>SELLTHRESHOLD):
-            buylogic(confidence_scoreinc,usdtbalance)
-        elif(confidence_scoreinc<BUYTHRESHOLD and confidence_scoredec<SELLTHRESHOLD):
-            selllogic(confidence_scoredec,btcbalance,bid_price)
-        else:
-            logger(str("Didnt act"))
+        logger(str("Didnt act"))
+
     plot_graph(bid_price, confidence_scoreinc,confidence_scoredec, portfolio_balance,usdtbalance,btcbalance*bid_price,"performance.png","performance.csv",GRAPHVIEWWINDOW)
+if (TESTRETRAINATSTART):
+    logger("Testing retrain function.")
+    end_date = datetime.now()
+    start_date = end_date-timedelta(0.4)
+    retrain(end_date=datetime.now(),start_date=start_date)
+    logger("Testing prediction")
+    data = fetch_bybit_data_v5(TEST,start_date,end_date,"BTCUSDT",INTERVAL,'spot')
+    confinc = getconfidencescore(data,"ensembleinc")
+    confdec = getconfidencescore(data,"ensembledec")
+    logger("prediction is:",confinc,confdec)
 
+    logger("Done. Claning up models...")
+    mm = ModelManagement()
+    mm.clean_up_models("models")
+    logger("Done.")
 
-if (FORCERETRAINATSTART):
-    logger("Force retrain at start set to true, retraining.")
-    retrain()
 
 call_decide_every_n_seconds(300, trade_loop)
 

@@ -15,6 +15,7 @@ from config import *
 from functions.logger import plot_graph, logger
 from functions.modelmanagement import ModelManagement
 from get_latest_model_file import compare_dates, get_latest_model_filename, get_model_filename
+from prep_data import prep_data
 
 class TrainingAndValidation:
 
@@ -29,6 +30,7 @@ class TrainingAndValidation:
         self.capital_tracker = CapitalTracker(10000)
 
     def train_and_cross_validate(self, data, symbol, start, end, interval):
+        data = prep_data(data)
         i = 0
         self.num_train = 10
         self.len_train = 40
@@ -138,7 +140,7 @@ class TrainingAndValidation:
 
 
 
-
+    
 
 
     def get_results_df(self):
