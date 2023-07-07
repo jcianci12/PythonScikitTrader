@@ -30,7 +30,7 @@ class TrainingAndValidation:
         self.capital_tracker = CapitalTracker(10000)
 
     def train_and_cross_validate(self, data, symbol, start, end, interval):
-        data = prep_data(data)
+        # data = prep_data(data)
         i = 0
         self.num_train = 10
         self.len_train = 40
