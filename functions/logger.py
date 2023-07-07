@@ -40,6 +40,7 @@ def plot_graph(btc_price, confidence_signalinc,confidence_signaldec, portfolio_b
         reader = csv.reader(f)
         header = next(reader)
         data = [row for row in reader]
+        
     
     # Extract the data from the CSV file
     datetime_values = [datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S.%f') for row in data]

@@ -10,6 +10,7 @@
 2023-07-01 23:47:22.301348: REAL MODE Recieved confidence signal of: 0.0
 2023-07-01 23:47:31.492957: REAL MODE retraining...
 2023-07-01 23:47:31.493584: REAL MODE Starting training
+<<<<<<< HEAD
 2023-07-06 23:44:27.700450: REAL MODE retraining...
 2023-07-06 23:44:27.706398: REAL MODE Starting training
 2023-07-06 23:45:26.925961: REAL MODE Testing retrain function.
@@ -409,3 +410,15 @@
 2023-07-07 02:54:19.482636: REAL MODE Decided to sell  5.000000000000000059975195066 percent of BTC balance of:  28.5315104344  | Market value:  30099.07 USDT transaction amount: 1.426575521720000017111829038
 2023-07-07 02:54:19.488655: REAL MODE Not enough  BTC  balance is: 28.5315104344
 >>>>>>> Stashed changes
+=======
+2023-07-06 21:48:52.017640: REAL MODE Starting loop
+2023-07-06 21:48:52.024351: REAL MODE File doesnt exist
+2023-07-06 21:48:57.639709: REAL MODE retraining...
+2023-07-06 21:48:57.644582: REAL MODE Starting training
+2023-07-06 21:55:06.457524: REAL MODE Ensemble Accuracy Inc = 0.6565170940170945
+2023-07-06 21:55:06.462760: REAL MODE Ensemble Accuracy Dec = 0.6583867521367525
+2023-07-06 22:12:04.173766: REAL MODE Starting loop
+2023-07-06 22:12:04.180110: REAL MODE File doesnt exist
+2023-07-06 22:12:09.475979: REAL MODE retraining...
+2023-07-06 22:12:09.482331: REAL MODE Starting training
+>>>>>>> newmain

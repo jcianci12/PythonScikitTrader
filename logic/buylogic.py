@@ -14,7 +14,7 @@ def buylogic(confidence_score,  usdtbalance):
     """
     
     # Calculate the percentage of capital to buy based on the confidence score
-    capitalpercent = map_range(confidence_score, BUYTHRESHOLD, 1, float(getminimumtransactionamount()), MAXBUYPERCENTOFCAPITAL)
+    capitalpercent = map_range(confidence_score, 0, 1, float(getminimumtransactionamount()), MAXBUYPERCENTOFCAPITAL)
     capitalpercent = decimal.Decimal(capitalpercent)
     buyamountinbtc = usdtbalance*(capitalpercent/100)
     # Calculate the transaction amount
