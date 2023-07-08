@@ -61,9 +61,11 @@ def retrain(start_date,end_date):
  
     #fetch the kline (historical data)
     trainingdata = fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",INTERVAL,category)
+    logger("Training data sample before prep:",trainingdata.tail(1).to_string())
+
     #smooth the data
     trainingdata = prep_data(trainingdata)
-    
+    logger("Training data sample after prep:",trainingdata.tail(1).to_string())
     # trainingdata.tail()
     validator = TrainingAndValidation()
     #retrain the data
@@ -120,6 +122,7 @@ def trade_loop():
     #smooth the data
     data = prep_data(data)
     data = data.tail(1)
+    logger("making decision based on ",data.to_string())
     confinc = getconfidencescore(data,"ensembleinc")
     confdec = getconfidencescore(data,"ensembledec")
 
