@@ -80,6 +80,7 @@ def _get_indicator_data(data):
     del (data['volume'])
     
     return data
+    
 
 def prep_data(data):
      #smooth the data
