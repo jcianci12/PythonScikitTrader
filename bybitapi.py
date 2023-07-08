@@ -59,7 +59,7 @@ def get_intervals(start_date, end_date, interval):
         print(f'intervals: {intervals}')
         return intervals
 
-def fetch_bybit_data_v5(test,start_date, end_date, symbol, interval, category):
+def fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category):
     # Get the intervals for the given date range and interval
     intervals = get_intervals(start_date, end_date, interval)
 
@@ -87,12 +87,19 @@ def fetch_bybit_data_v5(test,start_date, end_date, symbol, interval, category):
         else:
             url = "https://api.bybit.com/v5/market/kline"
 
-        response = requests.get(url, params=params)
-
-        if response.status_code == 200:
-            data += response.json()['result']['list']
-        else:
-            print(f"Error fetching data: {response.status_code}")
+        try:
+            response = requests.get(url, params=params)
+            if response.status_code == 200:
+                data += response.json()['result']['list']
+            else:
+                print(f"Error fetching data: {response.status_code}")
+        except requests.exceptions.RequestException as e:
+            print("An error occurred while making the request:")
+            print(e)
+            print("Retrying after 1 minute...")
+            time.sleep(60)  # Wait for 1 minute before retrying
+            # Recursive call to retry fetching data
+            return fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category)
 
     # Convert the data to a DataFrame
     df_new = pd.DataFrame(data, columns=['open_time', 'open', 'high', 'low', 'close', 'volume', 'turnover'])
