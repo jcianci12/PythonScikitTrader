@@ -166,4 +166,67 @@ class API_Tests(unittest.TestCase):
         server_time = get_server_time()
         print(datetime.datetime.fromtimestamp(float(server_time)),datetime.datetime.now())
         self.assertIsNotNone(server_time)
+
+
+import unittest
+import asyncio
+import ccxt.async_support as ccxt
+
+from KEYS import API_KEY, API_SECRET
+from bybitapi import fetch_spot_balance, create_limit_order, cancel_order, fetch_closed_orders
+
+class TestExample1(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.exchange = ccxt.bybit({
+            'apiKey': API_KEY,
+            'secret': API_SECRET,
+        })
+        cls.exchange.options['defaultType'] = 'unified'  # Set spot as default type
+
+    @classmethod
+    def tearDownClass(cls):
+        asyncio.get_event_loop().run_until_complete(cls.exchange.close())
+
+    async def test_fetch_spot_balance(self):
+        balance = await fetch_spot_balance(self.exchange)
+        self.assertIsNotNone(balance)
+        self.assertIn('total', balance)
+
+    async def test_create_limit_order(self):
+        symbol = 'LTC/USDT'
+        order_type = 'limit'
+        side = 'buy'
+        amount = 0.1
+        price = 50
+        created_order = await create_limit_order(self.exchange, symbol, order_type, side, amount, price)
+        self.assertIsNotNone(created_order)
+        self.assertIn('id', created_order)
+
+    async def test_cancel_order(self):
+        symbol = 'LTC/USDT'
+        order_id = 'order_id_here'  # Replace 'order_id_here' with the actual order ID
+        canceled_order = await cancel_order(self.exchange, order_id, symbol)
+        self.assertIsNotNone(canceled_order)
+        self.assertIn('id', canceled_order)
+
+    async def test_fetch_closed_orders(self):
+        symbol = 'LTC/USDT'
+        closed_orders = await fetch_closed_orders(self.exchange, symbol)
+        self.assertIsNotNone(closed_orders)
+        self.assertIsInstance(closed_orders, list)
+
+    def run_async_test(self, coro):
+        loop = asyncio.get_event_loop()
+        return loop.run_until_complete(coro)
+
+    def test_async(self):
+        self.run_async_test(self.test_fetch_spot_balance())
+        self.run_async_test(self.test_create_limit_order())
+        self.run_async_test(self.test_cancel_order())
+        self.run_async_test(self.test_fetch_closed_orders())
+
+
+
         

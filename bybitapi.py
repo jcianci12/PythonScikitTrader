@@ -317,6 +317,30 @@ def load_time_difference(self, params={}):
     self.options['timeDifference'] = after - serverTime
     return self.options['timeDifference']
 
-    def fetch_time(self, params={}):
-        response = self.publicGetTime(params) 
-        return self.safe_timestamp(response, 'time_now')
+def fetch_time(self, params={}):
+    response = self.publicGetTime(params) 
+    return self.safe_timestamp(response, 'time_now')
+
+from KEYS import API_KEY, API_SECRET
+import ccxt
+
+exchange = ccxt.bybit({
+    'apiKey': API_KEY,
+    'secret': API_SECRET,
+})
+
+async def fetch_spot_balance(exchange):
+    balance = await exchange.fetch_balance()
+    print("Spot Balance:", balance)
+
+async def create_limit_order(exchange, symbol, order_type, side, amount, price):
+    create_order = await exchange.create_order(symbol, order_type, side, amount, price)
+    print('Created Order ID:', create_order['id'])
+
+async def cancel_order(exchange, order_id, symbol):
+    canceled_order = await exchange.cancel_order(order_id, symbol)
+    print('Canceled Order ID:', canceled_order['id'])
+
+async def fetch_closed_orders(exchange, symbol):
+    orders = await exchange.fetch_closed_orders(symbol)
+    print("Canceled Orders:", orders)
