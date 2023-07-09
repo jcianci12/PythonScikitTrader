@@ -1,4 +1,4 @@
-from config import LOOKAHEADVALUE
+from config import LOOKAHEADVALUE, PERCENTCHANGEINDICATOR
 
 import pandas as pd
 from finta import TA
@@ -17,12 +17,13 @@ def _produce_movement_indicators(data):
     At a given row, it looks 'window' rows ahead to see if the price increased (1) or decreased (0)
     :param window: number of days, or rows to look ahead to see what the price did
     """
+    precentChangeAmount = data["close"] * PERCENTCHANGEINDICATOR 
 
-    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= data["close"]
+    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= precentChangeAmount+ data["close"]
     predictionup = predictionup.iloc[:-LOOKAHEADVALUE]
     data["pred"] = predictionup.astype(int)
 
-    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= data["close"]
+    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= precentChangeAmount -data["close"]
     predictiondec = predictiondec.iloc[:-LOOKAHEADVALUE]
     data["preddec"] = predictiondec.astype(int)
 
