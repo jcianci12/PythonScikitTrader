@@ -45,7 +45,7 @@ symbol = "BTCUSD"
 test = True
 days = 2
 
-
+previousaction = None
 
 
 
@@ -141,14 +141,21 @@ def trade_loop():
     logger("Portfolio: ",portfolio_balance,"BTC:",btcbalance,"USDT:",usdtbalance)
     # Print the final output
     logger("buy signal:", confidence_scoreinc,"sell signal:",confidence_scoredec)
-
-    
+    global previousaction 
+    newaction = None
     if(confidence_scoreinc==1 and confidence_scoredec==0):
-        buylogic(1,usdtbalance)
+        newaction = 1
+        if(newaction!=previousaction):
+            logger("State is different, acting.")
+            buylogic(1,usdtbalance)
     elif(confidence_scoreinc==0 and confidence_scoredec==1):
-        selllogic(1,btcbalance,bid_price)
+        if(newaction!=previousaction):            
+            newaction = -1
+            selllogic(1,btcbalance,bid_price)
     else:
+        newaction = 0
         logger(str("Didnt act"))
+    previousaction = newaction
 
     plot_graph(bid_price, confidence_scoreinc,confidence_scoredec, portfolio_balance,usdtbalance,btcbalance*bid_price,"performance.png","performance.csv",GRAPHVIEWWINDOW)
 if (TESTRETRAINATSTART):

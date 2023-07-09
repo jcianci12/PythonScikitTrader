@@ -14,7 +14,7 @@ def _exponential_smooth(data, alpha):
 def _produce_movement_indicators(data):
     """
     Function that produces the 'truth' values
-    At a given row, it looks 'window' rows ahead to see if the price increased (1) or decreased (0)
+    At a given row, it looks 'window' rows ahead to see if the price increased by the percentamountchanged (1) or decreased (0)
     :param window: number of days, or rows to look ahead to see what the price did
     """
     precentChangeAmount = data["close"] * PERCENTCHANGEINDICATOR 
@@ -23,7 +23,7 @@ def _produce_movement_indicators(data):
     predictionup = predictionup.iloc[:-LOOKAHEADVALUE]
     data["pred"] = predictionup.astype(int)
 
-    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= precentChangeAmount -data["close"]
+    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= data["close"]
     predictiondec = predictiondec.iloc[:-LOOKAHEADVALUE]
     data["preddec"] = predictiondec.astype(int)
 
