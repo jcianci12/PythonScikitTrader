@@ -235,34 +235,27 @@ def place_sell_order(testmode,  marketsymbol, qty):
     :param marketsymbol: The symbol for the market asset.
     :param qty: The quantity to sell.
     """
-    try:
-        session = get_session(testmode)
-        
-        # Check if qty is less than the minimum order quantity
-        min_qty = 0.000001
-        qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
+    bybit = ccxt.bybit()
+    bybit.apiKey = API_KEY
+    bybit.secret = API_SECRET
 
-        if qty_rounded < min_qty:
-            logger(f"Sale of {qty} was below minimum amount.")
-            qty_rounded = min_qty
-            return None
-        
+    symbol = 'BTCUSDT' # The trading symbol
+    amount = 0.01 # The amount of BTC to buy/sell
+    side = "Buy" # The side of the order (buy/sell)
+    type = ‘market’ # The type of the order (market/limit)
+    stop_loss = 30000 # The stop-loss price
+    take_profit = 35000 # The take-profit price
 
+    # Set additional parameters for the order
+    params = {
+    ‘stop_loss’: stop_loss,
+    ‘take_profit’: take_profit,
+    }
 
-        response = session.place_order(
-            category="spot",
-            symbol=marketsymbol,
-            side="Sell",
-            orderType="Market",
-            qty=str(qty_rounded),
-            timeInForce="GTC",
-            orderLinkId=str(uuid.uuid4()),
-        )
-    except Exception as e:
-        Logger(f"the error: {e}")
-        raise e
+    order = bybit.create_order(symbol, type, side, amount, None, params)
+    print(order)
 
-    return response
+        return response
 
 
 
