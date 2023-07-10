@@ -177,7 +177,35 @@ def get_market_ask_price(test, symbol):
 # get_market_ask_price(True, "BTCUSDT")
 # %%
 
-def place_buy_order(testmode, symbol, capitalsymbol, takeprofitprice, stoplossprice, qty):
+def place_buy_order(testmode,orderType,takeprofitprice, stoplossprice, symbol, capitalsymbol,   qty):
+    bybit = ccxt.bybit()
+    bybit.apiKey = API_KEY
+    bybit.secret = API_SECRET
+
+    # Get the market data
+    market_data = get_market_ask_price(testmode, symbol=symbol)
+    
+    # Get the market price
+    market_price = float(market_data)
+    # Calculate the take profit and stop loss prices
+    take_profit_price = None if takeprofitprice == None else (market_price + takeprofitprice)
+    stop_loss_price = None if stoplossprice == None else (market_price + stoplossprice)
+
+    # symbol = ‘BTC/USD’ # The trading symbol
+    # amount = 0.01 # The amount of BTC to buy/sell
+    # side = ‘buy’ # The side of the order (buy/sell)
+    # type = ‘market’ # The type of the order (market/limit)
+    # stop_loss = 30000 # The stop-loss price
+    # take_profit = 35000 # The take-profit price
+
+    # Set additional parameters for the order
+    params = {'stop_loss' stop_loss_price, 'take_profit': take_profit_price}
+
+    order = bybit.create_order(symbol, type, side, amount, None, params)
+    print(order)
+
+
+def place_limit_order(testmode,orderType, symbol, capitalsymbol,   qty,price):
     """
     Function to place a buy order.
     :param testmode: Boolean indicating if test mode is enabled.
@@ -196,26 +224,23 @@ def place_buy_order(testmode, symbol, capitalsymbol, takeprofitprice, stoplosspr
         # Get the market price
         market_price = float(market_data)
         # Calculate the take profit and stop loss prices
-        take_profit_price = None if takeprofitprice == None else (market_price + takeprofitprice)
-        stop_loss_price = None if stoplossprice == None else (market_price + stoplossprice)
-        
+       
         # Check if qty is less than the minimum order quantity
         min_qty = MINIMUMBTCTRANSACTIONSIZE
         if qty < min_qty:
             logger(f"Sale of {qty} was below minimum amount.")
             qty = min_qty
         
-        logger("placing buy order of ", symbol, "qty:", qty,"market price",market_price,"take profit",takeprofitprice,"stop loss",stoplossprice)
+        logger("placing buy order of ", symbol, "qty:", qty,"market price",market_price)
 
         response = session.place_order(
             category="spot",
             symbol=symbol,
             side="Buy",
-            orderType="Market",
+            orderType=orderType,
+            price=price,
             qty=str(qty),
-            timeInForce="GTC",
-            takeProfit=take_profit_price,
-            stopLoss=stop_loss_price,
+            timeInForce="GTC",            
             orderLinkId=str(uuid.uuid4()),
         )
     except Exception as e:
@@ -223,9 +248,6 @@ def place_buy_order(testmode, symbol, capitalsymbol, takeprofitprice, stoplosspr
         raise e
 
     return response
-
-
-
 
 def place_sell_order(testmode,  marketsymbol, qty):
     """
@@ -235,27 +257,34 @@ def place_sell_order(testmode,  marketsymbol, qty):
     :param marketsymbol: The symbol for the market asset.
     :param qty: The quantity to sell.
     """
-    bybit = ccxt.bybit()
-    bybit.apiKey = API_KEY
-    bybit.secret = API_SECRET
+    try:
+        session = get_session(testmode)
+        
+        # Check if qty is less than the minimum order quantity
+        min_qty = 0.000001
+        qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
 
-    symbol = 'BTCUSDT' # The trading symbol
-    amount = 0.01 # The amount of BTC to buy/sell
-    side = "Buy" # The side of the order (buy/sell)
-    type = ‘market’ # The type of the order (market/limit)
-    stop_loss = 30000 # The stop-loss price
-    take_profit = 35000 # The take-profit price
+        if qty_rounded < min_qty:
+            logger(f"Sale of {qty} was below minimum amount.")
+            qty_rounded = min_qty
+            return None
+        
 
-    # Set additional parameters for the order
-    params = {
-    ‘stop_loss’: stop_loss,
-    ‘take_profit’: take_profit,
-    }
 
-    order = bybit.create_order(symbol, type, side, amount, None, params)
-    print(order)
+        response = session.place_order(
+            category="spot",
+            symbol=marketsymbol,
+            side="Sell",
+            orderType="Market",
+            qty=str(qty_rounded),
+            timeInForce="GTC",
+            orderLinkId=str(uuid.uuid4()),
+        )
+    except Exception as e:
+        Logger(f"the error: {e}")
+        raise e
 
-        return response
+    return response
 
 
 

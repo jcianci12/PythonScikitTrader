@@ -3,6 +3,7 @@ from bybitapi import get_market_bid_price, place_sell_order
 from config import *
 from functions.logger import logger
 from functions.map_range import map_range
+import ccxt
 
 
 def selllogic(confidence_score, btcbalance, btcmarketvalue):
