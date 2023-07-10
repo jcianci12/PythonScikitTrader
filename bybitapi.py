@@ -177,7 +177,7 @@ def get_market_ask_price(test, symbol):
 # get_market_ask_price(True, "BTCUSDT")
 # %%
 
-def place_buy_order(testmode, symbol, capitalsymbol, takeprofitprice, stoplossprice, qty):
+def place_buy_order(testmode,orderType, symbol, capitalsymbol,   qty):
     """
     Function to place a buy order.
     :param testmode: Boolean indicating if test mode is enabled.
@@ -196,26 +196,22 @@ def place_buy_order(testmode, symbol, capitalsymbol, takeprofitprice, stoplosspr
         # Get the market price
         market_price = float(market_data)
         # Calculate the take profit and stop loss prices
-        take_profit_price = None if takeprofitprice == None else (market_price + takeprofitprice)
-        stop_loss_price = None if stoplossprice == None else (market_price + stoplossprice)
-        
+       
         # Check if qty is less than the minimum order quantity
         min_qty = MINIMUMBTCTRANSACTIONSIZE
         if qty < min_qty:
             logger(f"Sale of {qty} was below minimum amount.")
             qty = min_qty
         
-        logger("placing buy order of ", symbol, "qty:", qty,"market price",market_price,"take profit",takeprofitprice,"stop loss",stoplossprice)
+        logger("placing buy order of ", symbol, "qty:", qty,"market price",market_price)
 
         response = session.place_order(
             category="spot",
             symbol=symbol,
             side="Buy",
-            orderType="Market",
+            orderType=orderType,
             qty=str(qty),
-            timeInForce="GTC",
-            takeProfit=take_profit_price,
-            stopLoss=stop_loss_price,
+            timeInForce="GTC",            
             orderLinkId=str(uuid.uuid4()),
         )
     except Exception as e:
@@ -223,9 +219,49 @@ def place_buy_order(testmode, symbol, capitalsymbol, takeprofitprice, stoplosspr
         raise e
 
     return response
+def place_limit_order(testmode,orderType, symbol, capitalsymbol,   qty,price):
+    """
+    Function to place a buy order.
+    :param testmode: Boolean indicating if test mode is enabled.
+    :param symbol: The symbol for the market asset.
+    :param capitalsymbol: The symbol for the capital asset.
+    :param take_profit_percent: The take profit percentage for the order.
+    :param stop_loss_percent: The stop loss percentage for the order.
+    :param qty: The quantity to buy.
+    """
+    try:
+        session = get_session(testmode)
+        
+        # Get the market data
+        market_data = get_market_ask_price(testmode, symbol=symbol)
+        
+        # Get the market price
+        market_price = float(market_data)
+        # Calculate the take profit and stop loss prices
+       
+        # Check if qty is less than the minimum order quantity
+        min_qty = MINIMUMBTCTRANSACTIONSIZE
+        if qty < min_qty:
+            logger(f"Sale of {qty} was below minimum amount.")
+            qty = min_qty
+        
+        logger("placing buy order of ", symbol, "qty:", qty,"market price",market_price)
 
+        response = session.place_order(
+            category="spot",
+            symbol=symbol,
+            side="Buy",
+            orderType=orderType,
+            price=price,
+            qty=str(qty),
+            timeInForce="GTC",            
+            orderLinkId=str(uuid.uuid4()),
+        )
+    except Exception as e:
+        logger(f"the error: {e}")
+        raise e
 
-
+    return response
 
 def place_sell_order(testmode,  marketsymbol, qty):
     """
