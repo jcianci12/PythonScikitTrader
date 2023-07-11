@@ -198,23 +198,31 @@ def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qt
     # take_profit = 35000 # The take-profit price
 
     # Set additional parameters for the order
-    params={
-            'leverage': 1,
-            'stopLossPrice': stoplossprice,
-            'takeProfitPrice': takeprofitprice,
+    # params={
+    #         'leverage': 1,
+    #         'stopLossPrice': stoplossprice,
+    #         'takeProfitPrice': takeprofitprice,
             
-        }
+    #     }
 
 
-    order = bybit.create_order("BTC/USDT", type, side, qty,market_price,  params)
-    # if(takeprofitprice):
-    #     tp = bybit.create_order("BTC/USDT", "limit", "sell", qty,takeprofitprice,  None)
-    # if(stoplossprice):
-    #     sl = bybit.create_order("BTC/USDT", "limit", "sell", qty,stoplossprice,  None)
-
+    # order = bybit.create_order("BTC/USDT", type, side, qty,market_price,  params)
+  
     
-    print(order)
-    return order
+    market_order = exchange.create_order(symbol, 'market', 'buy', qty,market_price)
+
+    stop_loss_price = stoplossprice  # price in USDT
+    take_profit_price = takeprofitprice  # price in USDT
+
+    params = {
+        'stopLossPrice': stop_loss_price,
+        'takeProfitPrice': take_profit_price,
+    }
+
+    stop_loss_order = exchange.create_order(symbol, 'limit', 'sell', qty,market_price, params)
+    logger("market order",market_order,"stop loss order",stop_loss_order)
+    
+    return market_order
 
 
 
