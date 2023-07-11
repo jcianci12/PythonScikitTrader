@@ -220,7 +220,14 @@ def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qt
     }
 
     stop_loss_order = exchange.create_order(symbol, 'limit', 'sell', qty,market_price, params)
-    logger("market order",market_order,"stop loss order",stop_loss_order)
+    logger("market order",market_order)
+    logger("stop loss order",stop_loss_order)
+
+    symbol = 'BTC/USDT'
+
+    open_orders = exchange.fetch_open_orders(symbol=symbol)
+
+    logger("open orders",open_orders)
     
     return market_order
 
