@@ -30,7 +30,7 @@ def selllogic(confidence_score, btcbalance, btcmarketvalue):
             " | Market value: ", btcmarketvalue, "USDT transaction amount:", (tradeamount*btcmarketvalue))
                 
         # Check if the transaction amount is greater than the minimum transaction size
-        if tradeamount > getminimumtransactionamountinbtc():   
+        if tradeamount > getminimumtransactionamountinusdt(marketsymbol):   
 
             
             # Place the sell order
