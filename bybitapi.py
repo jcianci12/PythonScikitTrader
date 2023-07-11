@@ -202,6 +202,7 @@ def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qt
             'leverage': 1,
             'stopLossPrice': stoplossprice,
             'takeProfitPrice': takeprofitprice,
+            
         }
 
 
