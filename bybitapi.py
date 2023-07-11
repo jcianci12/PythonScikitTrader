@@ -202,7 +202,9 @@ def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qt
             'leverage': 1,
             'stopLossPrice': stoplossprice,
             'takeProfitPrice': takeprofitprice,
-        },
+        }
+
+
     order = bybit.create_order("BTC/USDT", type, side, qty,market_price,  params)
     # if(takeprofitprice):
     #     tp = bybit.create_order("BTC/USDT", "limit", "sell", qty,takeprofitprice,  None)
