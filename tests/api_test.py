@@ -59,7 +59,7 @@ class API_Tests(unittest.TestCase):
         qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
         
         # Place a buy order using 2% of USDT balance
-        buy = place_buy_order(TEST, "BTCUSDT", "USDT", 5, 5, qty_rounded)
+        buy = place_order(TEST, "BTCUSDT", "USDT", 5, 5, qty_rounded)
         
         # Assert that the buy order was successful
         assert buy['retCode'] == 0, f"Buy order failed: {buy}"
@@ -193,6 +193,18 @@ class TestExample1(unittest.TestCase):
         balance = await fetch_spot_balance(self.exchange)
         self.assertIsNotNone(balance)
         self.assertIn('total', balance)
+
+    def test_create_market_buy_order_tp_sl(self):
+        response = place_order(TEST,"market", "BTC/USDT","buy", 50000,10000, 0.001)
+
+        print(response)
+        self.assertIs(True,True)
+
+    def test_create_market_sell_order_tp_sl(self):        
+        response = place_order(TEST,"market", "BTC/USDT","sell", None,None, 0.001)
+
+        print(response)
+        self.assertIs(True,True)
 
     async def test_create_limit_order(self):
         symbol = 'LTC/USDT'

@@ -12,6 +12,7 @@ from KEYS import API_KEY, API_SECRET
 from config import *
 from functions.interval_map import *
 from functions.logger import logger
+import ccxt
 
 
 DELAY = 5
@@ -177,20 +178,18 @@ def get_market_ask_price(test, symbol):
 # get_market_ask_price(True, "BTCUSDT")
 # %%
 
-def place_buy_order(testmode,orderType,takeprofitprice, stoplossprice, symbol, capitalsymbol,   qty):
+def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qty):
     bybit = ccxt.bybit()
     bybit.apiKey = API_KEY
     bybit.secret = API_SECRET
 
     # Get the market data
-    market_data = get_market_ask_price(testmode, symbol=symbol)
+    market_data = get_market_ask_price(testmode, symbol="BTCUSDT")
     
     # Get the market price
     market_price = float(market_data)
     # Calculate the take profit and stop loss prices
-    take_profit_price = None if takeprofitprice == None else (market_price + takeprofitprice)
-    stop_loss_price = None if stoplossprice == None else (market_price + stoplossprice)
-
+    
     # symbol = ‘BTC/USD’ # The trading symbol
     # amount = 0.01 # The amount of BTC to buy/sell
     # side = ‘buy’ # The side of the order (buy/sell)
@@ -199,55 +198,23 @@ def place_buy_order(testmode,orderType,takeprofitprice, stoplossprice, symbol, c
     # take_profit = 35000 # The take-profit price
 
     # Set additional parameters for the order
-    params = {'stop_loss' stop_loss_price, 'take_profit': take_profit_price}
+    params={
+            'leverage': 1,
+            'stopLossPrice': stoplossprice,
+            'takeProfitPrice': takeprofitprice,
+        },
+    order = bybit.create_order("BTC/USDT", type, side, qty,market_price,  params)
+    # if(takeprofitprice):
+    #     tp = bybit.create_order("BTC/USDT", "limit", "sell", qty,takeprofitprice,  None)
+    # if(stoplossprice):
+    #     sl = bybit.create_order("BTC/USDT", "limit", "sell", qty,stoplossprice,  None)
 
-    order = bybit.create_order(symbol, type, side, amount, None, params)
+    
     print(order)
+    return order
 
 
-def place_limit_order(testmode,orderType, symbol, capitalsymbol,   qty,price):
-    """
-    Function to place a buy order.
-    :param testmode: Boolean indicating if test mode is enabled.
-    :param symbol: The symbol for the market asset.
-    :param capitalsymbol: The symbol for the capital asset.
-    :param take_profit_percent: The take profit percentage for the order.
-    :param stop_loss_percent: The stop loss percentage for the order.
-    :param qty: The quantity to buy.
-    """
-    try:
-        session = get_session(testmode)
-        
-        # Get the market data
-        market_data = get_market_ask_price(testmode, symbol=symbol)
-        
-        # Get the market price
-        market_price = float(market_data)
-        # Calculate the take profit and stop loss prices
-       
-        # Check if qty is less than the minimum order quantity
-        min_qty = MINIMUMBTCTRANSACTIONSIZE
-        if qty < min_qty:
-            logger(f"Sale of {qty} was below minimum amount.")
-            qty = min_qty
-        
-        logger("placing buy order of ", symbol, "qty:", qty,"market price",market_price)
 
-        response = session.place_order(
-            category="spot",
-            symbol=symbol,
-            side="Buy",
-            orderType=orderType,
-            price=price,
-            qty=str(qty),
-            timeInForce="GTC",            
-            orderLinkId=str(uuid.uuid4()),
-        )
-    except Exception as e:
-        logger(f"the error: {e}")
-        raise e
-
-    return response
 
 def place_sell_order(testmode,  marketsymbol, qty):
     """
