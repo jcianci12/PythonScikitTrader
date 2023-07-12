@@ -200,18 +200,18 @@ def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qt
     # take_profit = 35000 # The take-profit price
 
     # Set additional parameters for the order
-    # params={
-    #         'leverage': 1,
-    #         'stopLossPrice': stoplossprice,
-    #         'takeProfitPrice': takeprofitprice,
+    params={
+            'leverage': 1,
+            # 'stopLossPrice': stoplossprice,
+            # 'takeProfitPrice': takeprofitprice,
             
-    #     }
+        }
 
 
     # order = bybit.create_order("BTC/USDT", type, side, qty,market_price,  params)
   
     
-    market_order = exchange.create_market_order(symbol, side, qty,market_price)
+    market_order = exchange.create_market_order(symbol, side, qty,market_price,params)
     logger("market order",market_order)
 
     stop_loss_price = stoplossprice  # price in USDT
@@ -256,6 +256,14 @@ def place_sell_order(testmode,  marketsymbol, qty):
             qty_rounded = min_qty
             return None
         
+# (symbol="BTCUSDT",
+#                 side="Sell",
+#                 order_type="Market",
+#                 qty= 0.001,
+#                 time_in_force="GoodTillCancel",
+#                 reduce_only=True
+#                 close_on_trigger=False,)
+
 
 
         response = session.place_order(
@@ -263,9 +271,12 @@ def place_sell_order(testmode,  marketsymbol, qty):
             symbol=marketsymbol,
             side="Sell",
             orderType="Market",
-            qty=str(qty_rounded),
+            qty=str(0.0001),
             timeInForce="GTC",
             orderLinkId=str(uuid.uuid4()),
+            reduceOnly=True
+            
+
         )
     except Exception as e:
         Logger(f"the error: {e}")
