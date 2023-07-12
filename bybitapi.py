@@ -181,8 +181,8 @@ def get_market_ask_price(test, symbol):
 
 def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qty):
     bybit = ccxt.bybit()
-    bybit.apiKey = API_KEY
-    bybit.secret = API_SECRET
+    exchange.apiKey = API_KEY
+    exchange.secret = API_SECRET
     exchange.options['defaultType'] = 'spot'; # very important set spot as default type
 
     # Get the market data
@@ -211,7 +211,7 @@ def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qt
     # order = bybit.create_order("BTC/USDT", type, side, qty,market_price,  params)
   
     
-    market_order = exchange.create_order(symbol, 'market', side, qty,market_price)
+    market_order = exchange.create_market_order(symbol, side, qty,market_price)
     logger("market order",market_order)
 
     stop_loss_price = stoplossprice  # price in USDT

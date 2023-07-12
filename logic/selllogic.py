@@ -1,4 +1,5 @@
 import decimal
+from KEYS import API_KEY, API_SECRET
 from bybitapi import get_market_bid_price, place_order, place_sell_order
 from config import *
 from functions.logger import logger
@@ -32,10 +33,13 @@ def selllogic(confidence_score, btcbalance, btcmarketvalue):
         # Check if the transaction amount is greater than the minimum transaction size
         if tradeamount/btcmarketvalue > getminimumtransactionamountinbtc(btcbalance):   
 
-            
+            exchange = ccxt.bybit()
+            exchange.apiKey = API_KEY
+            exchange.secret = API_SECRET
+            exchange.options['defaultType'] = 'spot'; # very important set spot as default type
             # Place the sell order
             # response = place_sell_order(TEST,  marketsymbol, tradeamount/btcmarketvalue) 
-            response = place_order(TEST,"market", "BTC/USDT","sell", None,None, tradeamount/btcmarketvalue)
+            response = exchange.create_unified_account_order("BTC/USDT","market","sell",0.001,None,None)
 
 
         else:

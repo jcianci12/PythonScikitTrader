@@ -200,7 +200,7 @@ class TestExample1(unittest.TestCase):
         print(response)
         self.assertIs(True,True)
 
-    def test_create_market_sell_order_tp_sl(self):        
+    def test_create_market_sell_order(self):        
         response = place_order(TEST,"market", "BTC/USDT","sell", None,None, 0.001)
 
         print(response)
