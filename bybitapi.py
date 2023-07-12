@@ -18,6 +18,7 @@ import ccxt
 DELAY = 5
 TEST_URL = 'https://www.google.com'
 
+
 def get_session(test=True):
     http = HTTP(testnet=False, api_key="...", api_secret="...")
     http.testnet = test
@@ -182,6 +183,7 @@ def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qt
     bybit = ccxt.bybit()
     bybit.apiKey = API_KEY
     bybit.secret = API_SECRET
+    exchange.options['defaultType'] = 'spot'; # very important set spot as default type
 
     # Get the market data
     market_data = get_market_ask_price(testmode, symbol="BTCUSDT")
@@ -209,19 +211,19 @@ def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qt
     # order = bybit.create_order("BTC/USDT", type, side, qty,market_price,  params)
   
     
-    market_order = exchange.create_order(symbol, 'market', 'buy', qty,market_price)
+    market_order = exchange.create_order(symbol, 'market', side, qty,market_price)
+    logger("market order",market_order)
 
     stop_loss_price = stoplossprice  # price in USDT
     take_profit_price = takeprofitprice  # price in USDT
+    if(side=='buy'):
+        params = {
+            'stopLossPrice': stop_loss_price,
+            'takeProfitPrice': take_profit_price,
+        }
 
-    params = {
-        'stopLossPrice': stop_loss_price,
-        'takeProfitPrice': take_profit_price,
-    }
-
-    stop_loss_order = exchange.create_order(symbol, 'limit', 'sell', qty,market_price, params)
-    logger("market order",market_order)
-    logger("stop loss order",stop_loss_order)
+        stop_loss_order = exchange.create_order(symbol, 'limit', 'sell', qty,market_price, params)
+        logger("stop loss order",stop_loss_order)
 
     symbol = 'BTC/USDT'
 
