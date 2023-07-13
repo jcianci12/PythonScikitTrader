@@ -39,7 +39,7 @@ def selllogic(confidence_score, btcbalance, btcmarketvalue):
             exchange.options['defaultType'] = 'spot'; # very important set spot as default type
             # Place the sell order
             # response = place_sell_order(TEST,  marketsymbol, tradeamount/btcmarketvalue) 
-            response = exchange.create_unified_account_order("BTC/USDT","market","sell",0.001,None,None)
+            response = exchange.create_order("BTC/USDT","market","sell",tradeamount/btcmarketvalue,None,{})
 
 
         else:

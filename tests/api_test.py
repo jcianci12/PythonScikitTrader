@@ -1,14 +1,20 @@
+import datetime
+import decimal
 import json
 import unittest
 import uuid
+import pandas as pd
 
 from requests import patch
-from bybitapi import *
+from KEYS import API_KEY, API_SECRET
 
-
-from config import *
+from bybitapi import cancel_all, cancel_order, create_limit_order, fetch_bybit_current_orders, fetch_bybit_data_v5, fetch_closed_orders, fetch_spot_balance, get_intervals, get_market_ask_price, get_market_bid_price, get_server_time, get_wallet_balance, place_order, place_sell_order
+from config import BUYTHRESHOLD, INTERVAL, TEST
+from functions.logger import logger
 from logic.buylogic import buylogic
 from logic.selllogic import selllogic
+
+
 
 class API_Tests(unittest.TestCase):
 
@@ -88,9 +94,9 @@ class API_Tests(unittest.TestCase):
         Function to test the buylogic function.
         """
         # Set the confidence score, buythreshold, and usdtbalance values
-        confidence_score = 0.85
+        confidence_score = 1
         buythreshold = BUYTHRESHOLD
-        usdtbalance = 100
+        usdtbalance = get_wallet_balance(TEST,"USDT")
         
         # Call the buylogic function and assert that no exceptions were raised
         try:
@@ -172,8 +178,6 @@ import unittest
 import asyncio
 import ccxt.async_support as ccxt
 
-from KEYS import API_KEY, API_SECRET
-from bybitapi import fetch_spot_balance, create_limit_order, cancel_order, fetch_closed_orders
 
 class TestExample1(unittest.TestCase):
 
