@@ -13,18 +13,19 @@ def buylogic(confidence_score,  usdtbalance):
     :param usdtbalance: The current balance of USDT.
     """
     marketprice = decimal.Decimal(get_market_ask_price(TEST,"BTCUSDT"))
-
+    usdtbalance = decimal.Decimal( usdtbalance)
     # Calculate the percentage of capital to buy based on the confidence score
     capitalpercent = map_range(confidence_score, 0, 1, float(getminimumtransactionamount()), MAXBUYPERCENTOFCAPITAL)
     capitalpercent = decimal.Decimal(capitalpercent)
     buyamountinbtc = usdtbalance*(capitalpercent/100)/marketprice
+    buyamountinbtc = round(buyamountinbtc,6)
     buyamountinusdt = usdtbalance*(capitalpercent/100)
-    
+    buyamountinusdt = round(buyamountinusdt,2)
     # Calculate the transaction amount
     transactionamount =    buyamountinusdt*decimal.Decimal(get_market_bid_price(TEST,"BTCUSDT"))
     
     logger("Decided to buy %", capitalpercent, " of USDT balance. |USDT balance: ", usdtbalance,
-           " | BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", transactionamount)
+           " | BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", buyamountinusdt)
     min_qty = getminimumtransactionamount()
 
     tp = float(marketprice+(marketprice * TAKEPROFIT))

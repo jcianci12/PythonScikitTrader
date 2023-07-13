@@ -19,8 +19,8 @@ MAXSELLPERCENTOFCAPITAL = 50
 
 MINIMUMBTCTRANSACTIONSIZE = decimal.Decimal(0.000048)
 
-TAKEPROFIT = decimal.Decimal(1 /100) #4 percent
-STOPLOSS = decimal.Decimal(0.5/100)
+TAKEPROFIT = decimal.Decimal(4 /100) #4 percent
+STOPLOSS = decimal.Decimal(2/100)
 
 BUYTHRESHOLD = 0.8
 SELLTHRESHOLD = 0.4

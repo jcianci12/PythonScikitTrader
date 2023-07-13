@@ -12,8 +12,15 @@ from KEYS import API_KEY, API_SECRET
 from config import *
 from functions.interval_map import *
 from functions.logger import logger
+
+from KEYS import API_KEY, API_SECRET
 import ccxt
 
+exchange = ccxt.bybit({
+    'apiKey': API_KEY,
+    'secret': API_SECRET,
+})
+exchange.options['defaultType'] = 'spot'; # very important set spot as default type
 
 DELAY = 5
 TEST_URL = 'https://www.google.com'
@@ -129,8 +136,8 @@ def get_wallet_balance(test, coin):
 
     for c in coins:
         if c["coin"] == coin:
-            wallet_balance = c["walletBalance"]
-            print("current wallet balance is:" ,wallet_balance)
+            wallet_balance = c["availableToWithdraw"]
+            print("current wallet balance available is:" ,wallet_balance)
             return str(wallet_balance)
     print(f"No wallet balance found for coin: {coin}")
     return "0"
@@ -180,10 +187,7 @@ def get_market_ask_price(test, symbol):
 # %%
 
 def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qty):
-    bybit = ccxt.bybit()
-    exchange.apiKey = API_KEY
-    exchange.secret = API_SECRET
-    exchange.options['defaultType'] = 'spot'; # very important set spot as default type
+
 
     # Get the market data
     market_data = get_market_ask_price(testmode, symbol="BTCUSDT")
@@ -191,44 +195,49 @@ def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qt
     # Get the market price
     market_price = float(market_data)
     # Calculate the take profit and stop loss prices
-    
-    # symbol = ‘BTC/USD’ # The trading symbol
-    # amount = 0.01 # The amount of BTC to buy/sell
-    # side = ‘buy’ # The side of the order (buy/sell)
-    # type = ‘market’ # The type of the order (market/limit)
-    # stop_loss = 30000 # The stop-loss price
-    # take_profit = 35000 # The take-profit price
-
-    # Set additional parameters for the order
-    # params={
-    #         'leverage': 1,
-    #         'stopLossPrice': stoplossprice,
-    #         'takeProfitPrice': takeprofitprice,
-            
-    #     }
-
-
-    # order = bybit.create_order("BTC/USDT", type, side, qty,market_price,  params)
-  
-    
-    market_order = exchange.create_market_order(symbol, side, qty,market_price)
-    logger("market order",market_order)
-
-    stop_loss_price = stoplossprice  # price in USDT
-    take_profit_price = takeprofitprice  # price in USDT
-    if(side=='buy'):
-        params = {
-            'stopLossPrice': stop_loss_price,
-            'takeProfitPrice': take_profit_price,
+    uid = str(uuid.uuid4())
+    request = {  
+        "category":"spot",
+        "symbol":"BTCUSDT",
+        "side":side,
+        "orderType":"Limit",
+        "qty":str(qty), #in btc 
+        "price":str(market_price),
+        "timeInForce":"GTC",
+        "orderLinkId":uid,        
         }
+    
+    market_order = exchange.privatePostV5OrderCreate(request)
 
-        stop_loss_order = exchange.create_order(symbol, 'limit', 'sell', qty,market_price, params)
-        logger("stop loss order",stop_loss_order)
+
+    if(str(side).lower() =='buy'):
+        tprequest = {  
+                "category":"spot",
+                "symbol":"BTCUSDT",
+                "side":"sell",
+                "orderType":"Limit",
+                "qty":str(qty), #in btc 
+                "price":str(market_price),
+                "triggerPrice":str(takeprofitprice),
+                "timeInForce":"GTC",
+                "orderLinkId":uid + "-tp",        
+                }
+        tporder = exchange.privatePostV5OrderCreate(tprequest)
+        slrequest = {  
+                "category":"spot",
+                "symbol":"BTCUSDT",
+                "side":"sell",
+                "orderType":"Limit",
+                "qty":str(qty), #in btc 
+                "price":str(market_price),
+                "triggerPrice":str(stoplossprice),
+                "timeInForce":"GTC",
+                "orderLinkId":uid + "-sl",        
+                }
+        slorder = exchange.privatePostV5OrderCreate(slrequest)
 
     symbol = 'BTC/USDT'
-
     open_orders = exchange.fetch_open_orders(symbol=symbol)
-
     logger("open orders",open_orders)
     
     return market_order
@@ -330,13 +339,7 @@ def fetch_time(self, params={}):
     response = self.publicGetTime(params) 
     return self.safe_timestamp(response, 'time_now')
 
-from KEYS import API_KEY, API_SECRET
-import ccxt
 
-exchange = ccxt.bybit({
-    'apiKey': API_KEY,
-    'secret': API_SECRET,
-})
 
 async def fetch_spot_balance(exchange):
     balance = await exchange.fetch_balance()

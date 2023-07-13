@@ -100,7 +100,7 @@ class API_Tests(unittest.TestCase):
         
         # Call the buylogic function and assert that no exceptions were raised
         try:
-            buylogic(confidence_score, buythreshold, usdtbalance)
+            buylogic(confidence_score,  usdtbalance)
         except Exception as e:
             self.fail(f"buylogic raised an exception: {e}")
 
