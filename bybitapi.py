@@ -217,7 +217,7 @@ def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qt
                 "side":"sell",
                 "orderType":"Limit",
                 "qty":str(qty), #in btc 
-                "price":str(market_price),
+                "price":str(takeprofitprice),
                 "triggerPrice":str(takeprofitprice),
                 "timeInForce":"GTC",
                 "orderLinkId":uid + "-tp",        
@@ -229,7 +229,7 @@ def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qt
                 "side":"sell",
                 "orderType":"Limit",
                 "qty":str(qty), #in btc 
-                "price":str(market_price),
+                "price":str(stoplossprice),
                 "triggerPrice":str(stoplossprice),
                 "timeInForce":"GTC",
                 "orderLinkId":uid + "-sl",        
