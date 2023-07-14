@@ -73,7 +73,7 @@ def getws():
 def handle_message(message):
     if 'topic' in message and message['topic'] == 'tickers.BTCUSDT':
         last_price = float(message['data']['lastPrice'])
-        print(last_price)
+        # print(last_price)
         check_orders(True, "BTCUSDT", last_price)
 
 
