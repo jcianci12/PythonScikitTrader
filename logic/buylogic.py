@@ -15,18 +15,18 @@ def buylogic(confidence_score,  usdtbalance):
     marketprice = decimal.Decimal(get_market_ask_price(TEST,"BTCUSDT"))
     usdtbalance = decimal.Decimal( usdtbalance)
     # Calculate the percentage of capital to buy based on the confidence score
-    capitalpercent = map_range(confidence_score, 0, 1, float(getminimumtransactionamount()), MAXBUYPERCENTOFCAPITAL)
-    capitalpercent = decimal.Decimal(capitalpercent)
-    buyamountinbtc = usdtbalance*(capitalpercent/100)/marketprice
-    buyamountinbtc = round(buyamountinbtc,6)
-    buyamountinusdt = usdtbalance*(capitalpercent/100)
+    # capitalpercent = map_range(confidence_score, 0, 1, float(getminimumtransactionamountUSDT()), MAXBUYPERCENTOFCAPITAL)
+    # capitalpercent = decimal.Decimal(capitalpercent)
+    buyamountinbtc = usdtbalance*(MAXBUYPERCENTOFCAPITAL/100)/marketprice
+    buyamountinbtc = round(buyamountinbtc,5)
+    buyamountinusdt = usdtbalance*(MAXBUYPERCENTOFCAPITAL/100)
     buyamountinusdt = round(buyamountinusdt,2)
     # Calculate the transaction amount
     transactionamount =    buyamountinusdt*decimal.Decimal(get_market_bid_price(TEST,"BTCUSDT"))
     
-    logger("Decided to buy %", capitalpercent, " of USDT balance. |USDT balance: ", usdtbalance,
+    logger("Decided to buy %", MAXBUYPERCENTOFCAPITAL, " of USDT balance. |USDT balance: ", usdtbalance,
            " | BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", buyamountinusdt)
-    min_qty = getminimumtransactionamount()
+    min_qty = getminimumtransactionamountUSDT()
 
     tp = float(marketprice+(marketprice * TAKEPROFIT))
     sl = float(marketprice  -(marketprice*STOPLOSS))
@@ -40,12 +40,13 @@ def buylogic(confidence_score,  usdtbalance):
         
         # Place the buy order
         # response = place_order(TEST, "BTCUSDT", "USDT",TAKEPROFIT,STOPLOSS, qty_rounded)
-        response = place_order(TEST,"market", "BTC/USDT","buy", tp,sl, buyamountinbtc)
+        response = place_order(TEST,"market", "BTC/USDT","buy", tp,sl, buyamountinusdt)
 
         print(response)
     else:
         logger("Not enough ", "USDT", " balance is:", usdtbalance)
 
-def getminimumtransactionamount():
+def getminimumtransactionamountUSDT():
     return decimal.Decimal(MINIMUMBTCTRANSACTIONSIZE)*decimal.Decimal(get_market_ask_price(TEST,"BTCUSDT"))
-
+def getminimumtransactionamountBTC():
+    return decimal.Decimal(MINIMUMBTCTRANSACTIONSIZE)

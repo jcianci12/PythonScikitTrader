@@ -1,3 +1,4 @@
+import csv
 import datetime
 import decimal
 import hashlib
@@ -188,6 +189,8 @@ def get_market_ask_price(test, symbol):
 
 def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qty):
 
+    takeprofitprice = round(takeprofitprice,2)
+    stoplossprice = round(stoplossprice,2)
 
     # Get the market data
     market_data = get_market_ask_price(testmode, symbol="BTCUSDT")
@@ -195,53 +198,54 @@ def place_order(testmode,type, symbol, side, takeprofitprice, stoplossprice,  qt
     # Get the market price
     market_price = float(market_data)
     # Calculate the take profit and stop loss prices
-    uid = str(uuid.uuid4())
-    request = {  
-        "category":"spot",
-        "symbol":"BTCUSDT",
-        "side":side,
-        "orderType":"Limit",
-        "qty":str(qty), #in btc 
-        "price":str(market_price),
-        "timeInForce":"GTC",
-        "orderLinkId":uid,        
-        }
+    uid = str(uuid.uuid4())    
     
-    market_order = exchange.privatePostV5OrderCreate(request)
-
-
-    if(str(side).lower() =='buy'):
-        tprequest = {  
-                "category":"spot",
-                "symbol":"BTCUSDT",
-                "side":"sell",
-                "orderType":"Limit",
-                "qty":str(qty), #in btc 
-                "price":str(takeprofitprice),
-                "triggerPrice":str(takeprofitprice),
-                "timeInForce":"GTC",
-                "orderLinkId":uid + "-tp",        
-                }
-        tporder = exchange.privatePostV5OrderCreate(tprequest)
-        slrequest = {  
-                "category":"spot",
-                "symbol":"BTCUSDT",
-                "side":"sell",
-                "orderType":"Limit",
-                "qty":str(qty), #in btc 
-                "price":str(stoplossprice),
-                "triggerPrice":str(stoplossprice),
-                "timeInForce":"GTC",
-                "orderLinkId":uid + "-sl",        
-                }
-        slorder = exchange.privatePostV5OrderCreate(slrequest)
-
-    symbol = 'BTC/USDT'
-    open_orders = exchange.fetch_open_orders(symbol=symbol)
-    logger("open orders",open_orders)
+    # market_order = exchange.privatePostV5OrderCreate(request)
+    market_order = get_session(TEST).place_order(category="spot",
+        symbol="BTCUSDT",
+        side=side,
+        orderType="Market",
+        qty=str(qty), #in btc 
+        timeInForce="GTC",
+        orderLinkId=uid,  )
     
+    print("Market order",market_order)
+
+    # now we need to save this order to a csv called orders and append the stoploss and take profit prices to the row
+    with open('orders.csv', mode='a') as orders_file:
+        fieldnames = ['uid', 'symbol', 'side', 'qty', 'takeprofitprice', 'stoplossprice']
+        writer = csv.DictWriter(orders_file, fieldnames=fieldnames)
+
+        writer.writerow({
+            'uid': uid,
+            'symbol': symbol,
+            'side': side,
+            'qty': qty,
+            'takeprofitprice': takeprofitprice,
+            'stoplossprice': stoplossprice
+        })    
     return market_order
 
+
+
+
+# def place_conditional_order(testmode,price,side,qty,uid):
+#     tporder = get_session(testmode).place_order(
+#         category="spot",
+#                 symbol="BTCUSDT",
+#                 side=side,
+#                 orderType="Limit",
+#                 qty=str(qty), #in btc 
+#                 # price=str(price),
+#                 # triggerPrice=str(price),
+#                 timeInForce="GTC",
+#                 orderLinkId=uid + "-tp", 
+#                 orderFilter="tpslOrder",
+#                 takeProfit=str(price),
+#                 tpLimitPrice=str(price)
+#                     )
+        
+#     logger("condition order:",tporder)
 
 
 
