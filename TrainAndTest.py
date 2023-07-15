@@ -1,4 +1,5 @@
 # %%
+import asyncio
 import datetime
 import decimal
 import os
@@ -25,6 +26,7 @@ from functions.logger import logger, plot_graph
 from logic.selllogic import selllogic
 
 import multiprocessing as mp
+from messengerservice import send_telegram_message
 
 from prep_data import prep_data
 from watchprice import getws
@@ -157,14 +159,19 @@ def trade_loop():
     # buylogic(1, usdtbalance)
     if (confidence_scoreinc == 1 and confidence_scoredec == 0):
         buylogic(1, usdtbalance)
+        plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
+            usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
+        asyncio.run(send_telegram_message('Update'))
+
     elif (confidence_scoreinc == 0 and confidence_scoredec == 1):
         selllogic(1, btcbalance, bid_price)
+        plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
+            usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
     else:
         logger(str("Didnt act"))
 
-    plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
-               usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
 
+    
 
 if (TESTRETRAINATSTART):
     logger("Testing retrain function.")

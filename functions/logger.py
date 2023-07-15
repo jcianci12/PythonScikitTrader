@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 
 from config import TEST
@@ -92,6 +93,5 @@ def plot_graph(btc_price, confidence_signalinc,confidence_signaldec, portfolio_b
     # Save the plot to a file
     plt.savefig(chartfilename)
     plt.close()
-    send_telegram_message("Update!")
     
 
