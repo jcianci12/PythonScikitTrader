@@ -3,6 +3,7 @@ from time import sleep, time
 import csv
 
 from bybitapi import place_order
+from generateTPandSL import calculate_prices, save_updated_prices
 
 orders = []
 last_refresh_time = 0
@@ -19,8 +20,7 @@ def refresh_orders():
 
     last_refresh_time = time()
 
-
-def check_orders(testmode, symbol, market_price):
+def check_orders(testmode, symbol, market_price, ohlc):
     global orders
     global last_refresh_time
 
@@ -31,8 +31,8 @@ def check_orders(testmode, symbol, market_price):
     # Check for open orders that have reached their take profit or stop loss prices
     for order in orders:
         if not order['profit']:
-            takeprofitprice = float(order['takeprofitprice'])
-            stoplossprice = float(order['stoplossprice'])
+            entry_price = float(order['entryprice'])
+            takeprofitprice, stoplossprice = calculate_prices(entry_price, ohlc)
             side = order['side']
             qty = float(order['qty'])
 
@@ -54,12 +54,9 @@ def check_orders(testmode, symbol, market_price):
                         stoplossprice - market_price) * qty
 
     # Save the updated orders back to the CSV file
-    with open('orders.csv', mode='w') as orders_file:
-        fieldnames = ['uid', 'symbol', 'side', 'qty',
-                      'takeprofitprice', 'stoplossprice', 'profit']
-        writer = csv.DictWriter(orders_file, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(orders)
+    save_updated_prices('orders.csv', orders)
+
+
 
 
 def getws():

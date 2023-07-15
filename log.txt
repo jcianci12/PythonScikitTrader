@@ -295,3 +295,1022 @@ timestamp
 2023-07-11 07:59:20.224192: REAL MODE buy signal: 0.0 sell signal: 1.0
 2023-07-11 07:59:20.862752: REAL MODE Decided to sell  50.00000000000000148349339578 percent of BTC balance of:  67.4089207091  | Market value:  30541.99 USDT transaction amount: 33.70446035455000100000688689
 2023-07-11 07:59:26.981397: REAL MODE Not enough  BTC  balance is: 67.4089207091
+2023-07-13 05:31:37.704507: REAL MODE Starting loop
+2023-07-13 05:31:37.710275: REAL MODE File doesnt exist
+2023-07-13 05:31:42.472684: REAL MODE Training data sample before prep:                              open_time      open      high       low     close    volume        turnover
+timestamp                                                                                               
+2023-07-13 05:29:42.656  1689226200000  30076.97  30076.97  30076.94  30076.96  0.376069  11311.00986075
+2023-07-13 05:31:42.899633: REAL MODE Training data sample after prep:                             open_time         close     turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K           MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                
+2023-07-13 04:15:26.208  1.689222e+12  30076.966084  8922.113663      16.744971 -40.965684 -49.943304           65.858673  15134.358344       0.042312  0.014132      59.778203  0.000053  4405.770418     -39.692458       42.62741  1.107046  1.119852  0.996937  0.997284  0.998148  0.999845  0.697056   0.0      1.0
+2023-07-13 05:31:42.903677: REAL MODE retraining...
+2023-07-13 05:31:42.908426: REAL MODE Starting training
+2023-07-13 05:38:06.420562: REAL MODE Ensemble Accuracy Inc = 0.75994623655914
+2023-07-13 05:38:06.425729: REAL MODE Ensemble Accuracy Dec = 0.6026881720430111
+2023-07-13 05:38:06.434407: REAL MODE saving model file as  BTCUSD_5_2023-07-02 05:31:37.708032_2023-07-13 05:31:37.708032_rfinc.joblib
+2023-07-13 05:38:06.615170: REAL MODE saving model file as  BTCUSD_5_2023-07-02 05:31:37.708032_2023-07-13 05:31:37.708032_knninc.joblib
+2023-07-13 05:38:06.629516: REAL MODE saving model file as  BTCUSD_5_2023-07-02 05:31:37.708032_2023-07-13 05:31:37.708032_ensembleinc.joblib
+2023-07-13 05:38:06.976576: REAL MODE saving model file as  BTCUSD_5_2023-07-02 05:31:37.708032_2023-07-13 05:31:37.708032_rf.joblib
+2023-07-13 05:38:07.167585: REAL MODE saving model file as  BTCUSD_5_2023-07-02 05:31:37.708032_2023-07-13 05:31:37.708032_ensembledec.joblib
+2023-07-13 05:38:07.501159: REAL MODE Finished training
+2023-07-13 05:38:07.505434: REAL MODE Ensemble Accuracy inc = 0.75994623655914
+2023-07-13 05:38:07.511318: REAL MODE Ensemble Accuracy dec = 0.6026881720430111
+2023-07-13 05:38:08.400479: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K         MFV  14 period ATR       MOM  14 period MFI       ROC       OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21    ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-13 04:19:48.352  1.689222e+12  30287.911851  218978.857114      38.127061 -16.123356 -16.079525           32.335412 -170.830913      23.054359 -1.706139      38.593137 -0.116878 -1136.266     -64.330736  -2.251551e+06  1.064691  0.878063  0.997428  0.998715  0.99907  0.999735  0.803414   0.0      0.0
+2023-07-13 05:38:08.414336: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 05:31:37.708032_2023-07-13 05:31:37.708032_ensembleinc.joblib
+2023-07-13 05:38:08.676386: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 05:31:37.708032_2023-07-13 05:31:37.708032_ensembledec.joblib
+2023-07-13 05:38:12.284580: REAL MODE Portfolio:  369.3059905328 BTC: 0.00037314 USDT: 358.00263962
+2023-07-13 05:38:12.289549: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 05:38:13.043224: REAL MODE Decided to sell  1514625.999999999886181200969 percent of BTC balance of:  11.3033509128  | Market value:  30292.52 USDT transaction amount: 171203.4917965061151346617407
+2023-07-13 05:45:45.088004: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  363.63141393  | BTC TSCN QTY:  0.006002598490070816619620660625 USDT TSCN QTY: 5507105.03795929785
+2023-07-13 05:45:46.033945: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 363.63141393
+2023-07-13 05:45:53.095332: REAL MODE market order {'info': {'orderId': '1463737886181496832', 'orderLinkId': '1689227153497836'}, 'id': '1463737886181496832', 'clientOrderId': '1689227153497836', 'timestamp': None, 'datetime': None, 'lastTradeTimestamp': None, 'lastUpdateTimestamp': None, 'symbol': None, 'type': None, 'timeInForce': None, 'postOnly': None, 'reduceOnly': None, 'side': None, 'price': None, 'stopPrice': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': None, 'cost': None, 'average': None, 'filled': None, 'remaining': None, 'status': None, 'fee': None, 'trades': [], 'fees': []}
+2023-07-13 05:45:53.242274: REAL MODE stop loss order {'info': {'orderId': '1463737887423010816', 'orderLinkId': '16892271536431006'}, 'id': '1463737887423010816', 'clientOrderId': '16892271536431006', 'timestamp': None, 'datetime': None, 'lastTradeTimestamp': None, 'lastUpdateTimestamp': None, 'symbol': None, 'type': None, 'timeInForce': None, 'postOnly': None, 'reduceOnly': None, 'side': None, 'price': None, 'stopPrice': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': None, 'cost': None, 'average': None, 'filled': None, 'remaining': None, 'status': None, 'fee': None, 'trades': [], 'fees': []}
+2023-07-13 05:45:53.711327: REAL MODE open orders [{'info': {'symbol': 'BTCUSDT', 'orderType': 'Limit', 'orderLinkId': '16892271536431006', 'orderId': '1463737887423010816', 'cancelType': 'UNKNOWN', 'avgPrice': '0.00', 'stopOrderType': 'tpslOrder', 'lastPriceOnCreated': '', 'orderStatus': 'Untriggered', 'takeProfit': '', 'cumExecValue': '0.00000000', 'smpType': 'None', 'triggerDirection': '0', 'blockTradeId': '', 'isLeverage': '0', 'rejectReason': 'EC_NoError', 'price': '30289.50', 'orderIv': '', 'createdTime': '1689227153648', 'tpTriggerBy': '', 'positionIdx': '0', 'timeInForce': 'GTC', 'leavesValue': '0.00000000', 'updatedTime': '1689227153648', 'side': 'Sell', 'smpGroup': '0', 'triggerPrice': '30138.05', 'cumExecFee': '0', 'leavesQty': '0.006002', 'slTriggerBy': '', 'closeOnTrigger': False, 'placeType': '', 'cumExecQty': '0.000000', 'reduceOnly': False, 'qty': '0.006002', 'stopLoss': '', 'smpOrderId': '', 'triggerBy': '', 'nextPageCursor': '1463737887423010816%3A1689227153648%2C1463737887423010816%3A1689227153648'}, 'id': '1463737887423010816', 'clientOrderId': '16892271536431006', 'timestamp': 1689227153648, 'datetime': '2023-07-13T05:45:53.648Z', 'lastTradeTimestamp': 1689227153648, 'lastUpdateTimestamp': 1689227153648, 'symbol': 'BTC/USDT', 'type': 'limit', 'timeInForce': 'GTC', 'postOnly': False, 'reduceOnly': False, 'side': 'sell', 'price': 30289.5, 'stopPrice': 30138.05, 'triggerPrice': 30138.05, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': 0.006002, 'cost': 0.0, 'average': None, 'filled': 0.0, 'remaining': 0.006002, 'status': 'open', 'fee': {'cost': 0.0, 'currency': None}, 'trades': [], 'fees': [{'cost': 0.0, 'currency': None}]}]
+2023-07-13 05:48:54.144117: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  181.83383493  | BTC TSCN QTY:  0.003001152619825708061002178649 USDT TSCN QTY: 2754236.18851553535
+2023-07-13 05:48:55.080828: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 181.83383493
+2023-07-13 05:49:01.462386: REAL MODE market order {'info': {'orderId': '1463739466133870592', 'orderLinkId': '1689227341840991'}, 'id': '1463739466133870592', 'clientOrderId': '1689227341840991', 'timestamp': None, 'datetime': None, 'lastTradeTimestamp': None, 'lastUpdateTimestamp': None, 'symbol': None, 'type': None, 'timeInForce': None, 'postOnly': None, 'reduceOnly': None, 'side': None, 'price': None, 'stopPrice': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': None, 'cost': None, 'average': None, 'filled': None, 'remaining': None, 'status': None, 'fee': None, 'trades': [], 'fees': []}
+2023-07-13 05:49:01.822780: REAL MODE open orders [{'info': {'symbol': 'BTCUSDT', 'orderType': 'Limit', 'orderLinkId': '16892271536431006', 'orderId': '1463737887423010816', 'cancelType': 'UNKNOWN', 'avgPrice': '0.00', 'stopOrderType': 'tpslOrder', 'lastPriceOnCreated': '', 'orderStatus': 'Untriggered', 'takeProfit': '', 'cumExecValue': '0.00000000', 'smpType': 'None', 'triggerDirection': '0', 'blockTradeId': '', 'isLeverage': '0', 'rejectReason': 'EC_NoError', 'price': '30289.50', 'orderIv': '', 'createdTime': '1689227153648', 'tpTriggerBy': '', 'positionIdx': '0', 'timeInForce': 'GTC', 'leavesValue': '0.00000000', 'updatedTime': '1689227153648', 'side': 'Sell', 'smpGroup': '0', 'triggerPrice': '30138.05', 'cumExecFee': '0', 'leavesQty': '0.006002', 'slTriggerBy': '', 'closeOnTrigger': False, 'placeType': '', 'cumExecQty': '0.000000', 'reduceOnly': False, 'qty': '0.006002', 'stopLoss': '', 'smpOrderId': '', 'triggerBy': ''}, 'id': '1463737887423010816', 'clientOrderId': '16892271536431006', 'timestamp': 1689227153648, 'datetime': '2023-07-13T05:45:53.648Z', 'lastTradeTimestamp': 1689227153648, 'lastUpdateTimestamp': 1689227153648, 'symbol': 'BTC/USDT', 'type': 'limit', 'timeInForce': 'GTC', 'postOnly': False, 'reduceOnly': False, 'side': 'sell', 'price': 30289.5, 'stopPrice': 30138.05, 'triggerPrice': 30138.05, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': 0.006002, 'cost': 0.0, 'average': None, 'filled': 0.0, 'remaining': 0.006002, 'status': 'open', 'fee': {'cost': 0.0, 'currency': None}, 'trades': [], 'fees': [{'cost': 0.0, 'currency': None}]}, {'info': {'symbol': 'BTCUSDT', 'orderType': 'Market', 'orderLinkId': '1689227341840991', 'orderId': '1463739466133870592', 'cancelType': 'UNKNOWN', 'avgPrice': '0.00', 'stopOrderType': 'tpslOrder', 'lastPriceOnCreated': '', 'orderStatus': 'Untriggered', 'takeProfit': '', 'cumExecValue': '0.00000000', 'smpType': 'None', 'triggerDirection': '0', 'blockTradeId': '', 'isLeverage': '0', 'rejectReason': 'EC_NoError', 'price': '0', 'orderIv': '', 'createdTime': '1689227341845', 'tpTriggerBy': '', 'positionIdx': '0', 'timeInForce': 'GTC', 'leavesValue': '90.91000000', 'updatedTime': '1689227341845', 'side': 'Buy', 'smpGroup': '0', 'triggerPrice': '30142.53', 'cumExecFee': '0', 'leavesQty': '0.000000', 'slTriggerBy': '', 'closeOnTrigger': False, 'placeType': '', 'cumExecQty': '0.000000', 'reduceOnly': False, 'qty': '90.910000', 'stopLoss': '', 'smpOrderId': '', 'triggerBy': '', 'nextPageCursor': '1463739466133870592%3A1689227341845%2C1463737887423010816%3A1689227153648'}, 'id': '1463739466133870592', 'clientOrderId': '1689227341840991', 'timestamp': 1689227341845, 'datetime': '2023-07-13T05:49:01.845Z', 'lastTradeTimestamp': 1689227341845, 'lastUpdateTimestamp': 1689227341845, 'symbol': 'BTC/USDT', 'type': 'market', 'timeInForce': 'GTC', 'postOnly': False, 'reduceOnly': False, 'side': 'buy', 'price': None, 'stopPrice': 30142.53, 'triggerPrice': 30142.53, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': 90.91, 'cost': 0.0, 'average': None, 'filled': 0.0, 'remaining': 0.0, 'status': 'open', 'fee': {'cost': 0.0, 'currency': None}, 'trades': [], 'fees': [{'cost': 0.0, 'currency': None}]}]
+2023-07-13 05:50:06.576478: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  181.83383493  | BTC TSCN QTY:  0.003000361278747699408520694515 USDT TSCN QTY: 2754962.61468608070
+2023-07-13 05:50:07.562463: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 181.83383493
+2023-07-13 05:56:22.256049: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  181.83383493  | BTC TSCN QTY:  0.002999766314669394219348026924 USDT TSCN QTY: 2755509.02536004535
+2023-07-13 05:56:22.956724: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 181.83383493
+2023-07-13 05:57:02.680202: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  181.83383493  | BTC TSCN QTY:  0.002999667341878649905968524201 USDT TSCN QTY: 2755737.2268228825
+2023-07-13 05:57:03.365081: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 181.83383493
+2023-07-13 05:57:39.709844: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  181.83383493  | BTC TSCN QTY:  0.002998974715166908563134978229 USDT TSCN QTY: 2756236.36069976535
+2023-07-13 05:57:40.608366: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 181.83383493
+2023-07-13 05:58:13.581939: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  181.83383493  | BTC TSCN QTY:  0.002998824358489744543748960997 USDT TSCN QTY: 2756374.55441431215
+2023-07-13 05:58:14.305598: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 181.83383493
+2023-07-13 06:01:59.054184: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  181.83383493  | BTC TSCN QTY:  0.003000 USDT TSCN QTY: 2755508.11619087070
+2023-07-13 06:01:59.776851: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 181.83383493
+2023-07-13 06:02:53.378228: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  181.83383493  | BTC TSCN QTY:  0.003000 USDT TSCN QTY: 2754994.43560719345
+2023-07-13 06:02:54.266988: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 181.83383493
+2023-07-13 06:05:33.136621: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  181.83383493  | BTC TSCN QTY:  0.003000 USDT TSCN QTY: 2755269.91386711240
+2023-07-13 06:05:34.118224: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 181.83383493
+2023-07-13 06:06:25.705695: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  181.83383493  | BTC TSCN QTY:  0.003000 USDT TSCN QTY: 90.916917465
+2023-07-13 06:06:26.436116: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 181.83383493
+2023-07-13 06:07:38.354994: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  181.83383493  | BTC TSCN QTY:  0.002999 USDT TSCN QTY: 90.92
+2023-07-13 06:07:39.304684: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 181.83383493
+2023-07-13 06:07:56.330514: REAL MODE market order {'retCode': '0', 'retMsg': 'OK', 'result': {'orderId': '1463748986239260672', 'orderLinkId': 'spot-test-postonly'}, 'retExtInfo': {}, 'time': '1689228476735'}
+2023-07-13 06:08:01.990198: REAL MODE open orders []
+2023-07-13 06:29:43.579630: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  90.91615093  | BTC TSCN QTY:  0.001497 USDT TSCN QTY: 45.46
+2023-07-13 06:29:44.475420: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 90.91615093
+2023-07-13 06:30:52.356091: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  369.29834515  | BTC TSCN QTY:  0.006082 USDT TSCN QTY: 184.65
+2023-07-13 06:30:53.170328: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 369.29834515
+2023-07-13 06:31:23.926322: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  369.29834515  | BTC TSCN QTY:  0.006082 USDT TSCN QTY: 184.65
+2023-07-13 06:31:25.113630: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 369.29834515
+2023-07-13 06:31:26.451736: REAL MODE market order {'retCode': '0', 'retMsg': 'OK', 'result': {'orderId': '1463760815191562240', 'orderLinkId': 'spot-test-postonly'}, 'retExtInfo': {}, 'time': '1689229886859'}
+2023-07-13 06:47:22.872362: REAL MODE Starting loop
+2023-07-13 06:47:22.895633: REAL MODE time is  1689230842.8920474 |file time is 1689226686.9743948
+2023-07-13 06:47:29.073329: REAL MODE Training data sample before prep:                              open_time      open     high      low    close    volume      turnover
+timestamp                                                                                          
+2023-07-13 06:43:59.104  1689230700000  29403.61  29405.8  29403.6  29405.8  0.021492  631.95329792
+2023-07-13 06:47:29.528810: REAL MODE Training data sample after prep:                             open_time        close      turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K           MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15     ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-13 05:29:42.656  1.689226e+12  30076.96237  23834.987095      16.820793 -14.449877 -20.217431           65.807007  15134.854718        0.03146  0.017838      44.670298  0.000013  4404.006593      -2.919186    -129.476716  1.022032  0.979813  0.997722  0.998646  0.999341  0.99999  1.565483   0.0      1.0
+2023-07-13 06:47:29.533666: REAL MODE retraining...
+2023-07-13 06:47:29.539090: REAL MODE Starting training
+2023-07-13 06:55:00.582698: REAL MODE Ensemble Accuracy Inc = 0.7677419354838709
+2023-07-13 06:55:00.588843: REAL MODE Ensemble Accuracy Dec = 0.6252688172043009
+2023-07-13 06:55:00.639902: REAL MODE saving model file as  BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_rfinc.joblib
+2023-07-13 06:55:00.891396: REAL MODE saving model file as  BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_knninc.joblib
+2023-07-13 06:55:00.910921: REAL MODE saving model file as  BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembleinc.joblib
+2023-07-13 06:55:01.363164: REAL MODE saving model file as  BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_rf.joblib
+2023-07-13 06:55:01.613494: REAL MODE saving model file as  BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembledec.joblib
+2023-07-13 06:55:02.060835: REAL MODE Finished training
+2023-07-13 06:55:02.066124: REAL MODE Ensemble Accuracy inc = 0.7677419354838709
+2023-07-13 06:55:02.074244: REAL MODE Ensemble Accuracy dec = 0.6252688172043009
+2023-07-13 06:55:03.355439: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI     MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR      MOM  14 period MFI       ROC         OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5  normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                          
+2023-07-13 05:40:38.016  1.689227e+12  30292.020255  152832.207324      45.555695 -4.55188 -6.984968           51.585707 -138.706985      17.623396 -6.16526      44.865782 -0.024909 -1192.10809      -3.371189   3.323617e+06  1.000278  1.015059  0.998203  0.999384  0.999646  0.999849  0.82476   0.0      0.0
+2023-07-13 06:55:03.372370: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembleinc.joblib
+2023-07-13 06:55:03.721349: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembledec.joblib
+2023-07-13 06:55:07.485101: REAL MODE Portfolio:  369.2124420874 BTC: 0.00607606 USDT: 184.66250965
+2023-07-13 06:55:07.494124: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 06:55:08.325394: REAL MODE Decided to sell  1518664.500000000020797058494 percent of BTC balance of:  184.5499324374  | Market value:  30373.29 USDT transaction amount: 2802694.308700778561380957399
+2023-07-13 07:00:15.810373: REAL MODE Starting loop
+2023-07-13 07:00:15.829203: REAL MODE time is  1689231615.826404 |file time is 1689231301.3613508
+2023-07-13 07:00:17.713052: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-13 05:45:00.160  1.689227e+12  30298.500589  89408.736423      48.622676 -4.062776 -6.400529           65.191547 -152.181588      17.112332 -1.761341      43.459819 -0.013029 -1182.592065      21.554108  792798.276267  1.048937  0.980928  0.998451  0.999616  0.999869  1.000053  0.528016   0.0      0.0
+2023-07-13 07:00:17.726567: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembleinc.joblib
+2023-07-13 07:00:18.031415: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembledec.joblib
+2023-07-13 07:00:22.545565: REAL MODE Portfolio:  369.1648275194 BTC: 0.00303806 USDT: 276.84429062
+2023-07-13 07:00:22.550758: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 07:00:23.527071: REAL MODE Decided to sell  1519399.499999999948243433031 percent of BTC balance of:  92.3205368994  | Market value:  30387.99 USDT transaction amount: 1402717.776046799055218059493
+2023-07-13 07:05:31.213369: REAL MODE Starting loop
+2023-07-13 07:05:31.234888: REAL MODE time is  1689231931.2315743 |file time is 1689231301.3613508
+2023-07-13 07:05:32.487540: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-13 05:49:22.304  1.689227e+12  30300.768706  51774.539983       49.69089 -3.452343 -5.810892           75.208753 -133.305635      15.897637  14.983531      46.822115  0.008526 -1189.586421      50.805388  903298.121774  1.061514  1.014894  0.998555  0.999705  0.999948  1.000106  0.345738   0.0      0.0
+2023-07-13 07:05:32.501208: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembleinc.joblib
+2023-07-13 07:05:32.837888: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembledec.joblib
+2023-07-13 07:05:36.740750: REAL MODE Portfolio:  369.136608258 BTC: 0.00151906 USDT: 322.95748807
+2023-07-13 07:05:36.745582: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 07:05:37.747291: REAL MODE Decided to sell  1519989.999999999962074311622 percent of BTC balance of:  46.179120188  | Market value:  30399.8 USDT transaction amount: 701918.0089455811824862507819
+2023-07-13 07:05:51.998294: REAL MODE Starting loop
+2023-07-13 07:05:52.022573: REAL MODE time is  1689231952.018539 |file time is 1689231301.3613508
+2023-07-13 07:05:52.827733: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-13 05:49:22.304  1.689227e+12  30300.768706  51774.539983       49.69089 -3.452343 -5.810892           75.208753 -133.305635      15.897637  14.983531      46.822115  0.008526 -1189.586421      50.805388  903298.121774  1.061514  1.014894  0.998555  0.999705  0.999948  1.000106  0.345738   0.0      0.0
+2023-07-13 07:05:52.842456: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembleinc.joblib
+2023-07-13 07:05:53.177795: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembledec.joblib
+2023-07-13 07:05:57.271291: REAL MODE Portfolio:  369.1081144738 BTC: 0.00076006 USDT: 346.0051559
+2023-07-13 07:05:57.276082: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 07:05:58.015468: REAL MODE Decided to sell  1519811.499999999916559323633 percent of BTC balance of:  23.1029585738  | Market value:  30396.23 USDT transaction amount: 351121.4212448483677227351052
+2023-07-13 07:06:50.444988: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  357.54417274  | BTC TSCN QTY:  0.005881 USDT TSCN QTY: 178.77
+2023-07-13 07:06:51.402487: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 357.54417274
+2023-07-13 07:07:23.379404: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  357.54417274  | BTC TSCN QTY:  0.005881 USDT TSCN QTY: 178.77
+2023-07-13 07:07:24.513210: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 357.54417274
+2023-07-13 07:08:54.572660: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  357.54417274  | BTC TSCN QTY:  0.005881 USDT TSCN QTY: 178.77
+2023-07-13 07:08:55.333123: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 357.54417274
+2023-07-13 07:09:15.058605: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  357.54417274  | BTC TSCN QTY:  0.005881 USDT TSCN QTY: 178.77
+2023-07-13 07:09:15.915065: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 357.54417274
+2023-07-13 07:09:41.268167: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  357.54417274  | BTC TSCN QTY:  0.005881 USDT TSCN QTY: 178.77
+2023-07-13 07:09:42.754572: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 357.54417274
+2023-07-13 07:10:23.841921: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  357.54417274  | BTC TSCN QTY:  0.005880 USDT TSCN QTY: 178.77
+2023-07-13 07:10:24.686582: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 357.54417274
+2023-07-13 07:11:40.818544: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  357.54417274  | BTC TSCN QTY:  0.005878 USDT TSCN QTY: 178.77
+2023-07-13 07:11:41.772830: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 357.54417274
+2023-07-13 07:11:55.329299: REAL MODE open orders []
+2023-07-13 07:12:39.861091: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  178.77062196  | BTC TSCN QTY:  0.002939 USDT TSCN QTY: 89.39
+2023-07-13 07:12:40.730130: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 178.77062196
+2023-07-13 07:12:48.148766: REAL MODE open orders []
+2023-07-13 07:13:23.425196: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  89.38137781  | BTC TSCN QTY:  0.001469 USDT TSCN QTY: 44.69
+2023-07-13 07:13:24.106382: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 89.38137781
+2023-07-13 07:14:09.693395: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  44.69733581  | BTC TSCN QTY:  0.000735 USDT TSCN QTY: 22.35
+2023-07-13 07:14:10.341773: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 44.69733581
+2023-07-13 07:15:07.491855: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  22.33583546  | BTC TSCN QTY:  0.000367 USDT TSCN QTY: 11.17
+2023-07-13 07:15:08.364712: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 22.33583546
+2023-07-13 07:16:05.900632: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  11.17029719  | BTC TSCN QTY:  0.000184 USDT TSCN QTY: 5.59
+2023-07-13 07:16:06.768751: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 11.17029719
+2023-07-13 07:18:04.344346: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  178.55205967  | BTC TSCN QTY:  0.002936 USDT TSCN QTY: 89.28
+2023-07-13 07:18:04.997635: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 178.55205967
+2023-07-13 07:18:30.283857: REAL MODE open orders []
+2023-07-13 07:19:54.493009: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  267.66307724  | BTC TSCN QTY:  0.004401 USDT TSCN QTY: 133.83
+2023-07-13 07:19:55.353309: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 267.66307724
+2023-07-13 07:21:11.052888: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  133.83746924  | BTC TSCN QTY:  0.002201 USDT TSCN QTY: 66.92
+2023-07-13 07:21:11.891702: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 133.83746924
+2023-07-13 07:21:27.851888: REAL MODE open orders [{'info': {'symbol': 'BTCUSDT', 'orderType': 'Limit', 'orderLinkId': '8ced3e9d-40a0-42b6-a37c-056881d4062b-tp', 'orderId': '1463785920013604864', 'cancelType': 'UNKNOWN', 'avgPrice': '0.00', 'stopOrderType': '', 'lastPriceOnCreated': '', 'orderStatus': 'New', 'takeProfit': '', 'cumExecValue': '0.00000000', 'smpType': 'None', 'triggerDirection': '0', 'blockTradeId': '', 'isLeverage': '0', 'rejectReason': 'EC_NoError', 'price': '30406.01', 'orderIv': '', 'createdTime': '1689232879579', 'tpTriggerBy': '', 'positionIdx': '0', 'timeInForce': 'GTC', 'leavesValue': '66.92362801', 'updatedTime': '1689232879584', 'side': 'Sell', 'smpGroup': '0', 'triggerPrice': '0.00', 'cumExecFee': '0', 'leavesQty': '0.002201', 'slTriggerBy': '', 'closeOnTrigger': False, 'placeType': '', 'cumExecQty': '0.000000', 'reduceOnly': False, 'qty': '0.002201', 'stopLoss': '', 'smpOrderId': '', 'triggerBy': ''}, 'id': '1463785920013604864', 'clientOrderId': '8ced3e9d-40a0-42b6-a37c-056881d4062b-tp', 'timestamp': 1689232879579, 'datetime': '2023-07-13T07:21:19.579Z', 'lastTradeTimestamp': 1689232879584, 'lastUpdateTimestamp': 1689232879584, 'symbol': 'BTC/USDT', 'type': 'limit', 'timeInForce': 'GTC', 'postOnly': False, 'reduceOnly': False, 'side': 'sell', 'price': 30406.01, 'stopPrice': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': 0.002201, 'cost': 0.0, 'average': None, 'filled': 0.0, 'remaining': 0.002201, 'status': 'open', 'fee': {'cost': 0.0, 'currency': None}, 'trades': [], 'fees': [{'cost': 0.0, 'currency': None}]}, {'info': {'symbol': 'BTCUSDT', 'orderType': 'Limit', 'orderLinkId': '8ced3e9d-40a0-42b6-a37c-056881d4062b-sl', 'orderId': '1463785942964836352', 'cancelType': 'UNKNOWN', 'avgPrice': '0.00', 'stopOrderType': '', 'lastPriceOnCreated': '', 'orderStatus': 'New', 'takeProfit': '', 'cumExecValue': '0.00000000', 'smpType': 'None', 'triggerDirection': '0', 'blockTradeId': '', 'isLeverage': '0', 'rejectReason': 'EC_NoError', 'price': '30406.01', 'orderIv': '', 'createdTime': '1689232882315', 'tpTriggerBy': '', 'positionIdx': '0', 'timeInForce': 'GTC', 'leavesValue': '66.92362801', 'updatedTime': '1689232882320', 'side': 'Sell', 'smpGroup': '0', 'triggerPrice': '0.00', 'cumExecFee': '0', 'leavesQty': '0.002201', 'slTriggerBy': '', 'closeOnTrigger': False, 'placeType': '', 'cumExecQty': '0.000000', 'reduceOnly': False, 'qty': '0.002201', 'stopLoss': '', 'smpOrderId': '', 'triggerBy': '', 'nextPageCursor': '1463785942964836352%3A1689232882315%2C1463785920013604864%3A1689232879579'}, 'id': '1463785942964836352', 'clientOrderId': '8ced3e9d-40a0-42b6-a37c-056881d4062b-sl', 'timestamp': 1689232882315, 'datetime': '2023-07-13T07:21:22.315Z', 'lastTradeTimestamp': 1689232882320, 'lastUpdateTimestamp': 1689232882320, 'symbol': 'BTC/USDT', 'type': 'limit', 'timeInForce': 'GTC', 'postOnly': False, 'reduceOnly': False, 'side': 'sell', 'price': 30406.01, 'stopPrice': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': 0.002201, 'cost': 0.0, 'average': None, 'filled': 0.0, 'remaining': 0.002201, 'status': 'open', 'fee': {'cost': 0.0, 'currency': None}, 'trades': [], 'fees': [{'cost': 0.0, 'currency': None}]}]
+2023-07-13 07:27:04.407259: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  66.91384123  | BTC TSCN QTY:  0.001100 USDT TSCN QTY: 33.46
+2023-07-13 07:27:05.946145: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 66.91384123
+2023-07-13 07:27:18.232597: REAL MODE open orders [{'info': {'symbol': 'BTCUSDT', 'orderType': 'Limit', 'orderLinkId': '8ced3e9d-40a0-42b6-a37c-056881d4062b-tp', 'orderId': '1463785920013604864', 'cancelType': 'UNKNOWN', 'avgPrice': '0.00', 'stopOrderType': '', 'lastPriceOnCreated': '', 'orderStatus': 'New', 'takeProfit': '', 'cumExecValue': '0.00000000', 'smpType': 'None', 'triggerDirection': '0', 'blockTradeId': '', 'isLeverage': '0', 'rejectReason': 'EC_NoError', 'price': '30406.01', 'orderIv': '', 'createdTime': '1689232879579', 'tpTriggerBy': '', 'positionIdx': '0', 'timeInForce': 'GTC', 'leavesValue': '66.92362801', 'updatedTime': '1689232879584', 'side': 'Sell', 'smpGroup': '0', 'triggerPrice': '0.00', 'cumExecFee': '0', 'leavesQty': '0.002201', 'slTriggerBy': '', 'closeOnTrigger': False, 'placeType': '', 'cumExecQty': '0.000000', 'reduceOnly': False, 'qty': '0.002201', 'stopLoss': '', 'smpOrderId': '', 'triggerBy': ''}, 'id': '1463785920013604864', 'clientOrderId': '8ced3e9d-40a0-42b6-a37c-056881d4062b-tp', 'timestamp': 1689232879579, 'datetime': '2023-07-13T07:21:19.579Z', 'lastTradeTimestamp': 1689232879584, 'lastUpdateTimestamp': 1689232879584, 'symbol': 'BTC/USDT', 'type': 'limit', 'timeInForce': 'GTC', 'postOnly': False, 'reduceOnly': False, 'side': 'sell', 'price': 30406.01, 'stopPrice': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': 0.002201, 'cost': 0.0, 'average': None, 'filled': 0.0, 'remaining': 0.002201, 'status': 'open', 'fee': {'cost': 0.0, 'currency': None}, 'trades': [], 'fees': [{'cost': 0.0, 'currency': None}]}, {'info': {'symbol': 'BTCUSDT', 'orderType': 'Limit', 'orderLinkId': '8ced3e9d-40a0-42b6-a37c-056881d4062b-sl', 'orderId': '1463785942964836352', 'cancelType': 'UNKNOWN', 'avgPrice': '0.00', 'stopOrderType': '', 'lastPriceOnCreated': '', 'orderStatus': 'New', 'takeProfit': '', 'cumExecValue': '0.00000000', 'smpType': 'None', 'triggerDirection': '0', 'blockTradeId': '', 'isLeverage': '0', 'rejectReason': 'EC_NoError', 'price': '30406.01', 'orderIv': '', 'createdTime': '1689232882315', 'tpTriggerBy': '', 'positionIdx': '0', 'timeInForce': 'GTC', 'leavesValue': '66.92362801', 'updatedTime': '1689232882320', 'side': 'Sell', 'smpGroup': '0', 'triggerPrice': '0.00', 'cumExecFee': '0', 'leavesQty': '0.002201', 'slTriggerBy': '', 'closeOnTrigger': False, 'placeType': '', 'cumExecQty': '0.000000', 'reduceOnly': False, 'qty': '0.002201', 'stopLoss': '', 'smpOrderId': '', 'triggerBy': ''}, 'id': '1463785942964836352', 'clientOrderId': '8ced3e9d-40a0-42b6-a37c-056881d4062b-sl', 'timestamp': 1689232882315, 'datetime': '2023-07-13T07:21:22.315Z', 'lastTradeTimestamp': 1689232882320, 'lastUpdateTimestamp': 1689232882320, 'symbol': 'BTC/USDT', 'type': 'limit', 'timeInForce': 'GTC', 'postOnly': False, 'reduceOnly': False, 'side': 'sell', 'price': 30406.01, 'stopPrice': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': 0.002201, 'cost': 0.0, 'average': None, 'filled': 0.0, 'remaining': 0.002201, 'status': 'open', 'fee': {'cost': 0.0, 'currency': None}, 'trades': [], 'fees': [{'cost': 0.0, 'currency': None}]}, {'info': {'symbol': 'BTCUSDT', 'orderType': 'Limit', 'orderLinkId': 'f1896e5b-eeb4-4e4b-b08d-238ee298c35d-tp', 'orderId': '1463788863601317888', 'cancelType': 'UNKNOWN', 'avgPrice': '0.00', 'stopOrderType': '', 'lastPriceOnCreated': '', 'orderStatus': 'New', 'takeProfit': '', 'cumExecValue': '0.00000000', 'smpType': 'None', 'triggerDirection': '0', 'blockTradeId': '', 'isLeverage': '0', 'rejectReason': 'EC_NoError', 'price': '30401.72', 'orderIv': '', 'createdTime': '1689233230482', 'tpTriggerBy': '', 'positionIdx': '0', 'timeInForce': 'GTC', 'leavesValue': '33.44189200', 'updatedTime': '1689233230487', 'side': 'Sell', 'smpGroup': '0', 'triggerPrice': '0.00', 'cumExecFee': '0', 'leavesQty': '0.001100', 'slTriggerBy': '', 'closeOnTrigger': False, 'placeType': '', 'cumExecQty': '0.000000', 'reduceOnly': False, 'qty': '0.001100', 'stopLoss': '', 'smpOrderId': '', 'triggerBy': ''}, 'id': '1463788863601317888', 'clientOrderId': 'f1896e5b-eeb4-4e4b-b08d-238ee298c35d-tp', 'timestamp': 1689233230482, 'datetime': '2023-07-13T07:27:10.482Z', 'lastTradeTimestamp': 1689233230487, 'lastUpdateTimestamp': 1689233230487, 'symbol': 'BTC/USDT', 'type': 'limit', 'timeInForce': 'GTC', 'postOnly': False, 'reduceOnly': False, 'side': 'sell', 'price': 30401.72, 'stopPrice': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': 0.0011, 'cost': 0.0, 'average': None, 'filled': 0.0, 'remaining': 0.0011, 'status': 'open', 'fee': {'cost': 0.0, 'currency': None}, 'trades': [], 'fees': [{'cost': 0.0, 'currency': None}]}, {'info': {'symbol': 'BTCUSDT', 'orderType': 'Limit', 'orderLinkId': 'f1896e5b-eeb4-4e4b-b08d-238ee298c35d-sl', 'orderId': '1463788882777675776', 'cancelType': 'UNKNOWN', 'avgPrice': '0.00', 'stopOrderType': '', 'lastPriceOnCreated': '', 'orderStatus': 'New', 'takeProfit': '', 'cumExecValue': '0.00000000', 'smpType': 'None', 'triggerDirection': '0', 'blockTradeId': '', 'isLeverage': '0', 'rejectReason': 'EC_NoError', 'price': '30401.72', 'orderIv': '', 'createdTime': '1689233232768', 'tpTriggerBy': '', 'positionIdx': '0', 'timeInForce': 'GTC', 'leavesValue': '33.44189200', 'updatedTime': '1689233232773', 'side': 'Sell', 'smpGroup': '0', 'triggerPrice': '0.00', 'cumExecFee': '0', 'leavesQty': '0.001100', 'slTriggerBy': '', 'closeOnTrigger': False, 'placeType': '', 'cumExecQty': '0.000000', 'reduceOnly': False, 'qty': '0.001100', 'stopLoss': '', 'smpOrderId': '', 'triggerBy': '', 'nextPageCursor': '1463788882777675776%3A1689233232768%2C1463785920013604864%3A1689232879579'}, 'id': '1463788882777675776', 'clientOrderId': 'f1896e5b-eeb4-4e4b-b08d-238ee298c35d-sl', 'timestamp': 1689233232768, 'datetime': '2023-07-13T07:27:12.768Z', 'lastTradeTimestamp': 1689233232773, 'lastUpdateTimestamp': 1689233232773, 'symbol': 'BTC/USDT', 'type': 'limit', 'timeInForce': 'GTC', 'postOnly': False, 'reduceOnly': False, 'side': 'sell', 'price': 30401.72, 'stopPrice': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': 0.0011, 'cost': 0.0, 'average': None, 'filled': 0.0, 'remaining': 0.0011, 'status': 'open', 'fee': {'cost': 0.0, 'currency': None}, 'trades': [], 'fees': [{'cost': 0.0, 'currency': None}]}]
+2023-07-13 07:42:09.139961: REAL MODE Starting loop
+2023-07-13 07:42:09.180254: REAL MODE time is  1689234129.1741707 |file time is 1689231301.3613508
+2023-07-13 07:42:10.589191: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp    ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-13 06:24:19.456  1.689229e+12  30351.101011  271870.969818      67.207024  8.318631  2.270142           97.688146 -131.437191      15.252705  54.400283       83.29411  0.143613 -1267.703621     184.285378   1.142011e+07  0.736646  1.246898  1.00029  1.001184  1.001259  1.000934  1.211511   0.0      0.0
+2023-07-13 07:42:10.607281: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembleinc.joblib
+2023-07-13 07:42:11.024166: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembledec.joblib
+2023-07-13 07:42:14.458234: REAL MODE Portfolio:  367.6607436095 BTC: 0.00439885 USDT: 234.00225821
+2023-07-13 07:42:14.469446: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 07:42:15.178801: REAL MODE Decided to sell  1519243.499999999938939252646 percent of BTC balance of:  133.6584853995  | Market value:  30384.87 USDT transaction amount: 2030597.851630352700887129913
+2023-07-13 07:47:23.957190: REAL MODE Starting loop
+2023-07-13 07:47:24.008488: REAL MODE time is  1689234443.9985762 |file time is 1689231301.3613508
+2023-07-13 07:47:25.802276: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50   ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-13 06:30:52.672  1.689230e+12  30353.323354  347892.648864      67.852522  10.246663  3.865447           92.166827 -119.481703      14.361839  61.303099      84.184408  0.145759 -1270.065477     177.824464   1.018038e+07  0.745319  1.316711  1.000357  1.0012  1.001244  1.000839  1.419737   0.0      0.0
+2023-07-13 07:47:25.826485: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembleinc.joblib
+2023-07-13 07:47:26.444880: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembledec.joblib
+2023-07-13 07:47:30.649948: REAL MODE Portfolio:  367.6044171420 BTC: 0.00219985 USDT: 300.75423142
+2023-07-13 07:47:30.659493: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 07:47:31.769011: REAL MODE Decided to sell  1519426.000000000140789622729 percent of BTC balance of:  66.8501857220  | Market value:  30388.52 USDT transaction amount: 1015739.102908355814118124272
+2023-07-13 07:52:40.941067: REAL MODE Starting loop
+2023-07-13 07:52:40.984530: REAL MODE time is  1689234760.9766302 |file time is 1689231301.3613508
+2023-07-13 07:52:43.654601: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp    ema50    ema21    ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-13 06:35:14.816  1.689230e+12  30345.846174  260609.439368      63.335302  11.043988  5.301155           81.439523 -133.070803      14.161001  47.345585      76.303086  0.162214 -1231.829266     137.642359   7.316084e+06  0.776748  1.237435  1.00011  1.00091  1.00093  1.000494  1.052449   0.0      0.0
+2023-07-13 07:52:43.679849: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembleinc.joblib
+2023-07-13 07:52:44.302879: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 06:47:22.876510_2023-07-13 06:47:22.876510_ensembledec.joblib
+2023-07-13 07:52:48.520231: REAL MODE Portfolio:  367.5528231115 BTC: 0.00110085 USDT: 334.11781792
+2023-07-13 07:52:48.529388: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 07:52:49.462766: REAL MODE Decided to sell  1518599.499999999846161926836 percent of BTC balance of:  33.4350051915  | Market value:  30371.99 USDT transaction amount: 507743.8216630929910642322511
+2023-07-13 07:57:57.813990: REAL MODE Starting loop
+2023-07-13 07:57:57.873783: REAL MODE time is  1689235077.8651974 |file time is 1689231301.3613508
+2023-07-13 07:58:04.277476: REAL MODE Training data sample before prep:                              open_time      open     high       low  close    volume     turnover
+timestamp                                                                                        
+2023-07-13 07:56:04.480  1689234900000  30375.33  30485.7  30197.19  30200  1.485886  45079.61778
+2023-07-13 07:58:05.303258: REAL MODE Training data sample after prep:                             open_time        close      turnover  14 period RSI       MACD      SIGNAL  14 period STOCH %K          MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15     ema5  normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-13 06:39:36.960  1.689230e+12  29367.75045  11484.592682      14.142196 -191.60096 -107.359828           17.495842  15132.49523      96.093527 -709.20871      24.725418 -2.358012  4397.757963    -138.097471  -9.254824e+09  1.521325  0.416429  0.977073  0.980899  0.983455  0.99139  0.43628   1.0      0.0
+2023-07-13 07:58:05.315092: REAL MODE retraining...
+2023-07-13 07:58:05.325945: REAL MODE Starting training
+2023-07-13 08:12:45.533241: REAL MODE Ensemble Accuracy Inc = 0.770698924731183
+2023-07-13 08:12:45.543170: REAL MODE Ensemble Accuracy Dec = 0.6094086021505375
+2023-07-13 08:12:45.656843: REAL MODE saving model file as  BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_rfinc.joblib
+2023-07-13 08:12:46.056636: REAL MODE saving model file as  BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_knninc.joblib
+2023-07-13 08:12:46.094553: REAL MODE saving model file as  BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 08:12:46.889482: REAL MODE saving model file as  BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_rf.joblib
+2023-07-13 08:12:47.325745: REAL MODE saving model file as  BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 08:12:48.143413: REAL MODE Finished training
+2023-07-13 08:12:48.152445: REAL MODE Ensemble Accuracy inc = 0.770698924731183
+2023-07-13 08:12:48.169922: REAL MODE Ensemble Accuracy dec = 0.6094086021505375
+2023-07-13 08:12:49.371770: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K       MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-13 06:54:54.464  1.689231e+12  30380.734388  473398.735228      73.612478  16.455814  10.594415           89.517094 -68.59839      15.181055  59.014228      85.507641  0.221421 -1167.288222     159.756008   1.164771e+07  0.575585  1.365562  1.001208  1.001806  1.001711  1.001051  1.818337   0.0      1.0
+2023-07-13 08:12:49.397773: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 08:12:50.008828: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 08:12:53.786506: REAL MODE Portfolio:  367.5222921865 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 08:12:53.796978: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 08:12:53.805666: REAL MODE Didnt act
+2023-07-13 08:17:55.370011: REAL MODE Starting loop
+2023-07-13 08:17:55.410470: REAL MODE time is  1689236275.403383 |file time is 1689235966.885736
+2023-07-13 08:17:56.874057: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-13 06:59:16.608  1.689231e+12  30393.257036  210140.42491      76.360248  18.934504  12.262433           96.457462 -39.514724      16.050905  57.06148      86.133933  0.270501 -1145.471401     167.178724   1.253854e+07  0.576003  1.369804  1.001594  1.002118  1.001982  1.001219  0.833924   0.0      1.0
+2023-07-13 08:17:56.886109: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 08:17:57.215422: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 08:18:01.388994: REAL MODE Portfolio:  367.5430151635 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 08:18:01.400159: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 08:18:01.411003: REAL MODE Didnt act
+2023-07-13 08:23:02.943170: REAL MODE Starting loop
+2023-07-13 08:23:02.990045: REAL MODE time is  1689236582.982983 |file time is 1689235966.885736
+2023-07-13 08:23:04.554930: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                
+2023-07-13 07:05:49.824  1.689232e+12  30397.639963  131067.553256      77.253055  21.010355  14.012017           98.772025 -33.143154      15.669602  63.827018      86.049332  0.250381 -1136.665459     156.844046   1.190947e+07  0.612523  1.411811  1.001705  1.002159  1.001985  1.001136  0.565265   0.0      1.0
+2023-07-13 08:23:04.567292: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 08:23:04.908014: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 08:23:09.299588: REAL MODE Portfolio:  367.544552035 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 08:23:09.311555: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 08:23:09.322398: REAL MODE Didnt act
+2023-07-13 08:28:10.990281: REAL MODE Starting loop
+2023-07-13 08:28:11.037581: REAL MODE time is  1689236891.0306334 |file time is 1689235966.885736
+2023-07-13 08:28:12.515674: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                
+2023-07-13 07:10:11.968  1.689232e+12  30414.650487  159715.664694      80.354203  23.754265  15.960467           99.624893 -29.114016      15.796611  83.790456      84.820145  0.258618 -1123.677813     162.885431   1.445574e+07  0.561918  1.430042  1.002222  1.002596  1.002375  1.001413  0.726147   0.0      1.0
+2023-07-13 08:28:12.527133: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 08:28:12.956233: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 08:28:16.964327: REAL MODE Portfolio:  367.561738555 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 08:28:16.974585: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 08:28:16.981765: REAL MODE Didnt act
+2023-07-13 08:33:18.399518: REAL MODE Starting loop
+2023-07-13 08:33:18.443073: REAL MODE time is  1689237198.4349296 |file time is 1689235966.885736
+2023-07-13 08:33:20.030493: REAL MODE making decision based on                              open_time        close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-13 07:14:34.112  1.689232e+12  30410.32767  214309.547054      77.463969  25.288508  17.826075           90.295912 -18.030614      15.809028  59.22666      84.558994  0.252242 -1120.965911      147.77324   1.474831e+07  0.563504  1.43571  1.002039  1.002342  1.002084  1.001059  0.978467   0.0      1.0
+2023-07-13 08:33:20.057221: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 08:33:20.788645: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 08:33:25.144993: REAL MODE Portfolio:  367.55044613 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 08:33:25.154920: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 08:33:25.164105: REAL MODE Didnt act
+2023-07-13 08:38:26.514075: REAL MODE Starting loop
+2023-07-13 08:38:26.560806: REAL MODE time is  1689237506.553621 |file time is 1689235966.885736
+2023-07-13 08:38:27.567048: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC         OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-13 07:18:56.256  1.689233e+12  30402.314685  267913.618706      72.274514  25.56315  19.37349            80.58208 -12.710842      15.100696  48.991331      75.713617  0.235584 -1120.20129     119.442341   1.251899e+07  0.645131  1.401776  1.001741  1.001983  1.001698  1.000662  1.179515   0.0      1.0
+2023-07-13 08:38:27.579680: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 08:38:28.072195: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 08:38:31.740394: REAL MODE Portfolio:  367.5441223720 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 08:38:31.751449: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 08:38:31.763131: REAL MODE Didnt act
+2023-07-13 08:43:33.034411: REAL MODE Starting loop
+2023-07-13 08:43:33.075577: REAL MODE time is  1689237813.0691988 |file time is 1689235966.885736
+2023-07-13 08:43:34.477361: REAL MODE making decision based on                              open_time        close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K       MFV  14 period ATR        MOM  14 period MFI       ROC         OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-13 07:25:29.472  1.689233e+12  30406.00364  165098.175225      73.165775  25.781283  20.655049             84.0906 -1.019414      14.784529  60.157466       75.19094  0.180892 -1126.20277     105.101475   1.104644e+07  0.672157  1.349228  1.001827  1.002009  1.001698  1.000653  0.761556   0.0      1.0
+2023-07-13 08:43:34.489573: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 08:43:34.824838: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 08:43:38.078362: REAL MODE Portfolio:  367.5559491215 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 08:43:38.087589: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 08:43:38.097265: REAL MODE Didnt act
+2023-07-13 08:48:39.902852: REAL MODE Starting loop
+2023-07-13 08:48:39.954955: REAL MODE time is  1689238119.9469442 |file time is 1689235966.885736
+2023-07-13 08:48:41.605068: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                
+2023-07-13 07:29:51.616  1.689233e+12  30390.401274  147411.236602      63.821147  24.413747  21.406788           66.977546 -12.336126      15.797907  41.861613      74.154082  0.122154 -1146.452985      75.235593   9.342415e+06  0.670816  1.265037  1.001288  1.001426  1.001105  1.000116  0.718435   0.0      0.0
+2023-07-13 08:48:41.618004: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 08:48:41.890534: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 08:48:45.401341: REAL MODE Portfolio:  367.5540431805 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 08:48:45.411420: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 08:48:45.421025: REAL MODE Didnt act
+2023-07-13 08:53:47.286659: REAL MODE Starting loop
+2023-07-13 08:53:47.327649: REAL MODE time is  1689238427.3209615 |file time is 1689235966.885736
+2023-07-13 08:53:48.805607: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50    ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-13 07:34:13.760  1.689234e+12  30385.915446  117542.055556      61.393351  22.706254  21.666682           56.102609 -28.734202      14.795482  29.926565      68.937282  0.132042 -1157.962821      51.747733   5.984682e+06  0.803236  1.264516  1.001119  1.00122  1.000893  0.999974  0.616902   0.0      0.0
+2023-07-13 08:53:48.819241: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 08:53:49.100199: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 08:53:53.767186: REAL MODE Portfolio:  367.5613474515 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 08:53:53.778258: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 08:53:53.787824: REAL MODE Didnt act
+2023-07-13 08:58:55.476159: REAL MODE Starting loop
+2023-07-13 08:58:55.518333: REAL MODE time is  1689238735.510493 |file time is 1689235966.885736
+2023-07-13 08:58:56.972763: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD     SIGNAL  14 period STOCH %K       MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50   ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-13 07:40:46.976  1.689234e+12  30390.214906  114576.687916      62.851962  21.45269  21.623883           61.520599 -30.67281       14.30674  22.973798      66.334459  0.137322 -1167.499814      48.010618   4.922345e+06  0.829703  1.204458  1.001237  1.0013  1.000966  1.000096  0.644148   0.0      0.0
+2023-07-13 08:58:56.986365: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 08:58:57.277259: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 08:59:01.324784: REAL MODE Portfolio:  367.55925973 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 08:59:01.335793: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 08:59:01.348365: REAL MODE Didnt act
+2023-07-13 09:04:03.064141: REAL MODE Starting loop
+2023-07-13 09:04:03.106403: REAL MODE time is  1689239043.0990603 |file time is 1689235966.885736
+2023-07-13 09:04:04.558227: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD    SIGNAL  14 period STOCH %K        MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV     VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-13 07:45:09.120  1.689234e+12  30382.645717  118098.935313      58.650782  19.622267  21.22356           51.982241 -53.608636      14.194645  1.911329      69.912606  0.087814 -1161.349389      33.301975   4.717236e+06  0.8156  1.192297  1.000969  1.001003  1.000669  0.999873  0.703348   0.0      0.0
+2023-07-13 09:04:04.588112: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 09:04:05.232074: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 09:04:09.594531: REAL MODE Portfolio:  367.5815801720 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 09:04:09.605027: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 09:04:09.616314: REAL MODE Didnt act
+2023-07-13 09:09:11.525829: REAL MODE Starting loop
+2023-07-13 09:09:11.565758: REAL MODE time is  1689239351.558858 |file time is 1689235966.885736
+2023-07-13 09:09:12.930201: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC         OBV  20 period CCI  14 period EMV       VIm       VIp    ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-13 07:49:31.264  1.689234e+12  30375.498501  161221.194007      54.917946  17.394412  20.457731           38.657018 -46.367932      14.600661 -17.758535      69.457866  0.027192 -1161.33045       1.201299   2.622769e+06  0.846405  1.125787  1.00072  1.000733  1.000405  0.999698  0.967005   0.0      0.0
+2023-07-13 09:09:12.952859: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembleinc.joblib
+2023-07-13 09:09:13.535313: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 07:57:57.828280_2023-07-13 07:57:57.828280_ensembledec.joblib
+2023-07-13 09:09:17.498850: REAL MODE Portfolio:  367.6011188215 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 09:09:17.508379: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 09:09:17.517194: REAL MODE Didnt act
+2023-07-13 09:14:19.092963: REAL MODE Starting loop
+2023-07-13 09:14:19.133991: REAL MODE time is  1689239659.1268241 |file time is 1689235966.885736
+2023-07-13 09:14:26.611949: REAL MODE Training data sample before prep:                              open_time      open      high       low     close    volume       turnover
+timestamp                                                                                              
+2023-07-13 09:10:20.928  1689239400000  30097.83  30115.69  30097.83  30115.53  0.055392  1667.48250298
+2023-07-13 09:14:27.561900: REAL MODE Training data sample after prep:                             open_time         close       turnover  14 period RSI       MACD   SIGNAL  14 period STOCH %K          MFV  14 period ATR         MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV      VIm      VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-13 07:56:04.480  1.689235e+12  29921.363768  146503.654197      52.664012  92.768328 -4.82615           49.913318  15139.66948     122.555403  487.744178      68.165592  1.703706  4399.839429      89.967116   6.839368e+09  0.38581  1.31801  0.997864  1.001445  1.002266  0.998543  2.908847   1.0      0.0
+2023-07-13 09:14:27.570280: REAL MODE retraining...
+2023-07-13 09:14:27.580751: REAL MODE Starting training
+2023-07-13 09:29:04.598724: REAL MODE Ensemble Accuracy Inc = 0.7556451612903224
+2023-07-13 09:29:04.607507: REAL MODE Ensemble Accuracy Dec = 0.6268817204301069
+2023-07-13 09:29:04.695617: REAL MODE saving model file as  BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_rfinc.joblib
+2023-07-13 09:29:04.929794: REAL MODE saving model file as  BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_knninc.joblib
+2023-07-13 09:29:04.956125: REAL MODE saving model file as  BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembleinc.joblib
+2023-07-13 09:29:05.762213: REAL MODE saving model file as  BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_rf.joblib
+2023-07-13 09:29:06.161694: REAL MODE saving model file as  BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembledec.joblib
+2023-07-13 09:29:07.012430: REAL MODE Finished training
+2023-07-13 09:29:07.020959: REAL MODE Ensemble Accuracy inc = 0.7556451612903224
+2023-07-13 09:29:07.030290: REAL MODE Ensemble Accuracy dec = 0.6268817204301069
+2023-07-13 09:29:08.595645: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50   ema21     ema15     ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-13 08:09:10.912  1.689236e+12  30357.286098  241277.932627      46.621028  7.182509  14.288862           10.679914 -61.583874      13.422029 -45.028587      24.279351 -0.188608 -1185.682124     -86.263898  -4.227887e+06  1.197065  0.835237  1.000107  1.0001  0.999837  0.99954  0.873217   0.0      0.0
+2023-07-13 09:29:08.610687: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembleinc.joblib
+2023-07-13 09:29:08.984857: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembledec.joblib
+2023-07-13 09:29:12.662982: REAL MODE Portfolio:  367.6036086635 BTC: 0.00055085 USDT: 350.80570783
+2023-07-13 09:29:12.672472: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 09:29:13.587887: REAL MODE Decided to sell  1524725.500000000157777063811 percent of BTC balance of:  16.7979008335  | Market value:  30494.51 USDT transaction amount: 256121.8774730870690032347170
+2023-07-13 09:34:22.683336: REAL MODE Starting loop
+2023-07-13 09:34:22.723246: REAL MODE time is  1689240862.716887 |file time is 1689240545.7584689
+2023-07-13 09:34:24.097852: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50    ema21     ema15      ema5  normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-13 08:15:44.128  1.689236e+12  30372.394634  208441.810824      53.990012  6.715439  12.774178           31.943791 -47.188995      14.321889 -33.609005      26.049121 -0.124737 -1170.391169     -47.599818  -2.722776e+06  1.114822  0.822347  1.000597  1.00057  1.000313  1.000031  0.78627   0.0      0.0
+2023-07-13 09:34:24.111694: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembleinc.joblib
+2023-07-13 09:34:24.662437: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembledec.joblib
+2023-07-13 09:34:30.016171: REAL MODE Portfolio:  367.6051560320 BTC: 0.00027585 USDT: 359.18331209
+2023-07-13 09:34:30.025771: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 09:34:30.729764: REAL MODE Decided to sell  1526526.000000000115625180789 percent of BTC balance of:  8.4218439420  | Market value:  30530.52 USDT transaction amount: 128561.6374540549297377722837
+2023-07-13 09:39:39.555646: REAL MODE Starting loop
+2023-07-13 09:39:39.595300: REAL MODE time is  1689241179.588504 |file time is 1689240545.7584689
+2023-07-13 09:39:41.229053: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-13 08:20:06.272  1.689236e+12  30384.878122  221091.923347      59.023515  7.268806  11.673103           49.513154 -45.486314       14.04534 -5.523152      27.395007 -0.057353 -1199.352332      -3.502463  -3.594266e+06  1.147453  0.872237  1.000989  1.000937  1.000676  1.000368  0.857338   1.0      0.0
+2023-07-13 09:39:41.257700: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembleinc.joblib
+2023-07-13 09:39:41.880190: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembledec.joblib
+2023-07-13 09:39:45.536711: REAL MODE Portfolio:  367.6060475470 BTC: 0.00013885 USDT: 363.36215006
+2023-07-13 09:39:45.547382: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 09:39:46.530010: REAL MODE Decided to sell  1528230.999999999968628819230 percent of BTC balance of:  4.2438974870  | Market value:  30564.62 USDT transaction amount: 64856.55700455496866863924765
+2023-07-13 09:44:55.622163: REAL MODE Starting loop
+2023-07-13 09:44:55.661507: REAL MODE time is  1689241495.6549459 |file time is 1689240545.7584689
+2023-07-13 09:44:57.081059: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp    ema50     ema21     ema15     ema5  normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-13 08:24:28.416  1.689237e+12  30402.507343  525002.160419      64.868654  9.025839  11.143651            84.13878 -62.263045      14.254512  16.591897      33.519019 -0.011499 -1168.540268      66.001751  -2.839021e+06  1.063293  0.922032  1.00154  1.001448  1.001172  1.00079  1.73512   1.0      0.0
+2023-07-13 09:44:57.109659: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembleinc.joblib
+2023-07-13 09:44:57.695227: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembledec.joblib
+2023-07-13 09:45:01.243564: REAL MODE Portfolio:  367.6055709915 BTC: 0.00006985 USDT: 365.46899989
+2023-07-13 09:45:01.252966: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 09:45:01.987376: REAL MODE Decided to sell  1529399.499999999970226418166 percent of BTC balance of:  2.1365711015  | Market value:  30587.99 USDT transaction amount: 32676.70774348549186386625465
+2023-07-13 09:45:01.996697: REAL MODE Not enough  BTC  balance is: 2.1365711015
+2023-07-13 09:50:03.753814: REAL MODE Starting loop
+2023-07-13 09:50:03.799081: REAL MODE time is  1689241803.7907228 |file time is 1689240545.7584689
+2023-07-13 09:50:05.186773: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-13 08:35:23.776  1.689237e+12  30389.706949  162164.128496      58.092658  9.839263  10.681455            65.64912 -61.259683      14.725819  7.061232      36.734877  0.012478 -1185.113404      28.949449  -2.553679e+06  1.045592  0.948656  1.001072  1.000925  1.000638  1.000221  0.584418   1.0      0.0
+2023-07-13 09:50:05.211250: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembleinc.joblib
+2023-07-13 09:50:05.871160: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembledec.joblib
+2023-07-13 09:50:09.390288: REAL MODE Portfolio:  367.6032331120 BTC: 0.00006985 USDT: 365.46899989
+2023-07-13 09:50:09.400089: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 09:50:10.078719: REAL MODE Decided to sell  1527726.000000000148482496957 percent of BTC balance of:  2.1342332220  | Market value:  30554.52 USDT transaction amount: 32605.23583313172316896277891
+2023-07-13 09:50:10.088898: REAL MODE Not enough  BTC  balance is: 2.1342332220
+2023-07-13 09:55:11.737675: REAL MODE Starting loop
+2023-07-13 09:55:11.774411: REAL MODE time is  1689242111.7680044 |file time is 1689240545.7584689
+2023-07-13 09:55:12.834195: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50    ema21     ema15     ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-13 08:39:45.920  1.689237e+12  30402.669932  277781.26025      62.492984  10.725059  10.690176           86.919434 -54.263675      14.791215  27.171431      42.733851  0.040984 -1159.606807       58.03115  129773.560788  0.997555  0.998023  1.001471  1.00129  1.000994  1.00054  1.000835   1.0      0.0
+2023-07-13 09:55:12.858288: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembleinc.joblib
+2023-07-13 09:55:13.431274: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembledec.joblib
+2023-07-13 09:55:16.888568: REAL MODE Portfolio:  367.6035125120 BTC: 0.00006985 USDT: 365.46899989
+2023-07-13 09:55:16.898214: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 09:55:17.584261: REAL MODE Decided to sell  1527925.999999999939219777659 percent of BTC balance of:  2.1345126220  | Market value:  30558.52 USDT transaction amount: 32613.77332481971870263848245
+2023-07-13 09:55:17.594041: REAL MODE Not enough  BTC  balance is: 2.1345126220
+2023-07-13 10:00:19.360354: REAL MODE Starting loop
+2023-07-13 10:00:19.399917: REAL MODE time is  1689242419.39337 |file time is 1689240545.7584689
+2023-07-13 10:00:21.016912: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50    ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-13 08:44:08.064  1.689238e+12  30403.885476  140803.611547      62.886514  11.393802  10.830901            88.91396 -50.417883      14.889318  40.222501      46.128298  0.069908 -1147.177724      75.338411   2.850453e+06  0.923844  1.069567  1.001482  1.00127  1.000965  1.000483  0.552663   1.0      0.0
+2023-07-13 10:00:21.045860: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembleinc.joblib
+2023-07-13 10:00:21.645421: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembledec.joblib
+2023-07-13 10:00:25.672880: REAL MODE Portfolio:  367.6055709915 BTC: 0.00006985 USDT: 365.46899989
+2023-07-13 10:00:25.684061: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 10:00:26.575354: REAL MODE Decided to sell  1529399.499999999970226418166 percent of BTC balance of:  2.1365711015  | Market value:  30587.99 USDT transaction amount: 32676.70774348549186386625465
+2023-07-13 10:00:26.585065: REAL MODE Not enough  BTC  balance is: 2.1365711015
+2023-07-13 10:05:28.622880: REAL MODE Starting loop
+2023-07-13 10:05:28.665563: REAL MODE time is  1689242728.6579113 |file time is 1689240545.7584689
+2023-07-13 10:05:30.294891: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI     MACD     SIGNAL  14 period STOCH %K       MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV      VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-13 08:50:41.280  1.689238e+12  30413.001417  167990.438446       65.78577  12.5151  11.167741           97.010265 -33.73537      15.126083  52.538375      46.864616  0.123464 -1160.845958     103.165865   3.709026e+06  0.89583  1.088518  1.001748  1.001498  1.001181  1.000653  0.698967   0.0      0.0
+2023-07-13 10:05:30.322097: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembleinc.joblib
+2023-07-13 10:05:30.994860: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembledec.joblib
+2023-07-13 10:05:35.085483: REAL MODE Portfolio:  367.6025045765 BTC: 0.00006985 USDT: 365.46899989
+2023-07-13 10:05:35.095429: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 10:05:35.985973: REAL MODE Decided to sell  1527204.499999999858884930955 percent of BTC balance of:  2.1335046865  | Market value:  30544.09 USDT transaction amount: 32582.97957993888948930338856
+2023-07-13 10:05:35.997702: REAL MODE Not enough  BTC  balance is: 2.1335046865
+2023-07-13 10:10:38.065179: REAL MODE Starting loop
+2023-07-13 10:10:38.110607: REAL MODE time is  1689243038.1030195 |file time is 1689240545.7584689
+2023-07-13 10:10:39.714315: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD    SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-13 08:55:03.424  1.689238e+12  30413.656996  259866.342168      65.991525  13.303285  11.59485            95.20993 -44.163512      14.892772  57.882431      51.640054  0.164651 -1122.111622     114.096733   4.385523e+06  0.883846  1.13182  1.001736  1.001451  1.001122  1.000562  1.066666   0.0      0.0
+2023-07-13 10:10:39.740088: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembleinc.joblib
+2023-07-13 10:10:40.350317: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembledec.joblib
+2023-07-13 10:10:44.497365: REAL MODE Portfolio:  367.6038945915 BTC: 0.00006985 USDT: 365.46899989
+2023-07-13 10:10:44.507169: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 10:10:45.430304: REAL MODE Decided to sell  1528199.499999999954251667812 percent of BTC balance of:  2.1348947015  | Market value:  30563.99 USDT transaction amount: 32625.45015384949152332128008
+2023-07-13 10:10:45.442397: REAL MODE Not enough  BTC  balance is: 2.1348947015
+2023-07-13 10:15:47.562260: REAL MODE Starting loop
+2023-07-13 10:15:47.612655: REAL MODE time is  1689243347.6057434 |file time is 1689240545.7584689
+2023-07-13 10:15:49.269024: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV      VIm       VIp     ema50    ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-13 08:59:25.568  1.689239e+12  30442.479949  735546.698255      73.528813  16.068471  12.489574            95.32995 -12.058455      16.236006  85.193851       61.13129  0.270144 -1103.718199     185.748117   8.629675e+06  0.72053  1.196739  1.002633  1.00229  1.001933  1.001258  2.257823   0.0      0.0
+2023-07-13 10:15:49.294288: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembleinc.joblib
+2023-07-13 10:15:49.851365: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 09:14:19.101450_2023-07-13 09:14:19.101450_ensembledec.joblib
+2023-07-13 10:15:53.935810: REAL MODE Portfolio:  367.60305709 BTC: 0.00006985 USDT: 365.46899989
+2023-07-13 10:15:53.947011: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 10:15:54.889325: REAL MODE Decided to sell  1527599.999999999991040142568 percent of BTC balance of:  2.13405720  | Market value:  30552 USDT transaction amount: 32599.85778719999980879151735
+2023-07-13 10:15:54.898835: REAL MODE Not enough  BTC  balance is: 2.13405720
+2023-07-13 21:05:21.804338: REAL MODE Starting loop
+2023-07-13 21:05:21.848059: REAL MODE time is  1689282321.8395448 |file time is 1689240545.7584689
+2023-07-13 21:05:28.061710: REAL MODE Training data sample before prep:                              open_time     open     high      low    close   volume    turnover
+timestamp                                                                                      
+2023-07-13 21:04:41.472  1689282300000  31326.8  31326.8  31326.8  31326.8  0.00453  141.910404
+2023-07-13 21:05:29.008208: REAL MODE Training data sample after prep:                             open_time         close    turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K           MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV      VIm       VIp    ema50     ema21     ema15  ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                       
+2023-07-13 19:50:25.024  1.689278e+12  30499.876694  9666.02051      59.924744  1.272867  1.837611           99.947605  14879.190312      13.905265 -0.033357      44.161376 -0.000111  3691.834861      26.908497  -3.297383e+07  1.00018  0.978581  1.00243  1.000285  1.000067   1.0  0.329329   1.0      0.0
+2023-07-13 21:05:29.015292: REAL MODE retraining...
+2023-07-13 21:05:29.025224: REAL MODE Starting training
+2023-07-13 21:19:47.444723: REAL MODE Ensemble Accuracy Inc = 0.7744623655913975
+2023-07-13 21:19:47.449391: REAL MODE Ensemble Accuracy Dec = 0.6271505376344082
+2023-07-13 21:19:47.512138: REAL MODE saving model file as  BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_rfinc.joblib
+2023-07-13 21:19:47.788317: REAL MODE saving model file as  BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_knninc.joblib
+2023-07-13 21:19:47.806435: REAL MODE saving model file as  BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembleinc.joblib
+2023-07-13 21:19:48.237274: REAL MODE saving model file as  BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_rf.joblib
+2023-07-13 21:19:48.581212: REAL MODE saving model file as  BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembledec.joblib
+2023-07-13 21:19:49.379521: REAL MODE Finished training
+2023-07-13 21:19:49.383527: REAL MODE Ensemble Accuracy inc = 0.7744623655913975
+2023-07-13 21:19:49.388394: REAL MODE Ensemble Accuracy dec = 0.6271505376344082
+2023-07-13 21:19:50.612818: REAL MODE making decision based on                              open_time        close      turnover  14 period RSI        MACD      SIGNAL  14 period STOCH %K         MFV  14 period ATR         MOM  14 period MFI     ROC        OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-13 19:59:09.312  1.689278e+12  31652.30739  2.490765e+06      75.050368  150.562916  143.730136           78.229763  413.433607     119.477358  275.529462      89.542897  1.2414  3577.6126       83.37437   2.065852e+07  0.754802  1.244469  1.021806  1.012813  1.009197  1.003113  0.759506   0.0      1.0
+2023-07-13 21:19:50.636888: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembleinc.joblib
+2023-07-13 21:19:51.251339: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembledec.joblib
+2023-07-13 21:19:54.581091: REAL MODE Portfolio:  367.2793904236 BTC: 0.00006393 USDT: 365.2862755
+2023-07-13 21:19:54.591262: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 21:19:54.602023: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-13 21:24:56.363502: REAL MODE Starting loop
+2023-07-13 21:24:56.399776: REAL MODE time is  1689283496.393594 |file time is 1689283188.2341435
+2023-07-13 21:24:58.034142: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI        MACD      SIGNAL  14 period STOCH %K         MFV  14 period ATR         MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp    ema50     ema21    ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                 
+2023-07-13 20:05:42.528  1.689279e+12  31597.852087  2.304884e+06      68.164198  143.845342  143.753177           67.129584  376.556552     122.200254  216.379812       84.86074  0.843126  3507.138784      67.805536   1.788525e+07  0.766583  1.211134  1.01964  1.010562  1.00696  1.001155  0.739834   0.0      1.0
+2023-07-13 21:24:58.060215: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembleinc.joblib
+2023-07-13 21:24:58.657887: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembledec.joblib
+2023-07-13 21:25:03.461215: REAL MODE Portfolio:  367.2741481636 BTC: 0.00006393 USDT: 365.2862755
+2023-07-13 21:25:03.469967: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 21:25:03.480085: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-13 21:30:05.223530: REAL MODE Starting loop
+2023-07-13 21:30:05.245609: REAL MODE time is  1689283805.2411175 |file time is 1689283188.2341435
+2023-07-13 21:30:06.543171: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI        MACD      SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15     ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                 
+2023-07-13 20:14:26.816  1.689279e+12  31572.839231  1.318985e+06      65.116751  126.325412  138.835262           56.971043  368.064223     121.798378 -15.512398      81.529775  0.609809  3512.553207      41.762554   7.281488e+06  0.845891  1.165085  1.018082  1.008889  1.005368  1.00026  0.510547   0.0      1.0
+2023-07-13 21:30:06.555165: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembleinc.joblib
+2023-07-13 21:30:06.918690: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembledec.joblib
+2023-07-13 21:30:09.996368: REAL MODE Portfolio:  367.2790062043 BTC: 0.00006393 USDT: 365.2862755
+2023-07-13 21:30:10.001302: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 21:30:10.005685: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-13 21:35:10.788491: REAL MODE Starting loop
+2023-07-13 21:35:10.810811: REAL MODE time is  1689284110.8070004 |file time is 1689283188.2341435
+2023-07-13 21:35:12.043072: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI        MACD      SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                  
+2023-07-13 20:21:00.032  1.689279e+12  31562.296731  1.098185e+06      63.772237  117.404458  134.549101           52.876183  361.598814     120.183718 -78.157839      78.730797  0.396259  3467.277411      35.043897   3.237452e+06  0.871439  1.141996  1.017385  1.008161  1.004695  0.999938  0.470163   0.0      1.0
+2023-07-13 21:35:12.057267: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembleinc.joblib
+2023-07-13 21:35:12.340168: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembledec.joblib
+2023-07-13 21:35:15.676544: REAL MODE Portfolio:  367.2786226243 BTC: 0.00006393 USDT: 365.2862755
+2023-07-13 21:35:15.681601: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 21:35:15.686395: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-13 21:40:16.488806: REAL MODE Starting loop
+2023-07-13 21:40:16.509521: REAL MODE time is  1689284416.5059783 |file time is 1689283188.2341435
+2023-07-13 21:40:17.543468: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI        MACD      SIGNAL  14 period STOCH %K         MFV  14 period ATR         MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50    ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                   
+2023-07-13 20:25:22.176  1.689280e+12  31563.397356  809365.811646      63.856142  109.164963  129.472273            49.76952  346.396371      117.55623 -119.661744      76.354011 -0.078998  3484.056278      29.816009   1.852939e+06  0.882599  1.139752  1.017069  1.00782  1.004413  0.999978  0.388904   0.0      1.0
+2023-07-13 21:40:17.559158: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembleinc.joblib
+2023-07-13 21:40:17.864888: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembledec.joblib
+2023-07-13 21:40:20.889201: REAL MODE Portfolio:  367.2800003158 BTC: 0.00006393 USDT: 365.2862755
+2023-07-13 21:40:20.894194: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 21:40:20.898352: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-13 21:44:08.016600: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  365.2862755  | BTC TSCN QTY:  0.005842 USDT TSCN QTY: 182.64
+2023-07-13 21:44:08.826254: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 365.2862755
+2023-07-13 21:45:21.803320: REAL MODE Starting loop
+2023-07-13 21:45:21.825973: REAL MODE time is  1689284721.8218157 |file time is 1689283188.2341435
+2023-07-13 21:45:22.822311: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI       MACD      SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5  normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                
+2023-07-13 20:29:44.320  1.689280e+12  31481.882575  1.885193e+06      53.899503  94.962869  122.570392           17.148903  295.125142     118.637216 -196.58811      71.780495 -0.501169  3421.023145      -7.936889  -7.868374e+06  0.922071  1.068818  1.014152  1.004979  1.001698  0.997828   0.9226   0.0      1.0
+2023-07-13 21:45:22.837738: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembleinc.joblib
+2023-07-13 21:45:23.109429: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembledec.joblib
+2023-07-13 21:45:25.718795: REAL MODE Portfolio:  367.0802564228 BTC: 0.00590009 USDT: 182.63801494
+2023-07-13 21:45:25.724488: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-13 21:45:25.729709: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-13 21:46:12.699863: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  182.63801494  | BTC TSCN QTY:  0.002923 USDT TSCN QTY: 91.32
+2023-07-13 21:46:13.489668: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 182.63801494
+2023-07-13 21:46:53.982407: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  91.32054271  | BTC TSCN QTY:  0.00146 USDT TSCN QTY: 45.66
+2023-07-13 21:46:54.742033: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 91.32054271
+2023-07-13 21:48:58.175644: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  45.72040651  | BTC TSCN QTY:  0.00073 USDT TSCN QTY: 22.86
+2023-07-13 21:48:58.928932: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 45.72040651
+2023-07-13 21:49:42.261580: REAL MODE open orders [{'info': {'symbol': 'BTCUSDT', 'orderType': 'Limit', 'orderLinkId': '3ad0b041-594e-4530-a4f3-c97e7d0ec417-tp', 'orderId': '1464222789843116288', 'cancelType': 'UNKNOWN', 'avgPrice': '0.00', 'stopOrderType': '', 'lastPriceOnCreated': '', 'orderStatus': 'New', 'takeProfit': '', 'cumExecValue': '0.00000000', 'smpType': 'None', 'triggerDirection': '0', 'blockTradeId': '', 'isLeverage': '0', 'rejectReason': 'EC_NoError', 'price': '32525.65', 'orderIv': '', 'createdTime': '1689284958521', 'tpTriggerBy': '', 'positionIdx': '0', 'timeInForce': 'GTC', 'leavesValue': '23.74372450', 'updatedTime': '1689284958527', 'side': 'Sell', 'smpGroup': '0', 'triggerPrice': '0.00', 'cumExecFee': '0', 'leavesQty': '0.000730', 'slTriggerBy': '', 'closeOnTrigger': False, 'placeType': '', 'cumExecQty': '0.000000', 'reduceOnly': False, 'qty': '0.000730', 'stopLoss': '', 'smpOrderId': '', 'triggerBy': '', 'nextPageCursor': '1464222789843116288%3A1689284958521%2C1464222789843116288%3A1689284958521'}, 'id': '1464222789843116288', 'clientOrderId': '3ad0b041-594e-4530-a4f3-c97e7d0ec417-tp', 'timestamp': 1689284958521, 'datetime': '2023-07-13T21:49:18.521Z', 'lastTradeTimestamp': 1689284958527, 'lastUpdateTimestamp': 1689284958527, 'symbol': 'BTC/USDT', 'type': 'limit', 'timeInForce': 'GTC', 'postOnly': False, 'reduceOnly': False, 'side': 'sell', 'price': 32525.65, 'stopPrice': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': 0.00073, 'cost': 0.0, 'average': None, 'filled': 0.0, 'remaining': 0.00073, 'status': 'open', 'fee': {'cost': 0.0, 'currency': None}, 'trades': [], 'fees': [{'cost': 0.0, 'currency': None}]}]
+2023-07-13 21:50:26.695002: REAL MODE Starting loop
+2023-07-13 21:50:26.716737: REAL MODE time is  1689285026.713311 |file time is 1689283188.2341435
+2023-07-13 21:50:27.535164: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI       MACD      SIGNAL  14 period STOCH %K         MFV  14 period ATR         MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                  
+2023-07-13 20:34:06.464  1.689280e+12  31472.858901  1.768873e+06      52.915882  82.033838  114.463081           11.613588  279.624897     108.897383 -115.937339      59.794133 -0.663447  3370.860804     -36.600624  -1.912259e+07  1.081499  1.007941  1.013583  1.004477  1.001317  0.997951  0.885859   0.0      1.0
+2023-07-13 21:50:27.550577: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembleinc.joblib
+2023-07-13 21:50:27.816080: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembledec.joblib
+2023-07-13 21:50:30.694244: REAL MODE Portfolio:  344.1355602796 BTC: 0.00954798 USDT: 45.69893245
+2023-07-13 21:50:30.699629: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 21:50:30.704683: REAL MODE Didnt act
+2023-07-13 21:55:31.639475: REAL MODE Starting loop
+2023-07-13 21:55:31.662454: REAL MODE time is  1689285331.6587164 |file time is 1689283188.2341435
+2023-07-13 21:55:32.897425: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI       MACD      SIGNAL  14 period STOCH %K         MFV  14 period ATR         MOM  14 period MFI       ROC         OBV  20 period CCI  14 period EMV       VIm       VIp   ema50    ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-13 20:40:39.680  1.689281e+12  31456.700615  1.308899e+06       51.11699  69.680416  105.506548             7.20702  269.489541      97.385263 -141.022569      45.218052 -0.700066  3343.27939     -56.448767  -2.763013e+07  1.203379  0.914833  1.0128  1.00378  1.000749  0.997865  0.695392   0.0      1.0
+2023-07-13 21:55:32.912090: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembleinc.joblib
+2023-07-13 21:55:33.235347: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembledec.joblib
+2023-07-13 21:55:36.082115: REAL MODE Portfolio:  344.2692319996 BTC: 0.00954798 USDT: 45.69893245
+2023-07-13 21:55:36.087513: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 21:55:36.092208: REAL MODE Didnt act
+2023-07-13 22:00:36.846495: REAL MODE Starting loop
+2023-07-13 22:00:36.868844: REAL MODE time is  1689285636.8646975 |file time is 1689283188.2341435
+2023-07-13 22:00:37.999581: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR         MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                 
+2023-07-13 20:45:01.824  1.689281e+12  31466.983215  905875.663982      52.229919  60.027995  96.410838           10.641079  271.32446      90.873949 -140.357899      37.350065 -0.385621  3349.649681     -68.849718  -2.989322e+07  1.215031  0.856621  1.012867  1.003921  1.001004  0.998492  0.526829   0.0      1.0
+2023-07-13 22:00:38.010921: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembleinc.joblib
+2023-07-13 22:00:38.305638: REAL MODE Loading model from  models/BTCUSD_5_2023-07-02 21:05:21.811917_2023-07-13 21:05:21.811917_ensembledec.joblib
+2023-07-13 22:00:41.773200: REAL MODE Portfolio:  344.0789407582 BTC: 0.00954798 USDT: 45.69893245
+2023-07-13 22:00:41.778442: REAL MODE buy signal: 0.0 sell signal: 0.0
+2023-07-13 22:00:41.783116: REAL MODE Didnt act
+2023-07-13 22:01:07.909061: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  45.69893245  | BTC TSCN QTY:  0.00073 USDT TSCN QTY: 22.85
+2023-07-13 22:01:08.458163: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 45.69893245
+2023-07-13 22:06:55.864143: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  45.69893245  | BTC TSCN QTY:  0.00073 USDT TSCN QTY: 22.85
+2023-07-13 22:06:56.393553: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 45.69893245
+2023-07-13 22:08:00.481022: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  45.69893245  | BTC TSCN QTY:  0.00073 USDT TSCN QTY: 22.85
+2023-07-13 22:08:01.239479: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 45.69893245
+2023-07-13 22:09:42.912019: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  45.69893245  | BTC TSCN QTY:  0.00073 USDT TSCN QTY: 22.85
+2023-07-13 22:09:42.917228: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 45.69893245
+2023-07-13 22:10:26.841926: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  45.69893245  | BTC TSCN QTY:  0.00073 USDT TSCN QTY: 22.85
+2023-07-13 22:10:27.658852: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 45.69893245
+2023-07-13 22:11:03.490774: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  45.69893245  | BTC TSCN QTY:  0.00073 USDT TSCN QTY: 22.85
+2023-07-13 22:11:04.258574: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 45.69893245
+2023-07-13 22:11:57.138848: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  22.87976716  | BTC TSCN QTY:  0.00037 USDT TSCN QTY: 11.44
+2023-07-13 22:11:57.887767: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 22.87976716
+2023-07-13 22:13:49.995003: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  11.45497151  | BTC TSCN QTY:  0.00018 USDT TSCN QTY: 5.73
+2023-07-13 22:13:50.539765: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 11.45497151
+2023-07-13 23:33:50.580730: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  5.75545951  | BTC TSCN QTY:  0.00009 USDT TSCN QTY: 2.88
+2023-07-13 23:33:51.112002: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 5.75545951
+2023-07-13 23:34:02.854469: REAL MODE open orders [{'info': {'symbol': 'BTCUSDT', 'orderType': 'Limit', 'orderLinkId': '3ad0b041-594e-4530-a4f3-c97e7d0ec417-tp', 'orderId': '1464222789843116288', 'cancelType': 'UNKNOWN', 'avgPrice': '0.00', 'stopOrderType': '', 'lastPriceOnCreated': '', 'orderStatus': 'New', 'takeProfit': '', 'cumExecValue': '0.00000000', 'smpType': 'None', 'triggerDirection': '0', 'blockTradeId': '', 'isLeverage': '0', 'rejectReason': 'EC_NoError', 'price': '32525.65', 'orderIv': '', 'createdTime': '1689284958521', 'tpTriggerBy': '', 'positionIdx': '0', 'timeInForce': 'GTC', 'leavesValue': '23.74372450', 'updatedTime': '1689284958527', 'side': 'Sell', 'smpGroup': '0', 'triggerPrice': '0.00', 'cumExecFee': '0', 'leavesQty': '0.000730', 'slTriggerBy': '', 'closeOnTrigger': False, 'placeType': '', 'cumExecQty': '0.000000', 'reduceOnly': False, 'qty': '0.000730', 'stopLoss': '', 'smpOrderId': '', 'triggerBy': '', 'nextPageCursor': '1464222789843116288%3A1689284958521%2C1464222789843116288%3A1689284958521'}, 'id': '1464222789843116288', 'clientOrderId': '3ad0b041-594e-4530-a4f3-c97e7d0ec417-tp', 'timestamp': 1689284958521, 'datetime': '2023-07-13T21:49:18.521Z', 'lastTradeTimestamp': 1689284958527, 'lastUpdateTimestamp': 1689284958527, 'symbol': 'BTC/USDT', 'type': 'limit', 'timeInForce': 'GTC', 'postOnly': False, 'reduceOnly': False, 'side': 'sell', 'price': 32525.65, 'stopPrice': None, 'triggerPrice': None, 'takeProfitPrice': None, 'stopLossPrice': None, 'amount': 0.00073, 'cost': 0.0, 'average': None, 'filled': 0.0, 'remaining': 0.00073, 'status': 'open', 'fee': {'cost': 0.0, 'currency': None}, 'trades': [], 'fees': [{'cost': 0.0, 'currency': None}]}]
+2023-07-14 09:01:35.435923: REAL MODE condition order: {'retCode': 0, 'retMsg': 'OK', 'result': {'orderId': '1464561172557684992', 'orderLinkId': '93d87442-aaec-4afd-87b1-68c23d93402d-tp'}, 'retExtInfo': {}, 'time': 1689325296894}
+2023-07-14 09:04:56.892153: REAL MODE condition order: {'retCode': 0, 'retMsg': 'OK', 'result': {'orderId': '1464562862535041280', 'orderLinkId': 'd127ceff-91d1-47c8-bc66-728d5fe557b8-tp'}, 'retExtInfo': {}, 'time': 1689325498354}
+2023-07-14 09:20:15.679216: REAL MODE condition order: {'retCode': 0, 'retMsg': 'OK', 'result': {'orderId': '1464570569904185600', 'orderLinkId': '7bad29b3-06bf-4383-a6fe-bb245b784d93-tp'}, 'retExtInfo': {}, 'time': 1689326417145}
+2023-07-14 10:13:02.129617: REAL MODE Starting loop
+2023-07-14 10:13:02.154927: REAL MODE time is  1689329582.1509466 |file time is 1689283188.2341435
+2023-07-14 10:13:08.536586: REAL MODE Training data sample before prep:                              open_time      open      high       low     close    volume       turnover
+timestamp                                                                                              
+2023-07-14 10:08:56.320  1689329400000  31177.27  31177.41  31155.83  31162.41  0.079061  2464.52880631
+2023-07-14 10:13:09.045146: REAL MODE Training data sample after prep:                             open_time         close     turnover  14 period RSI       MACD    SIGNAL  14 period STOCH %K           MFV  14 period ATR         MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                 
+2023-07-14 08:54:39.872  1.689325e+12  31233.407243  1799.711992      44.215019 -24.563782 -32.94487           65.731161  14984.529895      27.652491  118.205249      34.654448  0.271533  3823.357991      -0.444129  -3.173467e+08  1.186623  0.886413  0.998654  0.998512  0.999221  1.000218  0.491072   0.0      1.0
+2023-07-14 10:13:09.049895: REAL MODE retraining...
+2023-07-14 10:13:09.055062: REAL MODE Starting training
+2023-07-14 10:20:34.651264: REAL MODE Ensemble Accuracy Inc = 0.7747311827956987
+2023-07-14 10:20:34.655770: REAL MODE Ensemble Accuracy Dec = 0.6306451612903226
+2023-07-14 10:20:34.705512: REAL MODE saving model file as  BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_rfinc.joblib
+2023-07-14 10:20:34.903051: REAL MODE saving model file as  BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_knninc.joblib
+2023-07-14 10:20:34.919797: REAL MODE saving model file as  BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 10:20:35.311844: REAL MODE saving model file as  BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_rf.joblib
+2023-07-14 10:20:35.536347: REAL MODE saving model file as  BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 10:20:35.910390: REAL MODE Finished training
+2023-07-14 10:20:35.915338: REAL MODE Ensemble Accuracy inc = 0.7747311827956987
+2023-07-14 10:20:35.920746: REAL MODE Ensemble Accuracy dec = 0.6306451612903226
+2023-07-14 10:20:36.990015: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-14 09:05:35.232  1.689325e+12  31218.967296  311782.284547      43.169026 -12.957625 -21.187324           71.825036 -52.175721      34.765079  7.752435      87.156851  0.121084  2947.230861      28.403867   8.407177e+06  0.834086  1.246467  0.997134  0.998422  0.999131  0.999691  0.543057   0.0      1.0
+2023-07-14 10:20:37.005319: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 10:20:37.299698: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 10:20:40.438383: REAL MODE Portfolio:  362.7866290348 BTC: 5.2E-7 USDT: 362.77042272
+2023-07-14 10:20:40.444291: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 10:20:40.449919: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 10:25:41.529161: REAL MODE Starting loop
+2023-07-14 10:25:41.552918: REAL MODE time is  1689330341.5491204 |file time is 1689330035.3094962
+2023-07-14 10:25:42.779215: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-14 09:09:57.376  1.689326e+12  31202.712553  667147.505676      39.510089 -14.050614 -19.759982           52.393849 -58.694646      31.038671 -28.200648      79.445673 -0.027449  2898.701826      -2.056662    6878587.527  0.872597  1.24746  0.996675  0.997997  0.998704  0.999309  1.132192   0.0      1.0
+2023-07-14 10:25:42.794017: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 10:25:43.084912: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 10:25:46.630412: REAL MODE Portfolio:  366.0287179836 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 10:25:46.635748: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 10:25:46.639707: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 10:26:26.790329: REAL MODE Starting loop
+2023-07-14 10:26:26.815453: REAL MODE time is  1689330386.8114092 |file time is 1689330035.3094962
+2023-07-14 10:26:27.577228: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-14 09:09:57.376  1.689326e+12  31202.712553  667147.505676      39.510089 -14.050614 -19.759982           52.393849 -58.694646      31.038671 -28.200648      79.445673 -0.027449  2898.701826      -2.056662    6878587.527  0.872597  1.24746  0.996675  0.997997  0.998704  0.999309  1.132192   0.0      1.0
+2023-07-14 10:26:27.592081: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 10:26:27.909569: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 10:26:30.608946: REAL MODE Portfolio:  366.0287179836 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 10:26:30.614557: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 10:26:30.618964: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 10:31:31.598148: REAL MODE Starting loop
+2023-07-14 10:31:31.622634: REAL MODE time is  1689330691.6182692 |file time is 1689330035.3094962
+2023-07-14 10:31:32.409951: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21    ema15      ema5  normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-14 09:14:19.520  1.689326e+12  31186.993894  475074.921422       36.30548 -16.000733 -19.008132           11.664117 -63.158384      27.435749 -40.725727      72.009141 -0.077603  2841.291421     -28.583214   1.664866e+06  0.985074  1.146248  0.996245  0.997608  0.99832  0.999004  0.83316   0.0      1.0
+2023-07-14 10:31:32.425146: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 10:31:32.719375: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 10:31:35.587946: REAL MODE Portfolio:  366.0287179836 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 10:31:35.593769: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 10:31:35.598817: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 10:36:36.427237: REAL MODE Starting loop
+2023-07-14 10:36:36.450457: REAL MODE time is  1689330996.4464834 |file time is 1689330035.3094962
+2023-07-14 10:36:37.467525: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K      MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50    ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-14 09:20:52.736  1.689326e+12  31169.428363  449102.656856      33.076828 -18.747498 -18.956006            0.835068 -133.889      25.613405 -59.767004      61.824521 -0.196872  2806.429812      -63.51251  -1.975729e+06  1.091853  0.979295  0.995767  0.99718  0.997907  0.998701  0.816901   0.0      1.0
+2023-07-14 10:36:37.483079: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 10:36:37.766710: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 10:36:41.138917: REAL MODE Portfolio:  366.0287072872 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 10:36:41.144210: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 10:36:41.149130: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 10:41:42.603047: REAL MODE Starting loop
+2023-07-14 10:41:42.626292: REAL MODE time is  1689331302.622253 |file time is 1689330035.3094962
+2023-07-14 10:41:43.833561: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI      ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5  normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-14 09:25:14.880  1.689327e+12  31197.041427  597441.171668      41.833867 -18.483124 -18.861429            31.76317 -142.612144      26.480335 -59.021452      57.821413 -0.09824  2865.773051     -38.827203  -1.921039e+06  1.063725  0.903536  0.996713  0.998151  0.998872  0.999655  1.07086   0.0      1.0
+2023-07-14 10:41:43.848061: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 10:41:44.138420: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 10:41:47.493312: REAL MODE Portfolio:  366.02870112 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 10:41:47.498195: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 10:41:47.502132: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 10:46:48.525672: REAL MODE Starting loop
+2023-07-14 10:46:48.548354: REAL MODE time is  1689331608.5435195 |file time is 1689330035.3094962
+2023-07-14 10:46:49.573732: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp    ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-14 09:29:37.024  1.689327e+12  31171.638499  889195.55041      37.032962 -20.091804 -19.107504           18.418844 -131.331959      28.228617 -84.071508       46.23404 -0.184305  2827.279403     -67.703104  -3.208682e+06  1.072469  0.865598  0.99598  0.997459  0.998187  0.999034  1.451001   0.0      1.0
+2023-07-14 10:46:49.588149: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 10:46:49.878557: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 10:46:53.397850: REAL MODE Portfolio:  366.02870736 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 10:46:53.402940: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 10:46:53.408850: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 10:51:54.323294: REAL MODE Starting loop
+2023-07-14 10:51:54.343548: REAL MODE time is  1689331914.3397288 |file time is 1689330035.3094962
+2023-07-14 10:51:55.351708: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI      ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                
+2023-07-14 09:33:59.168  1.689327e+12  31175.500475  532091.730534      38.194236 -20.815122 -19.449028           21.614746 -135.604206      29.238873 -65.526028      43.626257 -0.25775  2850.179184     -82.069559  -4.171733e+06  1.107027  0.858421  0.996178  0.997692  0.998424  0.999298  0.887653   0.0      1.0
+2023-07-14 10:51:55.366079: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 10:51:55.638237: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 10:51:59.178164: REAL MODE Portfolio:  366.0287129968 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 10:51:59.184594: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 10:51:59.189502: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 10:57:00.347117: REAL MODE Starting loop
+2023-07-14 10:57:00.368897: REAL MODE time is  1689332220.365478 |file time is 1689330035.3094962
+2023-07-14 10:57:02.032938: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K         MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV      VIm      VIp    ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-14 09:40:32.384  1.689327e+12  31190.463166  301853.882856      42.610344 -19.951009 -19.549424           33.996829 -124.009068       29.80882 -42.43411      41.213848 -0.208752  2852.300395     -71.628648  -2.421486e+06  1.09593  0.88495  0.99672  0.998254  0.998976  0.999815  0.548873   0.0      1.0
+2023-07-14 10:57:02.046804: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 10:57:02.324780: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 10:57:05.673076: REAL MODE Portfolio:  366.0287240624 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 10:57:05.677894: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 10:57:05.682861: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 11:02:06.648466: REAL MODE Starting loop
+2023-07-14 11:02:06.669376: REAL MODE time is  1689332526.6657834 |file time is 1689330035.3094962
+2023-07-14 11:02:07.483223: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC        OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-14 09:44:54.528  1.689328e+12  31206.106608  518770.664935      46.883489 -17.798726 -19.199284           46.942255 -131.683212       28.48498 -32.707438      40.428845 -0.111776  2881.5856     -34.553616  -3.633984e+06  1.139908  0.906567  0.997272  0.998811  0.999512  1.000263  0.951712   0.0      1.0
+2023-07-14 11:02:07.498200: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 11:02:07.785117: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 11:02:11.208828: REAL MODE Portfolio:  366.028721244 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 11:02:11.213748: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 11:02:11.218573: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 11:07:12.161263: REAL MODE Starting loop
+2023-07-14 11:07:12.185532: REAL MODE time is  1689332832.180919 |file time is 1689330035.3094962
+2023-07-14 11:07:13.015989: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                 
+2023-07-14 09:49:16.672  1.689328e+12  31207.785813  301213.405021       47.33678 -15.775676 -18.514563           52.482321 -121.251228      27.185922 -24.343603      39.012801 -0.080401  2915.809857     -21.747932  -3.993458e+06  1.146945  0.900839  0.997376  0.998917  0.999594  1.000264  0.597087   0.0      1.0
+2023-07-14 11:07:13.030927: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 11:07:13.306778: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 11:07:16.412103: REAL MODE Portfolio:  366.0287201104 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 11:07:16.416821: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 11:07:16.421313: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 11:12:17.315418: REAL MODE Starting loop
+2023-07-14 11:12:17.339208: REAL MODE time is  1689333137.3354158 |file time is 1689330035.3094962
+2023-07-14 11:12:18.786969: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K        MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                
+2023-07-14 09:55:49.888  1.689328e+12  31196.569535  411354.689412      44.598975 -14.905631 -17.792777           47.673407 -96.813142      26.659751 -22.397761      39.627989 -0.135231  2874.164873     -38.497301  -3.690257e+06  1.129299  0.890437  0.997074  0.998623  0.999286  0.999921  0.841323   0.0      1.0
+2023-07-14 11:12:18.803915: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembleinc.joblib
+2023-07-14 11:12:19.083286: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 10:13:02.134782_2023-07-14 10:13:02.134782_ensembledec.joblib
+2023-07-14 11:12:21.742760: REAL MODE Portfolio:  366.0287208748 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 11:12:21.748300: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 11:12:21.752726: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 21:21:00.485999: REAL MODE Starting loop
+2023-07-14 21:21:00.508949: REAL MODE time is  1689369660.5056407 |file time is 1689330035.3094962
+2023-07-14 21:21:05.712706: REAL MODE Training data sample before prep:                              open_time      open     high       low    close    volume       turnover
+timestamp                                                                                            
+2023-07-14 21:19:35.424  1689369600000  30087.39  30087.4  30087.38  30087.4  0.128797  3875.16605617
+2023-07-14 21:21:06.097916: REAL MODE Training data sample after prep:                             open_time         close       turnover  14 period RSI        MACD     SIGNAL  14 period STOCH %K           MFV  14 period ATR         MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                     
+2023-07-14 20:05:18.976  1.689365e+12  30079.603737  136318.868512       3.767467 -192.412429 -184.92468            7.828644  14791.408639     101.017634 -156.023714       2.119414 -1.012783  3412.735543     -74.366341  -3.182505e+09  1.438957  0.520055  0.977134  0.985125  0.989114  0.997008  2.853241   0.0      0.0
+2023-07-14 21:21:06.102457: REAL MODE retraining...
+2023-07-14 21:21:06.106969: REAL MODE Starting training
+2023-07-14 21:30:22.575043: REAL MODE Ensemble Accuracy Inc = 0.7911290322580644
+2023-07-14 21:30:22.582726: REAL MODE Ensemble Accuracy Dec = 0.6282258064516127
+2023-07-14 21:30:22.659013: REAL MODE saving model file as  BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_rfinc.joblib
+2023-07-14 21:30:22.998812: REAL MODE saving model file as  BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_knninc.joblib
+2023-07-14 21:30:23.031201: REAL MODE saving model file as  BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-14 21:30:23.756411: REAL MODE saving model file as  BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_rf.joblib
+2023-07-14 21:30:24.095838: REAL MODE saving model file as  BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-14 21:30:24.804516: REAL MODE Finished training
+2023-07-14 21:30:24.812238: REAL MODE Ensemble Accuracy inc = 0.7911290322580644
+2023-07-14 21:30:24.819719: REAL MODE Ensemble Accuracy dec = 0.6282258064516127
+2023-07-14 21:30:26.206107: REAL MODE making decision based on                              open_time        close       turnover  14 period RSI        MACD      SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                  
+2023-07-14 20:14:03.264  1.689366e+12  30082.25485  818307.018791      25.426992 -143.007963 -169.926295           27.394075 -348.292699      64.957584 -89.999574       50.98446 -0.395152 -2543.337202     -76.188616   1.954772e+06  1.060124  1.145818  0.977605  0.988072  0.992685  0.998733  0.541367   0.0      0.0
+2023-07-14 21:30:26.230939: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-14 21:30:26.800273: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-14 21:30:30.888319: REAL MODE Portfolio:  366.0282331148 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 21:30:30.897248: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 21:30:30.906400: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-14 21:35:32.758542: REAL MODE Starting loop
+2023-07-14 21:35:32.795085: REAL MODE time is  1689370532.7887988 |file time is 1689370223.752763
+2023-07-14 21:35:34.226448: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI        MACD      SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp    ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                 
+2023-07-14 20:20:36.480  1.689366e+12  30069.732698  1.127302e+06      24.665445 -137.006424 -163.342321           16.635088 -346.060377      55.490512 -88.069351      35.805295 -0.411779 -2601.822186      -95.99473  -6.723625e+06  1.156639  1.013968  0.97764  0.988215  0.992783  0.998598  0.779378   0.0      0.0
+2023-07-14 21:35:34.243529: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-14 21:35:34.729466: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-14 21:35:38.721936: REAL MODE Portfolio:  366.0282253668 BTC: 5.2E-7 USDT: 366.01251872
+2023-07-14 21:35:38.730564: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-14 21:35:38.738004: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-15 03:16:57.733112: REAL MODE Starting loop
+2023-07-15 03:16:57.756896: REAL MODE time is  1689391017.75298 |file time is 1689370223.752763
+2023-07-15 03:21:31.816527: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  366.01251872  | BTC TSCN QTY:  0.00604 USDT TSCN QTY: 183.01
+2023-07-15 03:21:32.608800: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 366.01251872
+2023-07-15 03:56:51.431096: REAL MODE Starting loop
+2023-07-15 03:56:51.451472: REAL MODE time is  1689393411.4482582 |file time is 1689370223.752763
+2023-07-15 04:15:11.282300: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50    ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-15 02:40:43.008  1.689389e+12  30314.627688  96371.383658      49.971172  2.746101  8.325958           17.949803 -193.310622      15.327831 -31.292641      26.998764 -0.143775 -2976.208183     -65.074649  -1.489416e+06  1.142261  0.873227  0.997622  1.00018  1.000034  0.999907  0.521404   0.0      1.0
+2023-07-15 04:15:11.295427: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 04:15:19.386856: REAL MODE Starting loop
+2023-07-15 04:15:19.409123: REAL MODE time is  1689394519.405411 |file time is 1689370223.752763
+2023-07-15 04:15:33.375425: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-15 03:00:22.656  1.689390e+12  30298.783373  110534.958001      42.237591 -0.417825  4.060684           12.519945 -192.181248      12.285455 -20.460138      26.202237 -0.119612 -2946.916062    -110.558842  -1.210905e+07  1.346264  0.688357  0.997307  0.999658  0.999549  0.999548  0.784711   0.0      0.0
+2023-07-15 04:15:33.389215: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 04:15:33.675032: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 04:15:37.200105: REAL MODE Portfolio:  365.8668807036 BTC: 0.00603348 USDT: 183.01883022
+2023-07-15 04:15:37.204858: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 04:15:37.209652: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-15 04:16:27.114910: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  183.01883022  | BTC TSCN QTY:  0.00302 USDT TSCN QTY: 91.51
+2023-07-15 04:16:28.079188: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 183.01883022
+2023-07-15 04:17:00.858158: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  183.01883022  | BTC TSCN QTY:  0.00302 USDT TSCN QTY: 91.51
+2023-07-15 04:17:01.837602: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 183.01883022
+2023-07-15 04:18:05.790319: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  183.01883022  | BTC TSCN QTY:  0.00302 USDT TSCN QTY: 91.51
+2023-07-15 04:18:06.510144: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 183.01883022
+2023-07-15 04:18:57.301309: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  91.5312084  | BTC TSCN QTY:  0.00151 USDT TSCN QTY: 45.77
+2023-07-15 04:18:58.032069: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 91.5312084
+2023-07-15 04:19:36.355712: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  45.78739749  | BTC TSCN QTY:  0.00076 USDT TSCN QTY: 22.89
+2023-07-15 04:19:37.335128: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 45.78739749
+2023-07-15 04:20:12.566505: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  22.90182994  | BTC TSCN QTY:  0.00038 USDT TSCN QTY: 11.45
+2023-07-15 04:20:13.317014: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 22.90182994
+2023-07-15 04:20:47.671417: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  11.47420217  | BTC TSCN QTY:  0.00019 USDT TSCN QTY: 5.74
+2023-07-15 04:20:48.606872: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 11.47420217
+2023-07-15 04:21:34.152722: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  365.34027728  | BTC TSCN QTY:  0.00603 USDT TSCN QTY: 182.67
+2023-07-15 04:21:34.904609: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 365.34027728
+2023-07-15 04:28:42.661396: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  182.68896803  | BTC TSCN QTY:  0.00301 USDT TSCN QTY: 91.34
+2023-07-15 04:28:43.595165: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 182.68896803
+2023-07-15 04:34:32.054487: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  91.35967631  | BTC TSCN QTY:  0.00151 USDT TSCN QTY: 45.68
+2023-07-15 04:34:32.772643: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 91.35967631
+2023-07-15 04:37:51.273471: REAL MODE Starting loop
+2023-07-15 04:37:51.297835: REAL MODE time is  1689395871.2945747 |file time is 1689370223.752763
+2023-07-15 04:37:52.317416: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV      VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                              
+2023-07-15 03:20:02.304  1.689391e+12  30287.933329  275596.189547      41.947594 -7.532712 -1.974478           34.202187 -177.031749      14.415649 -16.352083      42.587756 -0.067867 -2922.366677    -110.335655  -1.133611e+07  1.14577  0.785759  0.997215  0.999463  0.999449  0.999739  1.486227   0.0      0.0
+2023-07-15 04:37:52.331870: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 04:37:52.605550: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 04:37:56.153819: REAL MODE Portfolio:  364.9584992408 BTC: 0.01053309 USDT: 45.69927737
+2023-07-15 04:37:56.159080: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 04:37:57.843192: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  45.69927737  | BTC TSCN QTY:  0.00075 USDT TSCN QTY: 22.85
+2023-07-15 04:37:58.592305: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 45.69927737
+2023-07-15 04:42:53.840723: REAL MODE Starting loop
+2023-07-15 04:42:53.864692: REAL MODE time is  1689396173.8615863 |file time is 1689370223.752763
+2023-07-15 04:42:54.639651: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-15 03:24:24.448  1.689391e+12  30293.176665  222994.540506      44.733735 -7.289659 -3.037514           46.479616 -183.439845      14.541048 -16.116729      43.485464 -0.038406 -2940.458137     -75.054135  -1.063856e+07  1.150454  0.840922  0.997442  0.999653  0.999647  0.999926  1.163143   0.0      0.0
+2023-07-15 04:42:54.653862: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 04:42:54.940306: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 04:42:58.693013: REAL MODE Portfolio:  364.7762972666 BTC: 0.01128534 USDT: 22.87574948
+2023-07-15 04:42:58.698810: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 04:43:00.955933: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  22.87574948  | BTC TSCN QTY:  0.00038 USDT TSCN QTY: 11.44
+2023-07-15 04:43:01.903868: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 22.87574948
+2023-07-15 04:43:26.799926: REAL MODE Starting loop
+2023-07-15 04:43:26.821883: REAL MODE time is  1689396206.8187456 |file time is 1689370223.752763
+2023-07-15 04:43:28.096436: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-15 03:24:24.448  1.689391e+12  30293.176665  222994.540506      44.733735 -7.289659 -3.037514           46.479616 -183.439845      14.541048 -16.116729      43.485464 -0.038406 -2940.458137     -75.054135  -1.063856e+07  1.150454  0.840922  0.997442  0.999653  0.999647  0.999926  1.163143   0.0      0.0
+2023-07-15 04:43:28.110382: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 04:43:28.411213: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 04:43:35.481244: REAL MODE Portfolio:  364.7647810204 BTC: 0.01166196 USDT: 11.45415748
+2023-07-15 04:43:35.486979: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 04:43:37.478540: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  11.45415748  | BTC TSCN QTY:  0.00019 USDT TSCN QTY: 5.73
+2023-07-15 04:43:38.450333: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 11.45415748
+2023-07-15 04:44:34.375599: REAL MODE Starting loop
+2023-07-15 04:44:34.400133: REAL MODE time is  1689396274.396538 |file time is 1689370223.752763
+2023-07-15 04:44:35.200956: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                               
+2023-07-15 03:24:24.448  1.689391e+12  30293.176665  222994.540506      44.733735 -7.289659 -3.037514           46.479616 -183.439845      14.541048 -16.116729      43.485464 -0.038406 -2940.458137     -75.054135  -1.063856e+07  1.150454  0.840922  0.997442  0.999653  0.999647  0.999926  1.163143   0.0      0.0
+2023-07-15 04:44:35.214595: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 04:44:35.490075: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 04:44:39.355952: REAL MODE Portfolio:  364.7590228923 BTC: 0.01185077 USDT: 5.72821348
+2023-07-15 04:44:39.361193: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 04:44:41.235070: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  5.72821348  | BTC TSCN QTY:  0.00009 USDT TSCN QTY: 2.86
+2023-07-15 04:44:41.961739: REAL MODE Enough USDT to cover purchase of  USDT  balance is: 5.72821348
+2023-07-15 04:53:26.807488: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  2.88038948  | BTC TSCN QTY:  0.00005 USDT TSCN QTY: 1.44
+2023-07-15 04:53:27.517292: REAL MODE Not enough  USDT  balance is: 2.88038948
+2023-07-15 04:54:04.406538: REAL MODE Starting loop
+2023-07-15 04:54:04.429461: REAL MODE time is  1689396844.4266353 |file time is 1689370223.752763
+2023-07-15 04:54:05.218928: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV      VIm       VIp     ema50     ema21    ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-15 03:35:19.808  1.689392e+12  30314.729041  155565.896654      54.799375 -4.506894 -3.865237           84.892742 -180.665625      14.805746 -3.111149      56.415424  0.017934 -2891.598311      26.952012  -3.403102e+06  0.96926  0.985408  0.998238  1.000351  1.00034  1.000505  0.854106   0.0      1.0
+2023-07-15 04:54:05.232401: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 04:54:05.531314: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 04:54:08.707123: REAL MODE Portfolio:  364.8354885416 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 04:54:08.712569: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 04:54:10.197247: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  2.88038948  | BTC TSCN QTY:  0.00005 USDT TSCN QTY: 1.44
+2023-07-15 04:54:10.952175: REAL MODE Not enough  USDT  balance is: 2.88038948
+2023-07-15 04:54:37.689856: REAL MODE Starting loop
+2023-07-15 04:54:37.714276: REAL MODE time is  1689396877.7103255 |file time is 1689370223.752763
+2023-07-15 04:54:38.511758: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV      VIm       VIp     ema50     ema21    ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-15 03:35:19.808  1.689392e+12  30314.729041  155565.896654      54.799375 -4.506894 -3.865237           84.892742 -180.665625      14.805746 -3.111149      56.415424  0.017934 -2891.598311      26.952012  -3.403102e+06  0.96926  0.985408  0.998238  1.000351  1.00034  1.000505  0.854106   0.0      1.0
+2023-07-15 04:54:38.526201: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 04:54:38.807376: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 04:54:42.011024: REAL MODE Portfolio:  364.8354885416 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 04:54:42.017676: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 04:54:43.722793: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  2.88038948  | BTC TSCN QTY:  0.00005 USDT TSCN QTY: 1.44
+2023-07-15 04:54:44.448249: REAL MODE Not enough  USDT  balance is: 2.88038948
+2023-07-15 04:55:44.720095: REAL MODE Starting loop
+2023-07-15 04:55:44.745185: REAL MODE time is  1689396944.7410662 |file time is 1689370223.752763
+2023-07-15 04:55:46.006614: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI     MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-15 03:39:41.952  1.689392e+12  30319.981665  168302.871149      56.915358 -2.57364 -3.606918           90.155607 -194.370272       15.17669  0.737598      62.600393  0.017661 -2878.004444      82.134887  -1.656018e+06  0.921896  1.053663  0.998446  1.000501  1.000479  1.000565  0.935623   0.0      1.0
+2023-07-15 04:55:46.022679: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 04:55:46.344227: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 04:55:50.320377: REAL MODE Portfolio:  364.8354885416 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 04:55:50.325633: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 04:59:04.198045: REAL MODE Starting loop
+2023-07-15 04:59:04.220353: REAL MODE time is  1689397144.2172384 |file time is 1689370223.752763
+2023-07-15 04:59:05.023224: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI     MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-15 03:39:41.952  1.689392e+12  30319.981665  168302.871149      56.915358 -2.57364 -3.606918           90.155607 -194.370272       15.17669  0.737598      62.600393  0.017661 -2878.004444      82.134887  -1.656018e+06  0.921896  1.053663  0.998446  1.000501  1.000479  1.000565  0.935623   0.0      1.0
+2023-07-15 04:59:05.037173: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 04:59:05.320065: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 04:59:08.789905: REAL MODE Portfolio:  364.82808284 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 04:59:08.795161: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:00:40.598353: REAL MODE Starting loop
+2023-07-15 05:00:40.623714: REAL MODE time is  1689397240.6197548 |file time is 1689370223.752763
+2023-07-15 05:00:41.856993: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI      ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-15 03:44:04.096  1.689393e+12  30320.162583  124386.555794      56.990042 -1.015221 -3.088578           88.400546 -181.426484      15.027484  17.788659      62.444866  0.00766 -2880.760402      92.533558  -1.130553e+06  0.922959  1.08697  0.998485  1.000484  1.000452  1.000476  0.728931   0.0      1.0
+2023-07-15 05:00:41.870466: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 05:00:42.158030: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 05:00:45.991630: REAL MODE Portfolio:  364.75641476 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 05:00:45.996927: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:01:01.574200: REAL MODE Starting loop
+2023-07-15 05:01:01.598453: REAL MODE time is  1689397261.5948737 |file time is 1689370223.752763
+2023-07-15 05:01:02.556433: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI      ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-15 03:44:04.096  1.689393e+12  30320.162583  124386.555794      56.990042 -1.015221 -3.088578           88.400546 -181.426484      15.027484  17.788659      62.444866  0.00766 -2880.760402      92.533558  -1.130553e+06  0.922959  1.08697  0.998485  1.000484  1.000452  1.000476  0.728931   0.0      1.0
+2023-07-15 05:01:02.571901: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 05:01:02.862330: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 05:01:06.698918: REAL MODE Portfolio:  364.75641476 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 05:01:06.704833: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:01:18.713643: REAL MODE Starting loop
+2023-07-15 05:01:18.737288: REAL MODE time is  1689397278.734013 |file time is 1689370223.752763
+2023-07-15 05:01:19.664976: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI      ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-15 03:44:04.096  1.689393e+12  30320.162583  124386.555794      56.990042 -1.015221 -3.088578           88.400546 -181.426484      15.027484  17.788659      62.444866  0.00766 -2880.760402      92.533558  -1.130553e+06  0.922959  1.08697  0.998485  1.000484  1.000452  1.000476  0.728931   0.0      1.0
+2023-07-15 05:01:19.679073: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 05:01:19.958514: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 05:01:23.347360: REAL MODE Portfolio:  364.7562953132 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 05:01:23.353166: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:01:45.437110: REAL MODE Starting loop
+2023-07-15 05:01:45.461679: REAL MODE time is  1689397305.4573584 |file time is 1689370223.752763
+2023-07-15 05:01:46.226917: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI      ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-15 03:44:04.096  1.689393e+12  30320.162583  124386.555794      56.990042 -1.015221 -3.088578           88.400546 -181.426484      15.027484  17.788659      62.444866  0.00766 -2880.760402      92.533558  -1.130553e+06  0.922959  1.08697  0.998485  1.000484  1.000452  1.000476  0.728931   0.0      1.0
+2023-07-15 05:01:46.239951: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 05:01:46.520790: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 05:01:49.861590: REAL MODE Portfolio:  364.7562953132 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 05:01:49.866925: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:02:29.071474: REAL MODE Starting loop
+2023-07-15 05:02:29.135191: REAL MODE time is  1689397349.095128 |file time is 1689370223.752763
+2023-07-15 05:02:30.294799: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI      ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-15 03:44:04.096  1.689393e+12  30320.162583  124386.555794      56.990042 -1.015221 -3.088578           88.400546 -181.426484      15.027484  17.788659      62.444866  0.00766 -2880.760402      92.533558  -1.130553e+06  0.922959  1.08697  0.998485  1.000484  1.000452  1.000476  0.728931   0.0      1.0
+2023-07-15 05:02:30.309135: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 05:02:30.592276: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 05:02:34.377926: REAL MODE Portfolio:  364.7383782932 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 05:02:34.383386: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:03:42.644582: REAL MODE Starting loop
+2023-07-15 05:03:42.666819: REAL MODE time is  1689397422.6636636 |file time is 1689370223.752763
+2023-07-15 05:03:43.608748: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI      ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                             
+2023-07-15 03:44:04.096  1.689393e+12  30320.162583  124386.555794      56.990042 -1.015221 -3.088578           88.400546 -181.426484      15.027484  17.788659      62.444866  0.00766 -2880.760402      92.533558  -1.130553e+06  0.922959  1.08697  0.998485  1.000484  1.000452  1.000476  0.728931   0.0      1.0
+2023-07-15 05:03:43.620962: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 05:03:43.894413: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 05:03:47.300571: REAL MODE Portfolio:  364.7383782932 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 05:03:47.306422: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:06:58.828916: REAL MODE Starting loop
+2023-07-15 05:06:58.852559: REAL MODE time is  1689397618.849145 |file time is 1689370223.752763
+2023-07-15 05:07:00.123376: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5  normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-15 03:50:37.312  1.689393e+12  30312.581904  92419.416453      52.855691 -0.387395 -2.548342           75.980093 -184.902337      15.265441  13.798531       58.23166 -0.021973 -2901.343749      60.613263  -3.515073e+06  0.965062  1.01935  0.998273  1.000223  1.000189  1.000188  0.58649   0.0      1.0
+2023-07-15 05:07:00.137440: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 05:07:00.550518: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 05:07:04.171431: REAL MODE Portfolio:  364.7801846732 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 05:07:04.177340: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:09:10.774045: REAL MODE Starting loop
+2023-07-15 05:09:10.799272: REAL MODE time is  1689397750.7957036 |file time is 1689370223.752763
+2023-07-15 05:09:12.083466: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5  normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-15 03:50:37.312  1.689393e+12  30312.581904  92419.416453      52.855691 -0.387395 -2.548342           75.980093 -184.902337      15.265441  13.798531       58.23166 -0.021973 -2901.343749      60.613263  -3.515073e+06  0.965062  1.01935  0.998273  1.000223  1.000189  1.000188  0.58649   0.0      1.0
+2023-07-15 05:09:12.097354: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 05:09:12.426121: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 05:09:16.463969: REAL MODE Portfolio:  364.7801846732 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 05:09:16.469824: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:09:18.575608: REAL MODE Decided to buy % 50  of USDT balance. |USDT balance:  2.88038948  | BTC TSCN QTY:  0.00005 USDT TSCN QTY: 1.44
+2023-07-15 05:09:19.528919: REAL MODE Not enough  USDT  balance is: 2.88038948
+2023-07-15 05:09:47.848679: REAL MODE Starting loop
+2023-07-15 05:09:47.871965: REAL MODE time is  1689397787.8684542 |file time is 1689370223.752763
+2023-07-15 05:09:48.837269: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm      VIp     ema50     ema21     ema15      ema5  normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-15 03:50:37.312  1.689393e+12  30312.581904  92419.416453      52.855691 -0.387395 -2.548342           75.980093 -184.902337      15.265441  13.798531       58.23166 -0.021973 -2901.343749      60.613263  -3.515073e+06  0.965062  1.01935  0.998273  1.000223  1.000189  1.000188  0.58649   0.0      1.0
+2023-07-15 05:09:48.851509: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 05:09:49.179301: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 05:09:53.006579: REAL MODE Portfolio:  364.7801846732 BTC: 0.01194468 USDT: 2.88038948
+2023-07-15 05:09:53.012128: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:09:53.016730: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-15 05:10:20.141330: REAL MODE Starting loop
+2023-07-15 05:10:20.170514: REAL MODE time is  1689397820.166029 |file time is 1689370223.752763
+2023-07-15 05:10:21.399492: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI       ROC         OBV  20 period CCI  14 period EMV       VIm       VIp    ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-15 03:54:59.456  1.689393e+12  30300.497166  80384.308842      47.001896 -0.855118 -2.209697            56.18003 -210.293296      15.812083  21.716486      53.790612 -0.006193 -2893.43106       0.636208  -9.452239e+06  1.039432  0.925997  0.99792  0.999832  0.999804  0.999824  0.555676   0.0      1.0
+2023-07-15 05:10:21.416504: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 05:10:21.698989: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 05:10:25.532319: REAL MODE Portfolio:  2.9009966148 BTC: 6.8E-7 USDT: 2.88038948
+2023-07-15 05:10:25.537776: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:10:25.542510: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-15 05:15:26.533120: REAL MODE Starting loop
+2023-07-15 05:15:26.555508: REAL MODE time is  1689398126.551245 |file time is 1689370223.752763
+2023-07-15 05:15:27.747164: REAL MODE making decision based on                              open_time         close      turnover  14 period RSI      MACD    SIGNAL  14 period STOCH %K        MFV  14 period ATR       MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-15 03:59:21.600  1.689393e+12  30297.216508  80243.943192      45.527783 -1.473528 -2.062463           50.804883 -193.61815      16.100443  17.65627      50.470889 -0.005171 -2906.358972     -26.327927  -1.158456e+07  1.085617  0.896473  0.997858  0.999736  0.999716  0.999763  0.599272   0.0      0.0
+2023-07-15 05:15:27.761993: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 05:15:28.027713: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 05:15:31.800327: REAL MODE Portfolio:  2.9010002664 BTC: 6.8E-7 USDT: 2.88038948
+2023-07-15 05:15:31.805933: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:15:31.810002: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-15 05:53:25.186313: REAL MODE Starting loop
+2023-07-15 05:53:25.209554: REAL MODE time is  1689400405.2061057 |file time is 1689370223.752763
+2023-07-15 05:53:26.472826: REAL MODE making decision based on                              open_time         close       turnover  14 period RSI     MACD   SIGNAL  14 period STOCH %K         MFV  14 period ATR        MOM  14 period MFI      ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                            
+2023-07-15 04:34:18.752  1.689396e+12  30303.166889  216239.308339      47.901782  0.79021 -0.50672            32.26081 -184.901597      10.351596 -16.995693      66.685091 -0.03814 -2879.736157       39.21725   1.039364e+06  0.853786  1.128816  0.998304  0.999904  0.999878  0.999839  1.792098   0.0      1.0
+2023-07-15 05:53:26.485994: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembleinc.joblib
+2023-07-15 05:53:26.860983: REAL MODE Loading model from  models/BTCUSD_5_2023-07-03 21:21:00.492732_2023-07-14 21:21:00.492732_ensembledec.joblib
+2023-07-15 05:53:29.710023: REAL MODE Portfolio:  2.9009874008 BTC: 6.8E-7 USDT: 2.88038948
+2023-07-15 05:53:29.715669: REAL MODE buy signal: 0.0 sell signal: 1.0
+2023-07-15 05:53:29.721024: REAL MODE Not allowed to sell. If you want to change this, please edit the config.py file.
+2023-07-15 05:53:56.050727: REAL MODE Starting loop
+2023-07-15 05:53:56.073632: REAL MODE time is  1689400436.0704741 |file time is 1689370223.752763
+2023-07-15 05:54:01.590530: REAL MODE Training data sample before prep:                              open_time      open      high       low     close    volume      turnover
+timestamp                                                                                             
+2023-07-15 05:50:46.272  1689400200000  30085.97  30085.98  30085.96  30085.97  0.216763  6521.5258638
+2023-07-15 05:54:01.963658: REAL MODE Training data sample after prep:                             open_time         close      turnover  14 period RSI       MACD     SIGNAL  14 period STOCH %K           MFV  14 period ATR        MOM  14 period MFI       ROC          OBV  20 period CCI  14 period EMV       VIm       VIp     ema50     ema21     ema15      ema5   normVol  pred  preddec
+timestamp                                                                                                                                                                                                                                                                                                                  
+2023-07-15 04:34:18.752  1.689396e+12  29996.380384  16745.129045      25.036056 -24.642762 -18.256793            0.052512  12894.565523      19.795834 -31.843352      20.578889 -0.302414 -2221.579089     -98.826918  -4.490742e+08  1.328102  0.671641  0.994406  0.997825  0.998286  0.999305  0.997362   0.0      0.0
+2023-07-15 05:54:01.967483: REAL MODE retraining...
+2023-07-15 05:54:01.974719: REAL MODE Starting training

@@ -10,7 +10,9 @@ import numpy as np
 import joblib
 from functions.map_range import map_range
 from functions.modelmanagement import ModelManagement
+from generateTPandSL import calculate_prices
 from get_latest_model_file import get_latest_model_filename, get_model_filename
+from get_last_ohlc_bybit import get_last_ohlc_bybit
 from logic.buylogic import buylogic
 from bybitapi import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_wallet_balance
 
@@ -125,6 +127,8 @@ def trade_loop():
     # smooth the data
     data = prep_data(data)
     data = data.tail(1)
+
+
     logger("making decision based on ", data.to_string())
     confinc = getconfidencescore(data, "ensembleinc")
     confdec = getconfidencescore(data, "ensembledec")
@@ -147,7 +151,10 @@ def trade_loop():
     # Print the final output
     logger("buy signal:", confidence_scoreinc,
            "sell signal:", confidence_scoredec)
+    
 
+    # calculate_prices(bid_price,None)
+    # buylogic(1, usdtbalance)
     if (confidence_scoreinc == 1 and confidence_scoredec == 0):
         buylogic(1, usdtbalance)
     elif (confidence_scoreinc == 0 and confidence_scoredec == 1):

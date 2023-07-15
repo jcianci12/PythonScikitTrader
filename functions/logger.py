@@ -1,6 +1,7 @@
 import datetime
 
 from config import TEST
+from messengerservice import send_telegram_message
 
 def logger(*args):
     now = datetime.now()
@@ -91,5 +92,6 @@ def plot_graph(btc_price, confidence_signalinc,confidence_signaldec, portfolio_b
     # Save the plot to a file
     plt.savefig(chartfilename)
     plt.close()
+    send_telegram_message("Update!")
     
 

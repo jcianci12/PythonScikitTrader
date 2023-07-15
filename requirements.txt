@@ -6,3 +6,4 @@ pybit
 ccxt
 pandas
 joblib
+python-telegram-bot

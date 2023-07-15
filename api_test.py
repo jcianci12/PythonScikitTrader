@@ -4,15 +4,19 @@ import json
 import unittest
 import uuid
 import pandas as pd
+from finta import TA
+
 
 from requests import patch
 from KEYS import API_KEY, API_SECRET
 
-from bybitapi import cancel_all, cancel_order, create_limit_order, fetch_bybit_current_orders, fetch_bybit_data_v5, fetch_closed_orders, fetch_spot_balance, get_intervals, get_market_ask_price, get_market_bid_price, get_server_time, get_wallet_balance, place_conditional_order, place_order, place_sell_order
+from bybitapi import cancel_all, cancel_order, create_limit_order, fetch_bybit_current_orders, fetch_bybit_data_v5, fetch_closed_orders, fetch_spot_balance, get_intervals, get_market_ask_price, get_market_bid_price, get_server_time, get_wallet_balance,  place_order, place_sell_order
 from config import BUYTHRESHOLD, INTERVAL, STOPLOSS, TAKEPROFIT, TEST
 from functions.logger import logger
+from generateTPandSL import calculate_prices
 from logic.buylogic import buylogic
 from logic.selllogic import selllogic
+from messengerservice import send_telegram_message
 
 
 
@@ -60,6 +64,7 @@ class API_Tests(unittest.TestCase):
         # Get the USDT balance
         usdtbalance = float(get_wallet_balance(TEST, "USDT"))
         
+
         # Calculate the quantity to buy (2% of USDT balance)
         qty = (2 / 100) * usdtbalance
         qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
@@ -89,25 +94,7 @@ class API_Tests(unittest.TestCase):
             logger("Sell order not placed due to minimum quantity requirement.")
             assert sell is None
 
-    def test_place_conditional_order(self):
-        # Get the USDT balance
-        usdtbalance = float(get_wallet_balance(TEST, "USDT"))
 
-        marketprice = decimal.Decimal(get_market_ask_price(TEST,"BTCUSDT"))
-
-        tp = round(marketprice+(marketprice * TAKEPROFIT),2)
-        sl = round(marketprice  -(marketprice*STOPLOSS),2)
-        
-        # Calculate the quantity to buy (2% of USDT balance)
-        qty = (2 / 100) * usdtbalance
-        qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
-        
-        conditional_order = place_conditional_order(TEST, tp,"buy",0.0001, str(uuid.uuid4()))
-
-        # conditional_order = place_conditional_order(TEST, sl,"sell",0.0001, str(uuid.uuid4()))
-
-        print(conditional_order)
-        assert True
 
 
     def test_buylogic(self):
@@ -140,7 +127,8 @@ class API_Tests(unittest.TestCase):
         except Exception as e:
             self.fail(f"selllogic raised an exception: {e}")
 
-
+    def test_send_message(self):
+        asyncio.run(send_telegram_message('Your message here'))
 
 
     def test_USDT_balance(self):
@@ -258,7 +246,6 @@ class TestExample1(unittest.TestCase):
         loop = asyncio.get_event_loop()
         return loop.run_until_complete(coro)
 
-    def subtoprice(self):
         
 
     def test_async(self):
