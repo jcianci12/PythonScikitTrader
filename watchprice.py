@@ -1,9 +1,12 @@
+import asyncio
+from functools import partial
 from pybit.unified_trading import WebSocket
 from time import sleep, time
 import csv
 
 from bybitapi import place_order
 from generateTPandSL import calculate_prices, save_updated_prices
+from get_last_ohlc_bybit import get_last_ohlc_bybit
 
 orders = []
 last_refresh_time = 0
@@ -19,10 +22,13 @@ def refresh_orders():
         orders = list(reader)
 
     last_refresh_time = time()
+def caller(callback):
+    callback()
 
-def check_orders(testmode, symbol, market_price, ohlc):
+def check_orders(testmode, symbol, market_price):
     global orders
     global last_refresh_time
+    print("check orders called")
 
     # Refresh the orders if it has been more than 5 seconds since the last refresh
     if time() - last_refresh_time > 5:
@@ -31,6 +37,7 @@ def check_orders(testmode, symbol, market_price, ohlc):
     # Check for open orders that have reached their take profit or stop loss prices
     for order in orders:
         if not order['profit']:
+            ohlc = get_last_ohlc_bybit(symbol,"5")
             entry_price = float(order['entryprice'])
             takeprofitprice, stoplossprice = calculate_prices(entry_price, ohlc)
             side = order['side']
@@ -55,9 +62,10 @@ def check_orders(testmode, symbol, market_price, ohlc):
 
     # Save the updated orders back to the CSV file
     save_updated_prices('orders.csv', orders)
+    return
 
-
-
+def test():
+    print("Hi!")
 
 def getws():
 
@@ -68,16 +76,24 @@ def getws():
 
 
 def handle_message(message):
+    print(message)
+    
+
     if 'topic' in message and message['topic'] == 'tickers.BTCUSDT':
         last_price = float(message['data']['lastPrice'])
-        # print(last_price)
         check_orders(True, "BTCUSDT", last_price)
+        test()
+ 
+def startListening():
+    getws().ticker_stream(
+        symbol="BTCUSDT",
+        callback=handle_message
+    )
+    
+    while True:
+        sleep(1)
+        
+
+startListening()
 
 
-getws().ticker_stream(
-    symbol="BTCUSDT",
-    callback=handle_message
-)
-
-# while True:
-#     sleep(1)
