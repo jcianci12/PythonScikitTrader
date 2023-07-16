@@ -29,7 +29,7 @@ import multiprocessing as mp
 from messengerservice import send_telegram_message
 
 from prep_data import prep_data
-from watchprice import getws
+from watchprice import getws, startListening
 
 
 # %%
@@ -191,7 +191,7 @@ if (TESTRETRAINATSTART):
     logger("Done.")
 
 
-getws()
 call_decide_every_n_seconds(300, trade_loop)
+startListening()
 
 
