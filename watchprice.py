@@ -25,7 +25,7 @@ def refresh_orders():
 def caller(callback):
     callback()
 
-def check_orders(testmode, symbol, market_price):
+async def check_orders(testmode, symbol, market_price):
     global orders
     global last_refresh_time
     print("check orders called")
@@ -94,6 +94,6 @@ def startListening():
         sleep(1)
         
 
-# startListening()
+startListening()
 
 
