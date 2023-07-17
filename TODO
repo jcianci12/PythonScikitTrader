@@ -3,5 +3,7 @@ TODO:
 [x] Train on price increase and decrease.
 [ ] Incorporate backtesting.py
 [ ] The model is trained to predict on a price rise in n days. We should save the order in a list of completed orders, and when the order reaches the predicted training date, we should sell, or check to see if we are in the black and sell
-[ ] Start testing with tp and sl on orders. - not working...
 [ ] Save all orders to csv so we can see what we made on each one?
+[ ] train the INC value on hitting the take profit mark
+[ ] train the DEC value on hitting the stop loss mark.
+[ ] fix issue where orders are not closed out. First order closes and the loop doesnt continue
