@@ -18,8 +18,8 @@ def get_last_ohlc_bybit( symbol, timeframe):
 
     # Convert data to DataFrame
     df = pd.DataFrame(data['result']['list'], columns=['open_time', 'open', 'high', 'low', 'close', 'volume', 'turnover'])
-    df['open_time'] = pd.to_datetime(df['open_time'], unit='ms')
-    df = df.set_index('open_time')
+    # df['open_time'] = pd.to_datetime(df['open_time'], unit='ms')
+    # df = df.set_index('open_time')
 
     return df
 

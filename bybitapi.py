@@ -196,8 +196,8 @@ def place_order(testmode, type, symbol, side, qty):
     # Get the market price
     market_price = float(market_data)
     uid = str(uuid.uuid4())
-
-    # market_order = exchange.privatePostV5OrderCreate(request)
+    qty = round(qty,6)
+    # market_order = exchange.privatePostV5OrderCreate(request) 0.000048
     market_order = get_session(TEST).place_order(
         category="spot",
         symbol=symbol,
@@ -212,23 +212,23 @@ def place_order(testmode, type, symbol, side, qty):
 
     # Calculate initial take profit and stop loss prices using ATR
     takeprofitprice, stoplossprice = calculate_prices(market_price, None)
+    if(side=="buy"):
+        # now we need to save this order to a csv called orders and append the stoploss and take profit prices to the row
+        with open('orders.csv', mode='a') as orders_file:
+            fieldnames = ['uid', 'symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice']
+            writer = csv.DictWriter(orders_file, fieldnames=fieldnames)
 
-    # now we need to save this order to a csv called orders and append the stoploss and take profit prices to the row
-    with open('orders.csv', mode='a') as orders_file:
-        fieldnames = ['uid', 'symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice']
-        writer = csv.DictWriter(orders_file, fieldnames=fieldnames)
-
-        writer.writerow({
-            'uid': uid,
-            'symbol': symbol,
-            'side': side,
-            'qty': qty,
-            'entryprice': market_price,
-            'takeprofitprice': takeprofitprice,
-            'stoplossprice': stoplossprice
-        })
-    return market_order
-
+            writer.writerow({
+                'uid': uid,
+                'symbol': symbol,
+                'side': side,
+                'qty': qty,
+                'entryprice': market_price,
+                'takeprofitprice': takeprofitprice,
+                'stoplossprice': stoplossprice
+            })
+        return market_order
+    return None
 
 def place_sell_order(testmode,  marketsymbol, qty):
     """

@@ -1,4 +1,5 @@
 import asyncio
+import decimal
 from functools import partial
 from pybit.unified_trading import WebSocket
 from time import sleep, time
@@ -25,7 +26,7 @@ def refresh_orders():
 def caller(callback):
     callback()
 
-async def check_orders(testmode, symbol, market_price):
+def check_orders(testmode, symbol, market_price):
     global orders
     global last_refresh_time
     print("check orders called")
@@ -37,32 +38,31 @@ async def check_orders(testmode, symbol, market_price):
     # Check for open orders that have reached their take profit or stop loss prices
     for order in orders:
         if not order['profit']:
-            ohlc = get_last_ohlc_bybit(symbol,"5")
+            # ohlc = get_last_ohlc_bybit(symbol,"5")
             entry_price = float(order['entryprice'])
-            takeprofitprice, stoplossprice = calculate_prices(entry_price, ohlc)
-            side = order['side']
+            takeprofitprice, stoplossprice = calculate_prices(entry_price, None )
+            side = order['side'].lower()
             qty = float(order['qty'])
 
-            if (side == 'Buy' and market_price >= takeprofitprice) or (side == 'Sell' and market_price <= takeprofitprice):
+            if (side == 'buy' and market_price >= takeprofitprice) or (side == 'sell' and market_price <= takeprofitprice):
                 # Take profit
-                new_side = 'Sell' if side == 'Buy' else 'Buy'
-                place_order(testmode, symbol, new_side,
-                            takeprofitprice, stoplossprice, qty)
-                order['profit'] = (market_price - takeprofitprice) * \
-                    qty if side == 'Buy' else (
-                        takeprofitprice - market_price) * qty
-            elif (side == 'Buy' and market_price <= stoplossprice) or (side == 'Sell' and market_price >= stoplossprice):
+                new_side = 'Sell' if side == 'buy' else 'buy'
+                place_order(testmode,"market",symbol, new_side,
+                            qty/market_price)
+                order['profit'] = ((decimal.Decimal(market_price) - stoplossprice) * \
+                    decimal.Decimal(qty) if side == 'buy' else (
+                        takeprofitprice - market_price) * (qty))/market_price
+            elif (side == 'buy' and market_price <= stoplossprice) or (side == 'sell' and market_price >= stoplossprice):
                 # Stop loss
-                new_side = 'Sell' if side == 'Buy' else 'Buy'
-                place_order(testmode, symbol, new_side,
-                            takeprofitprice, stoplossprice, qty)
-                order['profit'] = (market_price - stoplossprice) * \
-                    qty if side == 'Buy' else (
-                        stoplossprice - market_price) * qty
+                new_side = 'Sell' if side == 'buy' else 'buy'
+                place_order(testmode,"market",symbol, new_side,
+                            qty/market_price)
+                order['profit'] = ((decimal.Decimal(market_price) - stoplossprice) * \
+                    decimal.Decimal(qty) if side == 'buy' else (
+                        stoplossprice - market_price) * (qty))/market_price
 
     # Save the updated orders back to the CSV file
     save_updated_prices('orders.csv', orders)
-    return
 
 def test():
     print("Hi!")
@@ -95,5 +95,5 @@ def startListening():
         
 
 startListening()
-
+# check_orders(True, "BTCUSDT", 30000)
 
