@@ -70,7 +70,7 @@ class API_Tests(unittest.TestCase):
         qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
         
         # Place a buy order using 2% of USDT balance
-        buy = place_order(TEST, "BTCUSDT", "USDT", 5, 5, qty_rounded)
+        buy = place_order(TEST, "Market","BTCUSDT","buy", qty_rounded)
         
         # Assert that the buy order was successful
         assert buy['retCode'] == 0, f"Buy order failed: {buy}"
