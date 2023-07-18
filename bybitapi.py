@@ -216,8 +216,7 @@ def place_order(testmode, type, symbol, side, qty):
         if(side=="buy"):
             # now we need to save this order to a csv called orders and append the stoploss and take profit prices to the row
             with open('orders.csv', mode='a') as orders_file:
-                fieldnames = ['uid','date', 'symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice']
-                writer = csv.DictWriter(orders_file, fieldnames=fieldnames)
+                writer = csv.DictWriter(orders_file, fieldnames=ORDERCSVFIELDNAMES)
 
                 writer.writerow({
                     'uid': uid,
@@ -229,7 +228,7 @@ def place_order(testmode, type, symbol, side, qty):
                     'takeprofitprice': takeprofitprice,
                     'stoplossprice': stoplossprice
                 })
-            return market_order
+        return market_order
     except Exception as e:
         logger(f"An error occurred: {e}")
     return None
