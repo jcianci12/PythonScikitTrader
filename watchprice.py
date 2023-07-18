@@ -16,9 +16,9 @@ orderservice = OrderService()
 def check_orders(testmode, symbol, market_price):
     print("check orders called")
 
-    orders = orderservice.read_orders()
+    orderstocheck = orderservice.read_orders()
     # Check for open orders that have reached their take profit or stop loss prices
-    for order in orders:
+    for order in orderstocheck:
         if not order['profit']:
             # ohlc = get_last_ohlc_bybit(symbol,"5")
             entry_price = float(order['entryprice'])
@@ -50,7 +50,7 @@ def check_orders(testmode, symbol, market_price):
             # Save the updated orders back to the CSV file
         
    
-            orderservice.write_orders('orders.csv', orders)
+            orderservice.write_orders('orders.csv', orderstocheck.copy())
 
 def getOrderProfitLoss(order,entry_price,market_price,qty):
 
