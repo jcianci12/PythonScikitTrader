@@ -49,9 +49,7 @@ def check_orders(testmode, symbol, market_price):
                 new_side = 'Sell' if side == 'buy' else 'buy'
                 place_order(testmode,"market",symbol, new_side,
                             qty/market_price)
-                order['profit'] = ((decimal.Decimal(market_price) - stoplossprice) * \
-                    decimal.Decimal(qty) if side == 'buy' else (
-                        takeprofitprice - market_price) * (qty))/market_price
+                order['profit'] = getOrderProfitLoss(order)
             elif (side == 'buy' and market_price <= stoplossprice) or (side == 'sell' and market_price >= stoplossprice):
                 # Stop loss
                 new_side = 'Sell' if side == 'buy' else 'buy'
@@ -64,21 +62,20 @@ def check_orders(testmode, symbol, market_price):
     # Save the updated orders back to the CSV file
     save_updated_prices('orders.csv', orders)
 
-def test():
-    print("Hi!")
+def getOrderProfitLoss(order):
+    order['profit'] = ((decimal.Decimal(market_price) - stoplossprice) * \
+                    decimal.Decimal(qty) if side == 'buy' else (
+                        takeprofitprice - market_price) * (qty))/market_price
+    return order
 
 def getws():
-
     return WebSocket(
         testnet=True,
         channel_type="spot",
     )
 
-
 def handle_message(message):
-    print(message)
-    
-
+    print(message)  
     if 'topic' in message and message['topic'] == 'tickers.BTCUSDT':
         last_price = float(message['data']['lastPrice'])
         check_orders(True, "BTCUSDT", last_price)

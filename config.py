@@ -44,4 +44,5 @@ SIMULATETRADE = False
 GRAPHVIEWWINDOW = 96
 ALLOWEDTOSELL = False
 
+ORDERCSVFIELDNAMES= ['uid', 'date','symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice', 'profit']
 
