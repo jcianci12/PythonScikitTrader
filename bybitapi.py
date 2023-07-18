@@ -18,6 +18,7 @@ from KEYS import API_KEY, API_SECRET
 import ccxt
 
 from generateTPandSL import calculate_prices
+from ordersservice import OrderService
 
 exchange = ccxt.bybit({
     'apiKey': API_KEY,
@@ -27,7 +28,7 @@ exchange.options['defaultType'] = 'spot'; # very important set spot as default t
 
 DELAY = 5
 TEST_URL = 'https://www.google.com'
-
+orderservice = OrderService()
 
 def get_session(test=True):
     http = HTTP(testnet=False, api_key="...", api_secret="...")
@@ -215,10 +216,20 @@ def place_order(testmode, type, symbol, side, qty):
         takeprofitprice, stoplossprice = calculate_prices(market_price, None)
         if(side=="buy"):
             # now we need to save this order to a csv called orders and append the stoploss and take profit prices to the row
-            with open('orders.csv', mode='a') as orders_file:
-                writer = csv.DictWriter(orders_file, fieldnames=ORDERCSVFIELDNAMES)
+            # with open('orders.csv', mode='a') as orders_file:
+            #     writer = csv.DictWriter(orders_file, fieldnames=ORDERCSVFIELDNAMES)
 
-                writer.writerow({
+            #     writer.writerow({
+            #         'uid': uid,
+            #         'date':datetime.datetime.now(),
+            #         'symbol': symbol,
+            #         'side': side,
+            #         'qty': qty,
+            #         'entryprice': market_price,
+            #         'takeprofitprice': takeprofitprice,
+            #         'stoplossprice': stoplossprice
+            #     })
+            orderservice.add_order({
                     'uid': uid,
                     'date':datetime.datetime.now(),
                     'symbol': symbol,

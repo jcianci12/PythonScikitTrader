@@ -9,13 +9,6 @@ from config import ORDERCSVFIELDNAMES
 
 from get_last_ohlc_bybit import get_last_ohlc_bybit
 
-def save_updated_prices(filename, orders):
-    # Write updated data to CSV file
-    with open(filename, mode='w') as file:
-        writer = csv.DictWriter(file, fieldnames=ORDERCSVFIELDNAMES)
-        writer.writeheader()
-        writer.writerows(orders)
-
 
 
 

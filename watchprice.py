@@ -6,35 +6,17 @@ from time import sleep, time
 import csv
 
 from bybitapi import place_order
-from generateTPandSL import calculate_prices, save_updated_prices
+from generateTPandSL import calculate_prices
 from get_last_ohlc_bybit import get_last_ohlc_bybit
 
-orders = []
-last_refresh_time = 0
+from ordersservice import OrderService
 
-
-def refresh_orders():
-    global orders
-    global last_refresh_time
-
-    # Load the orders from the CSV file
-    with open('orders.csv', mode='r') as orders_file:
-        reader = csv.DictReader(orders_file)
-        orders = list(reader)
-
-    last_refresh_time = time()
-def caller(callback):
-    callback()
+orderservice = OrderService()
 
 def check_orders(testmode, symbol, market_price):
-    global orders
-    global last_refresh_time
     print("check orders called")
 
-    # Refresh the orders if it has been more than 5 seconds since the last refresh
-    if time() - last_refresh_time > 5:
-        refresh_orders()
-
+    orders = orderservice.read_orders()
     # Check for open orders that have reached their take profit or stop loss prices
     for order in orders:
         if not order['profit']:
@@ -52,26 +34,27 @@ def check_orders(testmode, symbol, market_price):
                 orderresult = place_order(testmode,"market",symbol, new_side,
                             qty/market_price)
                 order['exitprice']=market_price
-                order['profit'] = getOrderProfitLoss(order)
+                order['profit'] = getOrderProfitLoss(order,entry_price,market_price,qty)['profit']
             elif (side == 'buy' and market_price <= stoplossprice) or (side == 'sell' and market_price >= stoplossprice):
                 # Stop loss
                 new_side = 'Sell' if side == 'buy' else 'buy'
                 orderresult = place_order(testmode,"market",symbol, new_side,
                             qty/market_price)
                 order['exitprice']=market_price
-                order['profit'] = ((decimal.Decimal(market_price) - stoplossprice) * \
-                    decimal.Decimal(qty) if side == 'buy' else (
-                        stoplossprice - market_price) * (qty))/market_price
+                order['profit'] = getOrderProfitLoss(order,entry_price,market_price,qty)['profit']
+
             newtp,newsl = calculate_prices(entry_price,None)
             order['takeprofitprice'] = newtp
             order['stoplossprice']= newsl
 
-    # Save the updated orders back to the CSV file
-    save_updated_prices('orders.csv', orders)
+            # Save the updated orders back to the CSV file
+        
+   
+            orderservice.write_orders('orders.csv', orders)
 
-def getOrderProfitLoss(order,entry_price):
+def getOrderProfitLoss(order,entry_price,market_price,qty):
 
-    order['profit'] = (market_price -entry_price *qty)*market_price
+    order['profit'] = (market_price-entry_price)*(qty/market_price)
     return order
 
 def getws():
@@ -96,6 +79,6 @@ def startListening():
         sleep(1)
         
 
-startListening()
-# check_orders(True, "BTCUSDT", 30000)
+# startListening()
+check_orders(True, "BTCUSDT", 30000)
 
