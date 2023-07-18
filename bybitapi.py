@@ -215,20 +215,8 @@ def place_order(testmode, type, symbol, side, qty):
         # Calculate initial take profit and stop loss prices using ATR
         takeprofitprice, stoplossprice = calculate_prices(market_price, None)
         if(side=="buy"):
-            # now we need to save this order to a csv called orders and append the stoploss and take profit prices to the row
-            # with open('orders.csv', mode='a') as orders_file:
-            #     writer = csv.DictWriter(orders_file, fieldnames=ORDERCSVFIELDNAMES)
-
-            #     writer.writerow({
-            #         'uid': uid,
-            #         'date':datetime.datetime.now(),
-            #         'symbol': symbol,
-            #         'side': side,
-            #         'qty': qty,
-            #         'entryprice': market_price,
-            #         'takeprofitprice': takeprofitprice,
-            #         'stoplossprice': stoplossprice
-            #     })
+            # now we need to save this order to a csv called orders and append the stoploss and take profit prices to the row          
+         
             orderservice.add_order({
                     'uid': uid,
                     'date':datetime.datetime.now(),
