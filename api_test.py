@@ -10,7 +10,7 @@ from finta import TA
 from requests import patch
 from KEYS import API_KEY, API_SECRET
 
-from bybitapi import cancel_all, cancel_order, create_limit_order, fetch_bybit_current_orders, fetch_bybit_data_v5, fetch_closed_orders, fetch_spot_balance, get_intervals, get_market_ask_price, get_market_bid_price, get_server_time, get_wallet_balance,  place_order, place_sell_order
+from bybitapi import cancel_all, cancel_order, check_orders, create_limit_order, fetch_bybit_current_orders, fetch_bybit_data_v5, fetch_closed_orders, fetch_spot_balance, get_intervals, get_market_ask_price, get_market_bid_price, get_server_time, get_wallet_balance,  place_order, place_sell_order
 from config import BUYTHRESHOLD, INTERVAL, STOPLOSS, TAKEPROFIT, TEST
 from functions.logger import logger
 from generateTPandSL import calculate_prices
@@ -42,20 +42,10 @@ class API_Tests(unittest.TestCase):
         data = fetch_bybit_data_v5(True,start_date,end_date,symbol,interval,category)
         print(data)
         self.assertIsNotNone(data)
-
     
-    # def test_place_sell_order(self):
-    #     symbol = "BTC"
-    #     marketsymbol = "BTCUSDT"
-    #     percent_to_sell = 100
-    #     # Instantiate the object containing the get_capital method        
-    #     response = place_sell_order(TEST,symbol,marketsymbol,100)
-    #     print(response)
-        
-        # Assert that the returned value is a float
-        self.assertEqual("OK", "OK")
-
-
+    def test_calculate_prices(self):
+        result = calculate_prices()
+        assert True
 
     def test_Buy(self):
         """
@@ -69,8 +59,9 @@ class API_Tests(unittest.TestCase):
         qty = (2 / 100) * usdtbalance
         qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
         
+        tp,sl = calculate_prices()
         # Place a buy order using 2% of USDT balance
-        buy = place_order(TEST, "Market","BTCUSDT","buy", qty_rounded)
+        buy = place_order(TEST, "Market","BTCUSDT","buy",tp,sl, qty_rounded)
         
         # Assert that the buy order was successful
         assert buy['retCode'] == 0, f"Buy order failed: {buy}"
@@ -126,6 +117,8 @@ class API_Tests(unittest.TestCase):
             selllogic(confidence_score, btcbalance, btcmarketvalue)
         except Exception as e:
             self.fail(f"selllogic raised an exception: {e}")
+    def test_checkorders(self):
+        check_orders()
 
     def test_send_message(self):
         asyncio.run(send_telegram_message('Your message here'))

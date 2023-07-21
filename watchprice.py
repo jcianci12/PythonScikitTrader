@@ -94,6 +94,6 @@ def startListening():
         sleep(1)
         
 
-startListening()
+# startListening()
 # check_orders(True, "BTCUSDT", 30000)
 

@@ -17,13 +17,13 @@ from functions.logger import logger
 from KEYS import API_KEY, API_SECRET
 import ccxt
 
-from generateTPandSL import calculate_prices
 
 exchange = ccxt.bybit({
     'apiKey': API_KEY,
     'secret': API_SECRET,
 })
-exchange.options['defaultType'] = 'spot'; # very important set spot as default type
+# very important set spot as default type
+exchange.options['defaultType'] = 'spot'
 
 DELAY = 5
 TEST_URL = 'https://www.google.com'
@@ -47,9 +47,11 @@ def get_session(test=True):
 
     return http
 
+
 def convert_interval_to_timespan(interval):
     minutes = interval_map[interval]
     return datetime.timedelta(minutes=minutes)
+
 
 def get_intervals(start_date, end_date, interval):
     interval_timespan = convert_interval_to_timespan(interval)
@@ -57,19 +59,22 @@ def get_intervals(start_date, end_date, interval):
     total_seconds = (end_date - start_date).total_seconds()
 
     total_intervals = total_seconds // time_span_seconds
-    print ("there are " ,datetime.timedelta(seconds=total_seconds).days,"total days in the range.")
-    
+    print("there are ", datetime.timedelta(
+        seconds=total_seconds).days, "total days in the range.")
+
     print(f'total_intervals: {total_intervals}')
     if total_intervals > 200:
         intervals = []
         for i in range(0, int(total_intervals), 200):
-            intervals.append([i * time_span_seconds + start_date.timestamp(), (i + 200) * time_span_seconds + start_date.timestamp()])
+            intervals.append([i * time_span_seconds + start_date.timestamp(),
+                             (i + 200) * time_span_seconds + start_date.timestamp()])
         print(f'intervals: {intervals}')
         return intervals
     else:
         intervals = [[start_date.timestamp(), end_date.timestamp()]]
         print(f'intervals: {intervals}')
         return intervals
+
 
 def fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category):
     # Get the intervals for the given date range and interval
@@ -84,7 +89,8 @@ def fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category):
         start_ts = int(interval_start * 1000)
         end_ts = int(interval_end * 1000)
 
-        print(f"Fetching historical data from {datetime.datetime.fromtimestamp(interval_start)} to {datetime.datetime.fromtimestamp(interval_end)}")
+        print(
+            f"Fetching historical data from {datetime.datetime.fromtimestamp(interval_start)} to {datetime.datetime.fromtimestamp(interval_end)}")
 
         params = {
             'symbol': symbol,
@@ -114,7 +120,8 @@ def fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category):
             return fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category)
 
     # Convert the data to a DataFrame
-    df_new = pd.DataFrame(data, columns=['open_time', 'open', 'high', 'low', 'close', 'volume', 'turnover'])
+    df_new = pd.DataFrame(data, columns=[
+                          'open_time', 'open', 'high', 'low', 'close', 'volume', 'turnover'])
     df_new['timestamp'] = pd.to_datetime(df_new['open_time'], unit='ms')
     df_new.set_index('timestamp', inplace=True)
     df_new.sort_values(by=['open_time'], inplace=True)
@@ -127,10 +134,9 @@ def fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category):
     return df_new
 
 
-
 # %%
 def get_wallet_balance(test, coin):
-    
+
     print("fetching balance on coin ", coin)
     http = get_session(test)
 
@@ -140,16 +146,16 @@ def get_wallet_balance(test, coin):
     for c in coins:
         if c["coin"] == coin:
             wallet_balance = c["availableToWithdraw"]
-            print("current wallet balance available is:" ,wallet_balance)
+            print("current wallet balance available is:", wallet_balance)
             return str(wallet_balance)
     print(f"No wallet balance found for coin: {coin}")
     return "0"
 
 # %%
+
+
 def get_market_bid_price(test, symbol):
     from pybit.unified_trading import HTTP
-
-    
 
     response = get_session().get_tickers(
         category="spot",
@@ -164,12 +170,10 @@ def get_market_bid_price(test, symbol):
     else:
         print("Error:", response['retMsg'])
         return str()
-        
+
 
 def get_market_ask_price(test, symbol):
     from pybit.unified_trading import HTTP
-
-    
 
     response = get_session().get_tickers(
         category="spot",
@@ -189,17 +193,22 @@ def get_market_ask_price(test, symbol):
 # get_market_ask_price(True, "BTCUSDT")
 # %%
 
-def place_order(testmode, type, symbol, side, qty):
+def place_order(testmode, type, symbol, side, tp, sl, qty):
     try:
         # Get the market data
         market_data = get_market_ask_price(testmode, symbol="BTCUSDT")
 
         # Get the market price
         market_price = float(market_data)
+        btcqty = float(qty)/market_price
+        tp = round(tp, 2)
+        sl = round(sl, 2)
+
         uid = str(uuid.uuid4())
-        qty = round(qty,6)
+        qty = round(qty, 6)
+        btcqty = round(btcqty, 6)
         # market_order = exchange.privatePostV5OrderCreate(request) 0.000048
-        market_order = get_session(TEST).place_order(
+        initial_order = get_session(TEST).place_order(
             category="spot",
             symbol=symbol,
             side=side,
@@ -209,30 +218,109 @@ def place_order(testmode, type, symbol, side, qty):
             orderLinkId=uid,
         )
 
-        print("Market order", market_order)
+        if (tp != None):
+            # Place a take profit order
+            take_profit_order = get_session(TEST).place_order(
+                category="spot",
+                symbol=symbol,
+                side="sell",
+                orderType="Limit",
+                qty=str(btcqty),  # in btc
+                timeInForce="GTC",
+                orderLinkId=uid+"tp",
+                price=tp
+            )
+        if (sl != None):
+            # Place a stop loss order
+            stop_loss_order = get_session(TEST).place_order(
+                category="spot",
+                symbol=symbol,
+                side="sell",
+                orderType="Limit",
+                qty=str(btcqty),  # in btc
+                timeInForce="GTC",
+                orderLinkId=uid+"sl",
+                price=sl
+            )
 
-        # Calculate initial take profit and stop loss prices using ATR
-        takeprofitprice, stoplossprice = calculate_prices(market_price, None)
-        if(side=="buy"):
-            # now we need to save this order to a csv called orders and append the stoploss and take profit prices to the row
-            with open('orders.csv', mode='a') as orders_file:
-                fieldnames = ['uid','date', 'symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice']
-                writer = csv.DictWriter(orders_file, fieldnames=fieldnames)
+# Save the order details to a CSV file
+        with open('orders.csv', mode='a') as file:
+            writer = csv.writer(file)
 
-                writer.writerow({
-                    'uid': uid,
-                    'date':datetime.datetime.now(),
-                    'symbol': symbol,
-                    'side': side,
-                    'qty': qty,
-                    'entryprice': market_price,
-                    'takeprofitprice': takeprofitprice,
-                    'stoplossprice': stoplossprice
-                })
-            return market_order
+            # Write the header row if the file is empty
+            if file.tell() == 0:
+                writer.writerow(ORDERCOLUMNS)
+
+            # Write the order details
+            writer.writerow([
+                initial_order['result']['orderId'],
+                datetime.datetime.now(),
+                symbol,
+                side,
+                qty,
+                market_price,
+                tp,
+                sl,
+                take_profit_order['result']['orderId'],
+                stop_loss_order['result']['orderId'],
+                ""
+            ])
+            return initial_order
     except Exception as e:
         logger(f"An error occurred: {e}")
     return None
+
+
+def check_orders():
+    session = get_session(TEST)
+
+    # Read the order details from the CSV file
+    with open('orders.csv', mode='r') as file:
+        reader = csv.DictReader(file)
+        orders = list(reader)
+
+    # Check the status of each order
+    for order in orders:
+        # Check the status of the take profit order
+        take_profit_status = session.query_conditional_order(
+            stop_order_id=order['takeprofitid']
+        ).result()['result']['stop_order_status']
+
+        # Check the status of the stop loss order
+        stop_loss_status = session.query_conditional_order(
+            stop_order_id=order['stoplossid']
+        ).result()['result']['stop_order_status']
+
+        # Cancel the other order if one is executed
+        if take_profit_status == 'Filled':
+            session.cancel_conditional_order(stop_order_id=order['stoplossid'])
+
+            # Calculate the profit
+            profit = float(order['takeprofitprice']) - \
+                float(order['entryprice'])
+
+            # Update the CSV file with the profit and completed time
+            order['profit'] = profit
+            order['completedtime'] = session.get_time().result()['time_now']
+        elif stop_loss_status == 'Filled':
+            session.cancel_conditional_order(
+                stop_order_id=order['takeprofitid'])
+
+            # Calculate the profit
+            profit = float(order['stoplossprice']) - float(order['entryprice'])
+
+            # Update the CSV file with the profit and completed time
+            order['profit'] = profit
+            order['completedtime'] = session.get_time().result()['time_now']
+
+    # Write the updated order details to the CSV file
+    with open('orders.csv', mode='w') as file:
+        fieldnames = ['uid', 'symbol', 'side', 'qty', 'entryprice', 'takeprofitprice',
+                      'stoplossprice', 'takeprofitid', 'stoplossid', 'profit', 'completedtime']
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+
+        writer.writeheader()
+        writer.writerows(orders)
 
 
 def place_sell_order(testmode,  marketsymbol, qty):
@@ -245,17 +333,16 @@ def place_sell_order(testmode,  marketsymbol, qty):
     """
     try:
         session = get_session(testmode)
-        
+
         # Check if qty is less than the minimum order quantity
         min_qty = 0.000001
-        qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
+        qty_rounded = decimal.Decimal(qty).quantize(
+            decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
 
         if qty_rounded < min_qty:
             logger(f"Sale of {qty} was below minimum amount.")
             qty_rounded = min_qty
             return None
-        
-
 
         response = session.place_order(
             category="spot",
@@ -273,16 +360,9 @@ def place_sell_order(testmode,  marketsymbol, qty):
     return response
 
 
-
-
-
-
-
 def fetch_bybit_current_orders():
     from pybit.unified_trading import HTTP
     import pandas as pd
-
-    
 
     response = get_session().get_open_orders(
         category="spot",
@@ -298,11 +378,10 @@ def fetch_bybit_current_orders():
         # Filter by outstanding orders
         df_new = df_new[df_new['orderStatus'] == 'New']
 
-        print("returning",df_new)
+        print("returning", df_new)
         return df_new
     else:
         print("Error:", response['retMsg'])
-    
 
 
 # print(Test_Buy_and_Sell())
@@ -312,12 +391,14 @@ def cancel_all(test, coin):
     response = session.cancel_all_orders(category="spot", settleCoin=coin)
     return response
 
+
 def get_server_time():
     response = requests.get('https://api.bybit.com/v2/public/time')
     data = response.json()
     server_time = data['time_now']
-    logger("server time is:" ,server_time)
+    logger("server time is:", server_time)
     return server_time
+
 
 def load_time_difference(self, params={}):
     serverTime = self.fetch_time(params)
@@ -325,23 +406,26 @@ def load_time_difference(self, params={}):
     self.options['timeDifference'] = after - serverTime
     return self.options['timeDifference']
 
-def fetch_time(self, params={}):
-    response = self.publicGetTime(params) 
-    return self.safe_timestamp(response, 'time_now')
 
+def fetch_time(self, params={}):
+    response = self.publicGetTime(params)
+    return self.safe_timestamp(response, 'time_now')
 
 
 async def fetch_spot_balance(exchange):
     balance = await exchange.fetch_balance()
     print("Spot Balance:", balance)
 
+
 async def create_limit_order(exchange, symbol, order_type, side, amount, price):
     create_order = await exchange.create_order(symbol, order_type, side, amount, price)
     print('Created Order ID:', create_order['id'])
 
+
 async def cancel_order(exchange, order_id, symbol):
     canceled_order = await exchange.cancel_order(order_id, symbol)
     print('Canceled Order ID:', canceled_order['id'])
+
 
 async def fetch_closed_orders(exchange, symbol):
     orders = await exchange.fetch_closed_orders(symbol)
