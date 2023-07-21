@@ -52,6 +52,8 @@ def check_orders(testmode, symbol, market_price):
    
             orderservice.write_orders('orders.csv', orderstocheck.copy())
 
+
+
 def getOrderProfitLoss(order,entry_price,market_price,qty):
 
     order['profit'] = (market_price-entry_price)*(qty/market_price)
@@ -66,8 +68,11 @@ def getws():
 def handle_message(message):
     print(message)  
     if 'topic' in message and message['topic'] == 'tickers.BTCUSDT':
-        last_price = float(message['data']['lastPrice'])
-        check_orders(True, "BTCUSDT", last_price)
+        last_price = message['data']['usdIndexPrice']
+        if(last_price!=None and last_price!=''):
+            last_price = float(last_price)
+            check_orders(True, "BTCUSDT", last_price)
+
  
 def startListening():
     getws().ticker_stream(
@@ -79,6 +84,7 @@ def startListening():
         sleep(1)
         
 
-# startListening()
-check_orders(True, "BTCUSDT", 30000)
+startListening()
+# check_orders(True, "BTCUSDT", 30000)
+# handle_message({'topic': 'tickers.BTCUSDT', 'ts': 1689726754342, 'type': 'snapshot', 'cs': 1190736060, 'data': {'symbol': 'BTCUSDT', 'lastPrice': '29790.14', 'highPrice24h': '30288.62', 'lowPrice24h': '29256.94', 'prevPrice24h': '30164.59', 'volume24h': '101.55343', 'turnover24h': '3034869.53650945', 'price24hPcnt': '-0.0124', 'usdIndexPrice': ''}})
 

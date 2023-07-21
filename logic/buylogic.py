@@ -1,8 +1,10 @@
+import asyncio
 import decimal
 from bybitapi import get_market_ask_price, get_market_bid_price, place_order
 from config import *
 from functions.logger import logger
 from functions.map_range import map_range
+from messengerservice import send_telegram_message
 
 
 def buylogic(confidence_score,  usdtbalance):
@@ -33,7 +35,8 @@ def buylogic(confidence_score,  usdtbalance):
     # Check if the transaction amount is greater than the minimum transaction size
     if buyamountinusdt > min_qty:
         logger("Enough USDT to cover purchase of ", "USDT", " balance is:", usdtbalance)
-        
+        # asyncio.run(send_telegram_message('Update'))
+
         # Calculate the quantity to buy
         # qty = (capitalpercent / 100) * usdtbalance
         # qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN) 

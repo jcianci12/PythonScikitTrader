@@ -24,8 +24,8 @@ def calculate_prices(entry_price, ohlc=[]):
     # print(atr)
 
     # Calculate take profit and stop loss prices
-    takeprofitprice = decimal.Decimal(entry_price) + 1 * decimal.Decimal(atr[len(atr)-1])
-    stoplossprice = decimal.Decimal(entry_price) - 1 * decimal.Decimal(atr[len(atr)-1])
+    takeprofitprice = decimal.Decimal(entry_price) + 3 * decimal.Decimal(atr[len(atr)-1])
+    stoplossprice = decimal.Decimal(entry_price) - 2 * decimal.Decimal(atr[len(atr)-1])
 
     return takeprofitprice, stoplossprice
 

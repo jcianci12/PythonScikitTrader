@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import decimal
 import json
@@ -17,6 +18,7 @@ from generateTPandSL import calculate_prices
 from logic.buylogic import buylogic
 from logic.selllogic import selllogic
 from messengerservice import send_telegram_message
+from watchprice import check_orders
 
 
 
@@ -61,6 +63,11 @@ class API_Tests(unittest.TestCase):
         # Assert that the buy order was successful
         assert buy['retCode'] == 0, f"Buy order failed: {buy}"
 
+    def check_orders():
+        
+        result = check_orders(True, "BTCUSDT", get_market_ask_price(TEST,"BTCUSDT"))
+        print(result)
+        assert True
 
 
     def test_Sell(self):
