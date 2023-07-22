@@ -44,4 +44,4 @@ SIMULATETRADE = False
 GRAPHVIEWWINDOW = 96
 ALLOWEDTOSELL = False
 
-ORDERCOLUMNS = ['orderid','dateopened', 'symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice', 'tpid', 'slid','profit']
+ORDERCOLUMNS = ['uid', 'date','symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice', 'takeprofitid', 'stoplossid', 'profit', 'completedtime']

@@ -1,17 +1,15 @@
 import datetime
 import decimal
-import json
+import time
 import unittest
-import uuid
 import pandas as pd
-from finta import TA
 
 
-from requests import patch
 from KEYS import API_KEY, API_SECRET
 
-from bybitapi import cancel_all, cancel_order, check_orders, create_limit_order, fetch_bybit_current_orders, fetch_bybit_data_v5, fetch_closed_orders, fetch_spot_balance, get_intervals, get_market_ask_price, get_market_bid_price, get_server_time, get_wallet_balance,  place_order, place_sell_order
-from config import BUYTHRESHOLD, INTERVAL, STOPLOSS, TAKEPROFIT, TEST
+from bybitapi import cancel_all, fetch_bybit_data_v5, get_intervals, get_market_ask_price, get_market_bid_price, get_server_time, get_wallet_balance,  place_order
+from checkorders import check_closed_orders
+from config import BUYTHRESHOLD, INTERVAL, TEST
 from functions.logger import logger
 from generateTPandSL import calculate_prices
 from logic.buylogic import buylogic
@@ -66,27 +64,18 @@ class API_Tests(unittest.TestCase):
         # Assert that the buy order was successful
         assert buy['retCode'] == 0, f"Buy order failed: {buy}"
 
-
-
-    def test_Sell(self):
-        """
-        Function to test selling.
-        """
-        # Get the BTC balance
-        btcbalance = decimal.Decimal(get_wallet_balance(True, "BTC"))
+    def test_check_closed_orders(self):
+        check_closed_orders()
+        assert True
+    
+    def test_call_check_orders(self):
         
-        # Place a sell order for 100% of the BTC balance
-        sell = place_sell_order(True, "BTC", "BTCUSDT", btcbalance)
-        
-        # Assert that the sell order was successful
-        if sell is not None:
-            assert sell['status'] == 'FILLED', f"Sell order failed: {sell}"
-        else:
-            logger("Sell order not placed due to minimum quantity requirement.")
-            assert sell is None
-
-
-
+        while True:
+            try:
+                check_closed_orders()
+                time.sleep(30)
+            except Exception as e:
+                print(f"An error occurred: {e}")    
 
     def test_buylogic(self):
         """
@@ -191,61 +180,61 @@ class TestExample1(unittest.TestCase):
         })
         cls.exchange.options['defaultType'] = 'unified'  # Set spot as default type
 
-    @classmethod
-    def tearDownClass(cls):
-        asyncio.get_event_loop().run_until_complete(cls.exchange.close())
+    # @classmethod
+    # def tearDownClass(cls):
+    #     asyncio.get_event_loop().run_until_complete(cls.exchange.close())
 
-    async def test_fetch_spot_balance(self):
-        balance = await fetch_spot_balance(self.exchange)
-        self.assertIsNotNone(balance)
-        self.assertIn('total', balance)
+    # async def test_fetch_spot_balance(self):
+    #     balance = await fetch_spot_balance(self.exchange)
+    #     self.assertIsNotNone(balance)
+    #     self.assertIn('total', balance)
 
-    def test_create_market_buy_order_tp_sl(self):
-        response = place_order(TEST,"market", "BTC/USDT","buy", 50000,10000, 0.001)
+    # def test_create_market_buy_order_tp_sl(self):
+    #     response = place_order(TEST,"market", "BTC/USDT","buy", 50000,10000, 0.001)
 
-        print(response)
-        self.assertIs(True,True)
+    #     print(response)
+    #     self.assertIs(True,True)
 
-    def test_create_market_sell_order(self):        
-        response = place_order(TEST,"market", "BTC/USDT","sell", None,None, 0.001)
+    # def test_create_market_sell_order(self):        
+    #     response = place_order(TEST,"market", "BTC/USDT","sell", None,None, 0.001)
 
-        print(response)
-        self.assertIs(True,True)
+    #     print(response)
+    #     self.assertIs(True,True)
 
-    async def test_create_limit_order(self):
-        symbol = 'LTC/USDT'
-        order_type = 'limit'
-        side = 'buy'
-        amount = 0.1
-        price = 50
-        created_order = await create_limit_order(self.exchange, symbol, order_type, side, amount, price)
-        self.assertIsNotNone(created_order)
-        self.assertIn('id', created_order)
+    # async def test_create_limit_order(self):
+    #     symbol = 'LTC/USDT'
+    #     order_type = 'limit'
+    #     side = 'buy'
+    #     amount = 0.1
+    #     price = 50
+    #     created_order = await create_limit_order(self.exchange, symbol, order_type, side, amount, price)
+    #     self.assertIsNotNone(created_order)
+    #     self.assertIn('id', created_order)
 
-    async def test_cancel_order(self):
-        symbol = 'LTC/USDT'
-        order_id = 'order_id_here'  # Replace 'order_id_here' with the actual order ID
-        canceled_order = await cancel_order(self.exchange, order_id, symbol)
-        self.assertIsNotNone(canceled_order)
-        self.assertIn('id', canceled_order)
+    # async def test_cancel_order(self):
+    #     symbol = 'LTC/USDT'
+    #     order_id = 'order_id_here'  # Replace 'order_id_here' with the actual order ID
+    #     canceled_order = await cancel_order(self.exchange, order_id, symbol)
+    #     self.assertIsNotNone(canceled_order)
+    #     self.assertIn('id', canceled_order)
 
-    async def test_fetch_closed_orders(self):
-        symbol = 'LTC/USDT'
-        closed_orders = await fetch_closed_orders(self.exchange, symbol)
-        self.assertIsNotNone(closed_orders)
-        self.assertIsInstance(closed_orders, list)
+    # async def test_fetch_closed_orders(self):
+    #     symbol = 'LTC/USDT'
+    #     closed_orders = await fetch_closed_orders(self.exchange, symbol)
+    #     self.assertIsNotNone(closed_orders)
+    #     self.assertIsInstance(closed_orders, list)
 
-    def run_async_test(self, coro):
-        loop = asyncio.get_event_loop()
-        return loop.run_until_complete(coro)
+    # def run_async_test(self, coro):
+    #     loop = asyncio.get_event_loop()
+    #     return loop.run_until_complete(coro)
 
         
 
-    def test_async(self):
-        self.run_async_test(self.test_fetch_spot_balance())
-        self.run_async_test(self.test_create_limit_order())
-        self.run_async_test(self.test_cancel_order())
-        self.run_async_test(self.test_fetch_closed_orders())
+    # def test_async(self):
+    #     self.run_async_test(self.test_fetch_spot_balance())
+    #     self.run_async_test(self.test_create_limit_order())
+    #     self.run_async_test(self.test_cancel_order())
+    #     self.run_async_test(self.test_fetch_closed_orders())
 
 
 

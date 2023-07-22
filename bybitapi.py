@@ -205,8 +205,8 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
         sl = round(sl, 2)
 
         uid = str(uuid.uuid4())
-        qty = round(qty, 6)
-        btcqty = round(btcqty, 6)
+        qty = round(qty, 5)
+        btcqty = round(btcqty, 5)
         # market_order = exchange.privatePostV5OrderCreate(request) 0.000048
         initial_order = get_session(TEST).place_order(
             category="spot",
@@ -228,7 +228,11 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
                 qty=str(btcqty),  # in btc
                 timeInForce="GTC",
                 orderLinkId=uid+"tp",
-                price=tp
+                triggerPrice=tp,
+                triggerDirection="1",
+                price=tp-10,
+                orderFilter="tpslOrder"
+
             )
         if (sl != None):
             # Place a stop loss order
@@ -240,7 +244,10 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
                 qty=str(btcqty),  # in btc
                 timeInForce="GTC",
                 orderLinkId=uid+"sl",
-                price=sl
+                triggerPrice=sl,
+                triggerDirection="2",
+                price=sl+10,
+                orderFilter="tpslOrder"
             )
 
 # Save the order details to a CSV file
@@ -254,10 +261,11 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
             # Write the order details
             writer.writerow([
                 initial_order['result']['orderId'],
-                datetime.datetime.now(),
+                                datetime.datetime.now(),
+
                 symbol,
                 side,
-                qty,
+                                qty,
                 market_price,
                 tp,
                 sl,
@@ -270,118 +278,15 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
         logger(f"An error occurred: {e}")
     return None
 
-
-def check_orders():
-    session = get_session(TEST)
-
-    # Read the order details from the CSV file
-    with open('orders.csv', mode='r') as file:
-        reader = csv.DictReader(file)
-        orders = list(reader)
-
-    # Check the status of each order
-    for order in orders:
-        # Check the status of the take profit order
-        take_profit_status = session.query_conditional_order(
-            stop_order_id=order['takeprofitid']
-        ).result()['result']['stop_order_status']
-
-        # Check the status of the stop loss order
-        stop_loss_status = session.query_conditional_order(
-            stop_order_id=order['stoplossid']
-        ).result()['result']['stop_order_status']
-
-        # Cancel the other order if one is executed
-        if take_profit_status == 'Filled':
-            session.cancel_conditional_order(stop_order_id=order['stoplossid'])
-
-            # Calculate the profit
-            profit = float(order['takeprofitprice']) - \
-                float(order['entryprice'])
-
-            # Update the CSV file with the profit and completed time
-            order['profit'] = profit
-            order['completedtime'] = session.get_time().result()['time_now']
-        elif stop_loss_status == 'Filled':
-            session.cancel_conditional_order(
-                stop_order_id=order['takeprofitid'])
-
-            # Calculate the profit
-            profit = float(order['stoplossprice']) - float(order['entryprice'])
-
-            # Update the CSV file with the profit and completed time
-            order['profit'] = profit
-            order['completedtime'] = session.get_time().result()['time_now']
-
-    # Write the updated order details to the CSV file
-    with open('orders.csv', mode='w') as file:
-        fieldnames = ['uid', 'symbol', 'side', 'qty', 'entryprice', 'takeprofitprice',
-                      'stoplossprice', 'takeprofitid', 'stoplossid', 'profit', 'completedtime']
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
-
-        writer.writeheader()
-        writer.writerows(orders)
-
-
-def place_sell_order(testmode,  marketsymbol, qty):
-    """
-    Function to place a sell order.
-    :param testmode: Boolean indicating if test mode is enabled.
-    :param capitalsymbol: The symbol for the capital asset.
-    :param marketsymbol: The symbol for the market asset.
-    :param qty: The quantity to sell.
-    """
+def cancel_order(symbol,id):
     try:
-        session = get_session(testmode)
-
-        # Check if qty is less than the minimum order quantity
-        min_qty = 0.000001
-        qty_rounded = decimal.Decimal(qty).quantize(
-            decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
-
-        if qty_rounded < min_qty:
-            logger(f"Sale of {qty} was below minimum amount.")
-            qty_rounded = min_qty
-            return None
-
-        response = session.place_order(
+        get_session(TEST).cancel_order(
             category="spot",
-            symbol=marketsymbol,
-            side="Sell",
-            orderType="Market",
-            qty=str(qty_rounded),
-            timeInForce="GTC",
-            orderLinkId=str(uuid.uuid4()),
+            symbol=symbol,
+            orderId=id
         )
     except Exception as e:
-        Logger(f"the error: {e}")
-        raise e
-
-    return response
-
-
-def fetch_bybit_current_orders():
-    from pybit.unified_trading import HTTP
-    import pandas as pd
-
-    response = get_session().get_open_orders(
-        category="spot",
-        symbol="BTCUSDT",
-        openOnly=0,
-        limit=20,
-    )
-
-    if response['retCode'] == 0:
-        data = response['result']['list']
-        df_new = pd.DataFrame(data)
-
-        # Filter by outstanding orders
-        df_new = df_new[df_new['orderStatus'] == 'New']
-
-        print("returning", df_new)
-        return df_new
-    else:
-        print("Error:", response['retMsg'])
+        logger(f"An error occurred: {e}")
 
 
 # print(Test_Buy_and_Sell())
@@ -422,9 +327,9 @@ async def create_limit_order(exchange, symbol, order_type, side, amount, price):
     print('Created Order ID:', create_order['id'])
 
 
-async def cancel_order(exchange, order_id, symbol):
-    canceled_order = await exchange.cancel_order(order_id, symbol)
-    print('Canceled Order ID:', canceled_order['id'])
+# async def cancel_order(exchange, order_id, symbol):
+#     canceled_order = await exchange.cancel_order(order_id, symbol)
+#     print('Canceled Order ID:', canceled_order['id'])
 
 
 async def fetch_closed_orders(exchange, symbol):
