@@ -41,7 +41,7 @@ def buylogic(confidence_score,  usdtbalance):
         
         # Place the buy order
         # response = place_order(TEST, "BTCUSDT", "USDT",TAKEPROFIT,STOPLOSS, qty_rounded)
-        tp,sl = calculate_prices()
+        tp,sl = calculate_prices(None)
         response = place_order(TEST,"market", "BTCUSDT","buy",tp,sl, buyamountinusdt)
 
         print(response)

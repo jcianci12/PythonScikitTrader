@@ -42,7 +42,7 @@ class API_Tests(unittest.TestCase):
         self.assertIsNotNone(data)
     
     def test_calculate_prices(self):
-        result = calculate_prices()
+        result = calculate_prices(None)
         assert True
 
     def test_Buy(self):
@@ -57,7 +57,7 @@ class API_Tests(unittest.TestCase):
         qty = (2 / 100) * usdtbalance
         qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
         
-        tp,sl = calculate_prices()
+        tp,sl = calculate_prices(None)
         # Place a buy order using 2% of USDT balance
         buy = place_order(TEST, "Market","BTCUSDT","buy",tp,sl, qty_rounded)
         

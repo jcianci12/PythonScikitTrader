@@ -3,6 +3,8 @@ from config import LOOKAHEADVALUE, PERCENTCHANGEINDICATOR
 import pandas as pd
 from finta import TA
 
+from generateTPandSL import calculate_prices, get_tp_sl_from_ATR
+
 def _exponential_smooth(data, alpha):
     """
     Function that exponentially smooths dataset so values are less 'rigid'
@@ -18,12 +20,13 @@ def _produce_movement_indicators(data):
     :param window: number of days, or rows to look ahead to see what the price did
     """
     targetAmount = data["close"] +(data["close"]* PERCENTCHANGEINDICATOR )
-
-    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= targetAmount
+    #get the takeprofit price
+    tp,sl = get_tp_sl_from_ATR(data['14 period ATR'],data["close"])
+    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= tp[len(data)-1]
     predictionup = predictionup.iloc[:-LOOKAHEADVALUE]
     data["pred"] = predictionup.astype(int)
 
-    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= data["close"]
+    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= sl[len(data)-1]
     predictiondec = predictiondec.iloc[:-LOOKAHEADVALUE]
     data["preddec"] = predictiondec.astype(int)
 

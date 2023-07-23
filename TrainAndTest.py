@@ -154,7 +154,6 @@ def trade_loop():
            "sell signal:", confidence_scoredec)
     
 
-    # calculate_prices(bid_price,None)
     # buylogic(1, usdtbalance)
     if (confidence_scoreinc == 1 and confidence_scoredec == 0):
         buylogic(1, usdtbalance)
