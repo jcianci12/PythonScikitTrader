@@ -3,6 +3,7 @@ from bybitapi import get_market_ask_price, get_market_bid_price, place_order
 from config import *
 from functions.logger import logger
 from functions.map_range import map_range
+from generateTPandSL import calculate_prices
 
 
 def buylogic(confidence_score,  usdtbalance):
@@ -40,7 +41,8 @@ def buylogic(confidence_score,  usdtbalance):
         
         # Place the buy order
         # response = place_order(TEST, "BTCUSDT", "USDT",TAKEPROFIT,STOPLOSS, qty_rounded)
-        response = place_order(TEST,"market", "BTCUSDT","buy", buyamountinusdt)
+        tp,sl = calculate_prices()
+        response = place_order(TEST,"market", "BTCUSDT","buy",tp,sl, buyamountinusdt)
 
         print(response)
     else:

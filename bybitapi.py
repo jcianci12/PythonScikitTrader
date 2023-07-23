@@ -230,7 +230,7 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
                 orderLinkId=uid+"tp",
                 triggerPrice=tp,
                 triggerDirection="1",
-                price=tp-10,
+                price=tp,
                 orderFilter="tpslOrder"
 
             )
@@ -246,7 +246,7 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
                 orderLinkId=uid+"sl",
                 triggerPrice=sl,
                 triggerDirection="2",
-                price=sl+10,
+                price=sl,
                 orderFilter="tpslOrder"
             )
 
@@ -261,11 +261,10 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
             # Write the order details
             writer.writerow([
                 initial_order['result']['orderId'],
-                                datetime.datetime.now(),
-
+                datetime.datetime.now(),
                 symbol,
                 side,
-                                qty,
+                qty,
                 market_price,
                 tp,
                 sl,
@@ -278,7 +277,8 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
         logger(f"An error occurred: {e}")
     return None
 
-def cancel_order(symbol,id):
+
+def cancel_order(symbol, id):
     try:
         get_session(TEST).cancel_order(
             category="spot",
