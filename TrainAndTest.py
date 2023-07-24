@@ -159,7 +159,7 @@ def trade_loop():
         buylogic(1, usdtbalance)
         plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
             usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
-        asyncio.run(send_telegram_message('Update'))
+        # asyncio.run(send_telegram_message('Update'))
 
     elif (confidence_scoreinc == 0 and confidence_scoredec == 1):
         selllogic(1, btcbalance, bid_price)

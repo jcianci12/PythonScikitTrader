@@ -205,7 +205,7 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
         sl = round(sl, 2)
 
         uid = str(uuid.uuid4())
-        qty = round(qty, 5)
+        qty = round(qty, 2)
         btcqty = round(btcqty, 5)
         # market_order = exchange.privatePostV5OrderCreate(request) 0.000048
         initial_order = get_session(TEST).place_order(
@@ -222,32 +222,25 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
             # Place a take profit order
             take_profit_order = get_session(TEST).place_order(
                 category="spot",
-                symbol=symbol,
+                symbol="BTCUSDT",
+                orderType="Market",
                 side="sell",
-                orderType="Limit",
-                qty=str(btcqty),  # in btc
-                timeInForce="GTC",
-                orderLinkId=uid+"tp",
-                triggerPrice=tp,
-                triggerDirection="1",
-                price=tp,
-                orderFilter="tpslOrder"
-
+                triggerPrice=str(tp),
+                price=str(tp),
+                qty=str(qty),
+                orderLinkId=uid+"tp"
             )
         if (sl != None):
             # Place a stop loss order
             stop_loss_order = get_session(TEST).place_order(
-                category="spot",
-                symbol=symbol,
+                symbol="BTCUSDT",
+                orderType="Market",
                 side="sell",
-                orderType="Limit",
-                qty=str(btcqty),  # in btc
-                timeInForce="GTC",
-                orderLinkId=uid+"sl",
-                triggerPrice=sl,
-                triggerDirection="2",
-                price=sl,
-                orderFilter="tpslOrder"
+                triggerPrice=str(sl),
+                price=str(sl),
+                qty=str(qty),
+                orderLinkId=uid+"sl"
+
             )
 
 # Save the order details to a CSV file

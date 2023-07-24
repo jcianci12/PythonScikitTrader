@@ -28,11 +28,11 @@ def calculate_prices(ohlc):
     if(ohlc==None):
         ohlc =get_last_ohlc_bybit("BTCUSDT","5") 
         ohlc = ohlc.apply(pd.to_numeric, errors='coerce')
-    else:
-        entry_price = get_market_bid_price(TEST,"BTCUSDT")
+    # else:
+    entry_price = get_market_bid_price(TEST,"BTCUSDT")
         # Calculate ATR using finta
 
-        atr = TA.ATR(ohlc)
+    atr = TA.ATR(ohlc)
         # print(atr)
 
     # Calculate take profit and stop loss prices
@@ -43,7 +43,8 @@ def calculate_prices(ohlc):
     return tp, sl
 
 def get_tp_sl_from_ATR(atr,entry_price):
+    entry_price = float(entry_price)
     # Calculate take profit and stop loss prices
-    tp = (entry_price) + 2 * (atr[len(atr)-1])
-    sl = (entry_price) - 1 * (atr[len(atr)-1])
+    tp = float(entry_price) + 3 * (atr[len(atr)-1])
+    sl = float(entry_price) - 2 * (atr[len(atr)-1])
     return tp,sl

@@ -21,12 +21,12 @@ def _produce_movement_indicators(data):
     """
     targetAmount = data["close"] +(data["close"]* PERCENTCHANGEINDICATOR )
     #get the takeprofit price
-    tp,sl = get_tp_sl_from_ATR(data['14 period ATR'],data["close"])
-    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= tp[len(data)-1]
+    tp,sl = get_tp_sl_from_ATR(data['14 period ATR'],data["close"].tail(1))
+    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= tp
     predictionup = predictionup.iloc[:-LOOKAHEADVALUE]
     data["pred"] = predictionup.astype(int)
 
-    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= sl[len(data)-1]
+    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= sl
     predictiondec = predictiondec.iloc[:-LOOKAHEADVALUE]
     data["preddec"] = predictiondec.astype(int)
 
