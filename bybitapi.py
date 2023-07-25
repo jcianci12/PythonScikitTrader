@@ -204,44 +204,32 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
         tp = round(tp, 2)
         sl = round(sl, 2)
 
-        uid = str(uuid.uuid4())
-        qty = round(qty, 2)
-        btcqty = round(btcqty, 5)
-        # market_order = exchange.privatePostV5OrderCreate(request) 0.000048
-        initial_order = get_session(TEST).place_order(
-            category="spot",
-            symbol=symbol,
-            side=side,
-            orderType="Market",
-            qty=str(qty),  # in btc
-            timeInForce="GTC",
-            orderLinkId=uid,
-        )
+        exchange = ccxt.bybit({
+            'apiKey': API_KEY,
+            'secret': API_SECRET,
+        })
+        exchange.options['defaultType'] = 'spot'
+        # exchange.verbose = True
 
-        if (tp != None):
-            # Place a take profit order
-            take_profit_order = get_session(TEST).place_order(
-                category="spot",
-                symbol="BTCUSDT",
-                orderType="Market",
-                side="sell",
-                triggerPrice=str(tp),
-                price=str(tp),
-                qty=str(qty),
-                orderLinkId=uid+"tp"
-            )
-        if (sl != None):
-            # Place a stop loss order
-            stop_loss_order = get_session(TEST).place_order(
-                symbol="BTCUSDT",
-                orderType="Market",
-                side="sell",
-                triggerPrice=str(sl),
-                price=str(sl),
-                qty=str(qty),
-                orderLinkId=uid+"sl"
 
-            )
+        # # Python
+        symbol = 'BTC/USDT'
+        type = 'market'  # or 'market'
+        side = 'buy'
+        amount = btcqty  # your amount
+        price = market_price  # your price
+        stopLossTriggerPrice = sl
+        TakeProfitTriggerPrice = tp
+        tpparams = {
+            'triggerPrice': TakeProfitTriggerPrice,  # your stop price
+        }
+        slparams = {
+            'triggerPrice': stopLossTriggerPrice,  # your stop price
+        }
+
+        initial_order = exchange.create_order(symbol, "market", side, amount, price)
+        stop_loss_order = exchange.create_order (symbol, "limit", "sell", amount, price, slparams)
+        take_profit_order = exchange.create_order (symbol, "limit", "sell", amount, price, tpparams)
 
 # Save the order details to a CSV file
         with open('orders.csv', mode='a') as file:
@@ -253,7 +241,7 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
 
             # Write the order details
             writer.writerow([
-                initial_order['result']['orderId'],
+                initial_order['id'],
                 datetime.datetime.now(),
                 symbol,
                 side,
@@ -261,8 +249,8 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
                 market_price,
                 tp,
                 sl,
-                take_profit_order['result']['orderId'],
-                stop_loss_order['result']['orderId'],
+                take_profit_order['id'],
+                stop_loss_order['id'],
                 ""
             ])
             return initial_order
