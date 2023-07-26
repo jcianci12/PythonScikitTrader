@@ -226,9 +226,11 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
         slparams = {
             'triggerPrice': stopLossTriggerPrice,  # your stop price
         }
-
+        logger("Creating buy order")
         initial_order = exchange.create_order(symbol, "market", side, amount, price)
+        logger("Creating sl order")
         stop_loss_order = exchange.create_order (symbol, "limit", "sell", amount, price, slparams)
+        logger("Creating tp order")
         take_profit_order = exchange.create_order (symbol, "limit", "sell", amount, price, tpparams)
 
 # Save the order details to a CSV file

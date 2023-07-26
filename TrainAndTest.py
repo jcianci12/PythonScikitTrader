@@ -9,6 +9,7 @@ import numpy as np
 
 
 import joblib
+from checkorders import check_closed_orders
 from functions.map_range import map_range
 from functions.modelmanagement import ModelManagement
 from generateTPandSL import calculate_prices
@@ -157,16 +158,17 @@ def trade_loop():
     # buylogic(1, usdtbalance)
     if (confidence_scoreinc == 1 and confidence_scoredec == 0):
         buylogic(1, usdtbalance)
-        plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
-            usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
+
         # asyncio.run(send_telegram_message('Update'))
 
     elif (confidence_scoreinc == 0 and confidence_scoredec == 1):
         selllogic(1, btcbalance, bid_price)
-        plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
-            usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
+        
     else:
         logger(str("Didnt act"))
+    check_closed_orders()
+    plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
+            usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
 
 
     
@@ -187,6 +189,7 @@ if (TESTRETRAINATSTART):
     mm = ModelManagement()
     mm.clean_up_models("models")
     logger("Done.")
+    check_closed_orders()
 
 
 call_decide_every_n_seconds(300, trade_loop)

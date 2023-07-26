@@ -12,7 +12,7 @@ ACCOUNT_TYPE = "SPOT" if TEST else "UNIFIED"
 
 
 
-
+SYMBOL = "BTCUSDT"
 
 MAXBUYPERCENTOFCAPITAL = decimal.Decimal(10)
 MAXSELLPERCENTOFCAPITAL = decimal.Decimal(10)
@@ -41,7 +41,7 @@ PLOTBACKTEST = False
 PLOTPROGRESS = True
 SIMULATETRADE = False
 
-GRAPHVIEWWINDOW = 96
+GRAPHVIEWWINDOW = 30
 ALLOWEDTOSELL = False
 
 ORDERCOLUMNS = ['uid', 'date','symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice', 'takeprofitid', 'stoplossid', 'profit', 'completedtime']

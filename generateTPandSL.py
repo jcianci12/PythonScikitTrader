@@ -6,7 +6,7 @@ import csv
 
 import pandas as pd
 from bybitapi import get_market_bid_price
-from config import TEST
+from config import SYMBOL, TEST
 
 from get_last_ohlc_bybit import get_last_ohlc_bybit
 
@@ -26,10 +26,10 @@ from finta import TA
 
 def calculate_prices(ohlc):
     if(ohlc==None):
-        ohlc =get_last_ohlc_bybit("BTCUSDT","5") 
+        ohlc =get_last_ohlc_bybit(SYMBOL,"5") 
         ohlc = ohlc.apply(pd.to_numeric, errors='coerce')
     # else:
-    entry_price = get_market_bid_price(TEST,"BTCUSDT")
+    entry_price = get_market_bid_price(TEST,SYMBOL)
         # Calculate ATR using finta
 
     atr = TA.ATR(ohlc)
