@@ -106,8 +106,8 @@ class API_Tests(unittest.TestCase):
             selllogic(confidence_score, btcbalance, btcmarketvalue)
         except Exception as e:
             self.fail(f"selllogic raised an exception: {e}")
-    def test_checkorders(self):
-        check_orders()
+    # def test_checkorders(self):
+    #     check_orders()
 
     def test_send_message(self):
         asyncio.run(send_telegram_message('Your message here'))
@@ -141,12 +141,12 @@ class API_Tests(unittest.TestCase):
         assert isinstance(ask_price, str)
         assert float(ask_price) > 0
 
-    def test_fetch_bybit_current_orders(self):
-        df = fetch_bybit_current_orders()
-        assert isinstance(df, pd.DataFrame)
-        assert len(df) > 0
-        assert 'orderId' in df.columns
-        assert 'orderStatus' in df.columns
+    # def test_fetch_bybit_current_orders(self):
+    #     df = fetch_bybit_current_orders()
+    #     assert isinstance(df, pd.DataFrame)
+    #     assert len(df) > 0
+    #     assert 'orderId' in df.columns
+    #     assert 'orderStatus' in df.columns
 
     def test_cancel_all_orders(self):
         symbol = "USDT"

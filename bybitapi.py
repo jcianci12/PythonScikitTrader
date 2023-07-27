@@ -24,7 +24,7 @@ exchange = ccxt.bybit({
 })
 # very important set spot as default type
 exchange.options['defaultType'] = 'spot'
-
+exchange.load_markets()
 DELAY = 5
 TEST_URL = 'https://www.google.com'
 
@@ -194,80 +194,74 @@ def get_market_ask_price(test, symbol):
 # %%
 
 def place_order(testmode, type, symbol, side, tp, sl, qty):
-    try:
-        # Get the market data
-        market_data = get_market_ask_price(testmode, symbol="BTCUSDT")
+    # Get the market data
+    market_data = get_market_ask_price(testmode, symbol="BTCUSDT")
 
-        # Get the market price
-        market_price = float(market_data)
-        btcqty = float(qty)/market_price
-        tp = round(tp, 2)
-        sl = round(sl, 2)
-
-        exchange = ccxt.bybit({
-            'apiKey': API_KEY,
-            'secret': API_SECRET,
-        })
-        exchange.options['defaultType'] = 'spot'
-        # exchange.verbose = True
+    # Get the market price
+    market_price = float(market_data)
+    btcqty = float(qty)/market_price
 
 
-        # # Python
-        symbol = 'BTC/USDT'
-        type = 'market'  # or 'market'
-        side = 'buy'
-        amount = btcqty  # your amount
-        price = market_price  # your price
-        stopLossTriggerPrice = sl
-        TakeProfitTriggerPrice = tp
-        tpparams = {
-            'triggerPrice': TakeProfitTriggerPrice,  # your stop price
+    exchange = ccxt.bybit({
+        'apiKey': API_KEY,
+        'secret': API_SECRET,
+    })
+    exchange.options['defaultType'] = 'spot'
+    # exchange.verbose = True
+
+
+    # # Python
+    symbol = 'BTC/USDT'
+    type = 'market'  # or 'market'
+    side = 'buy'
+    amount = btcqty  # your amount
+    price = market_price  # your price
+    exchange.load_markets()
+    stopLossTriggerPrice = exchange.price_to_precision("BTC/USDT",sl)
+    TakeProfitTriggerPrice = exchange.price_to_precision("BTC/USDT",tp)
+    tpparams = {
+            'stop_px': TakeProfitTriggerPrice, 'base_price':TakeProfitTriggerPrice,  # your stop price
         }
-        slparams = {
-            'triggerPrice': stopLossTriggerPrice,  # your stop price
-        }
-        logger("Creating buy order")
-        initial_order = exchange.create_order(symbol, "market", side, amount, price)
-        logger("Creating sl order")
-        stop_loss_order = exchange.create_order (symbol, "limit", "sell", amount, price, slparams)
-        logger("Creating tp order")
-        take_profit_order = exchange.create_order (symbol, "limit", "sell", amount, price, tpparams)
+    slparams = {
+        'stop_px': stopLossTriggerPrice, 'base_price':stopLossTriggerPrice,  # your stop price
+    }
+    logger("Creating buy order")
+    initial_order = exchange.create_order(symbol, "market", side, amount, price)
+
+    logger("Creating sl order")
+    stop_loss_order = exchange.create_order (symbol, "limit", "sell", amount, price, slparams)
+    logger("Creating tp order")
+    take_profit_order = exchange.create_order (symbol, "limit", "sell", amount, price, tpparams)
+
 
 # Save the order details to a CSV file
-        with open('orders.csv', mode='a') as file:
-            writer = csv.writer(file)
+    with open('orders.csv', mode='a') as file:
+        writer = csv.writer(file)
 
-            # Write the header row if the file is empty
-            if file.tell() == 0:
-                writer.writerow(ORDERCOLUMNS)
+        # Write the header row if the file is empty
+        if file.tell() == 0:
+            writer.writerow(ORDERCOLUMNS)
 
-            # Write the order details
-            writer.writerow([
-                initial_order['id'],
-                datetime.datetime.now(),
-                symbol,
-                side,
-                qty,
-                market_price,
-                tp,
-                sl,
-                take_profit_order['id'],
-                stop_loss_order['id'],
-                ""
-            ])
-            return initial_order
-    except Exception as e:
-        logger(f"An error occurred: {e}")
-    return None
-
+        # Write the order details
+        writer.writerow([
+            initial_order['id'],
+            datetime.datetime.now(),
+            symbol,
+            side,
+            qty,
+            market_price,
+            tp,
+            sl,
+            take_profit_order['id'],
+            stop_loss_order['id'],
+            ""
+        ])
+        return initial_order
 
 def cancel_order(symbol, id):
     try:
-        get_session(TEST).cancel_order(
-            category="spot",
-            symbol=symbol,
-            orderId=id
-        )
+        exchange.cancel_order(id,"BTC/USDT")
+
     except Exception as e:
         logger(f"An error occurred: {e}")
 
