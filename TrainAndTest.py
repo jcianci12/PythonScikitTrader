@@ -9,7 +9,6 @@ import numpy as np
 
 
 import joblib
-from checkorders import check_closed_orders
 from functions.map_range import map_range
 from functions.modelmanagement import ModelManagement
 from generateTPandSL import calculate_prices
@@ -141,8 +140,8 @@ def trade_loop():
     confidence_scoreinc = confinc
     confidence_scoredec = confdec
 
-    usdtbalance = decimal.Decimal(get_wallet_balance(TEST, "USDT"))
-    btcbalance = decimal.Decimal(get_wallet_balance(TEST, "BTC"))
+    usdtbalance = decimal.Decimal(get_wallet_balance( "USDT"))
+    btcbalance = decimal.Decimal(get_wallet_balance( "BTC"))
     bid_price = decimal.Decimal(get_market_bid_price(TEST, "BTCUSDT"))
     ask_price = decimal.Decimal(get_market_ask_price(TEST, "BTCUSDT"))
 
@@ -166,7 +165,6 @@ def trade_loop():
         
     else:
         logger(str("Didnt act"))
-    check_closed_orders()
     plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
             usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
 
@@ -189,7 +187,6 @@ if (TESTRETRAINATSTART):
     mm = ModelManagement()
     mm.clean_up_models("models")
     logger("Done.")
-    check_closed_orders()
 
 
 call_decide_every_n_seconds(300, trade_loop)

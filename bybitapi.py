@@ -18,7 +18,7 @@ from KEYS import API_KEY, API_SECRET
 import ccxt
 
 
-exchange = ccxt.bybit({
+exchange = ccxt.binance({
     'apiKey': API_KEY,
     'secret': API_SECRET,
 })
@@ -135,21 +135,36 @@ def fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category):
 
 
 # %%
-def get_wallet_balance(test, coin):
+# def get_wallet_balance(test, coin):
 
-    print("fetching balance on coin ", coin)
-    http = get_session(test)
+    
+def get_wallet_balance(symbol: str) -> float:
+        # Set up the exchange with your API key and secret
+    
 
-    response = http.get_wallet_balance(accountType=ACCOUNT_TYPE, coin=coin,)
-    coins = response["result"]["list"][0]["coin"]
+    # Fetch the balance for the specified symbol
+    balance = exchange.fetch_balance()
+    return balance[symbol]['free']
 
-    for c in coins:
-        if c["coin"] == coin:
-            wallet_balance = c["availableToWithdraw"]
-            print("current wallet balance available is:", wallet_balance)
-            return str(wallet_balance)
-    print(f"No wallet balance found for coin: {coin}")
-    return "0"
+    # # Example usage
+    # symbol = 'BTC'
+    # balance = get_balance(symbol)
+    # print(f'Your balance for {symbol} is: {balance}')
+
+
+    # print("fetching balance on coin ", coin)
+    # http = get_session(test)
+
+    # response = http.get_wallet_balance(accountType=ACCOUNT_TYPE, coin=coin,)
+    # coins = response["result"]["list"][0]["coin"]
+
+    # for c in coins:
+    #     if c["coin"] == coin:
+    #         wallet_balance = c["availableToWithdraw"]
+    #         print("current wallet balance available is:", wallet_balance)
+    #         return str(wallet_balance)
+    # print(f"No wallet balance found for coin: {coin}")
+    # return "0"
 
 # %%
 
@@ -212,48 +227,34 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
 
     # # Python
     symbol = 'BTC/USDT'
-    type = 'market'  # or 'market'
+    type = 'limit'  # or 'market'
     side = 'buy'
     amount = btcqty  # your amount
     price = market_price  # your price
     exchange.load_markets()
     stopLossTriggerPrice = exchange.price_to_precision("BTC/USDT",sl)
     TakeProfitTriggerPrice = exchange.price_to_precision("BTC/USDT",tp)
-    tpparams = {
-            'stop_px': TakeProfitTriggerPrice, 'base_price':TakeProfitTriggerPrice,'reduceOnly': "true"  # your stop price
-        }
-    slparams = {
-        'stop_px': stopLossTriggerPrice, 'base_price':stopLossTriggerPrice,'reduceOnly': "true"  # your stop price
-    }
-    logger("Creating buy order")
-    initial_order = exchange.create_order(symbol, "market", side, amount, price)
-
-    logger("Creating sl order")
-    stop_loss_order = exchange.create_order (symbol, "limit", "sell", amount, price, slparams)
-    logger("Creating tp order")
-
-#     {
-# 	"symbol_id": "BTCUSDT",
-# 	"type": "market",
-# 	"side": "sell",
-# 	"trigger_price": "29193",
-# 	"price": "",
-# 	"quantity": "0.000402",
-# 	"client_order_id": "1690700243834"
-# }
-    take_profit_order = exchange.create_order (symbol, "limit", "sell", amount, price, tpparams)
 
 
-    # #Ordres
-    # #Entry
-    # orderPE = exchange.create_limit_order(symbol=symbol, side=side, amount=amount, price=price)
-    # #TP
-    # orderTP = exchange.create_order(symbol=symbol, type='limit', side=close, amount=quantity, price=TPs[2])
-    # #SL
-    # if side == 'Buy':
-    # orderSL = exchange.create_limit_order(symbol=symbol, side=close, amount=quantity, price=SL, params={'stopLossPrice': SL}) #Close long
-    # else:
-    # orderSL = exchange.create_limit_buy_order(symbol=symbol, amount=quantity, price=SL, params = {'stopPrice': SL}) #Open long
+    market = exchange.market(symbol)
+
+    response = exchange.private_post_order_oco({
+        'symbol': market['id'],
+        'side': 'BUY',  # SELL, BUY
+        'quantity': exchange.amount_to_precision(symbol, amount),
+        'price': exchange.price_to_precision(symbol, price),
+        'stopPrice': exchange.price_to_precision(symbol, stopLossTriggerPrice),
+        'stopLimitPrice': exchange.price_to_precision(symbol, TakeProfitTriggerPrice),  # If provided, stopLimitTimeInForce is required
+        'stopLimitTimeInForce': 'GTC',  # GTC, FOK, IOC
+        # 'listClientOrderId': exchange.uuid(),  # A unique Id for the entire orderList
+        # 'limitClientOrderId': exchange.uuid(),  # A unique Id for the limit order
+        # 'limitIcebergQty': exchangea.amount_to_precision(symbol, limit_iceberg_quantity),
+        # 'stopClientOrderId': exchange.uuid()  # A unique Id for the stop loss/stop loss limit leg
+        # 'stopIcebergQty': exchange.amount_to_precision(symbol, stop_iceberg_quantity),
+        # 'newOrderRespType': 'ACK',  # ACK, RESULT, FULL
+    })
+    print(response)
+
 
 
 
