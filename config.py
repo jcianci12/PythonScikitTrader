@@ -10,8 +10,6 @@ WEBSOCKET_BASE_URL = "wss://stream.bybit.com/realtime"
 
 ACCOUNT_TYPE = "SPOT" if TEST else "UNIFIED"
 
-
-
 SYMBOL = "BTCUSDT"
 
 MAXBUYPERCENTOFCAPITAL = decimal.Decimal(10)
@@ -19,8 +17,8 @@ MAXSELLPERCENTOFCAPITAL = decimal.Decimal(10)
 
 MINIMUMBTCTRANSACTIONSIZE = decimal.Decimal(0.000048)
 
-TAKEPROFIT = decimal.Decimal(4 /100) #4 percent
-STOPLOSS = decimal.Decimal(2/100)
+TAKEPROFIT = 3
+STOPLOSS = 2
 
 BUYTHRESHOLD = 0.8
 SELLTHRESHOLD = 0.4

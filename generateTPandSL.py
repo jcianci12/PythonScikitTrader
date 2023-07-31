@@ -6,7 +6,7 @@ import csv
 
 import pandas as pd
 from bybitapi import get_market_bid_price
-from config import SYMBOL, TEST
+from config import STOPLOSS, SYMBOL, TAKEPROFIT, TEST
 
 from get_last_ohlc_bybit import get_last_ohlc_bybit
 
@@ -45,6 +45,6 @@ def calculate_prices(ohlc):
 def get_tp_sl_from_ATR(atr,entry_price):
     entry_price = float(entry_price)
     # Calculate take profit and stop loss prices
-    tp = float(entry_price) + 3 * (atr[len(atr)-1])
-    sl = float(entry_price) - 2 * (atr[len(atr)-1])
+    tp = float(entry_price) + TAKEPROFIT * (atr[len(atr)-1])
+    sl = float(entry_price) - STOPLOSS * (atr[len(atr)-1])
     return tp,sl

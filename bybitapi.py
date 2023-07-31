@@ -220,10 +220,10 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
     stopLossTriggerPrice = exchange.price_to_precision("BTC/USDT",sl)
     TakeProfitTriggerPrice = exchange.price_to_precision("BTC/USDT",tp)
     tpparams = {
-            'stop_px': TakeProfitTriggerPrice, 'base_price':TakeProfitTriggerPrice,  # your stop price
+            'stop_px': TakeProfitTriggerPrice, 'base_price':TakeProfitTriggerPrice,'reduceOnly': "true"  # your stop price
         }
     slparams = {
-        'stop_px': stopLossTriggerPrice, 'base_price':stopLossTriggerPrice,  # your stop price
+        'stop_px': stopLossTriggerPrice, 'base_price':stopLossTriggerPrice,'reduceOnly': "true"  # your stop price
     }
     logger("Creating buy order")
     initial_order = exchange.create_order(symbol, "market", side, amount, price)
@@ -231,7 +231,30 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
     logger("Creating sl order")
     stop_loss_order = exchange.create_order (symbol, "limit", "sell", amount, price, slparams)
     logger("Creating tp order")
+
+#     {
+# 	"symbol_id": "BTCUSDT",
+# 	"type": "market",
+# 	"side": "sell",
+# 	"trigger_price": "29193",
+# 	"price": "",
+# 	"quantity": "0.000402",
+# 	"client_order_id": "1690700243834"
+# }
     take_profit_order = exchange.create_order (symbol, "limit", "sell", amount, price, tpparams)
+
+
+    # #Ordres
+    # #Entry
+    # orderPE = exchange.create_limit_order(symbol=symbol, side=side, amount=amount, price=price)
+    # #TP
+    # orderTP = exchange.create_order(symbol=symbol, type='limit', side=close, amount=quantity, price=TPs[2])
+    # #SL
+    # if side == 'Buy':
+    # orderSL = exchange.create_limit_order(symbol=symbol, side=close, amount=quantity, price=SL, params={'stopLossPrice': SL}) #Close long
+    # else:
+    # orderSL = exchange.create_limit_buy_order(symbol=symbol, amount=quantity, price=SL, params = {'stopPrice': SL}) #Open long
+
 
 
 # Save the order details to a CSV file

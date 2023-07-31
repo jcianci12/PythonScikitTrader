@@ -19,7 +19,6 @@ def _produce_movement_indicators(data):
     At a given row, it looks 'window' rows ahead to see if the price increased (1) or decreased (0)
     :param window: number of days, or rows to look ahead to see what the price did
     """
-    targetAmount = data["close"] +(data["close"]* PERCENTCHANGEINDICATOR )
     #get the takeprofit price
     tp,sl = get_tp_sl_from_ATR(data['14 period ATR'],data["close"].tail(1))
     predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= tp
