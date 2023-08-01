@@ -38,7 +38,7 @@ def buylogic(confidence_score,  usdtbalance):
     tp,sl = calculate_prices(None)
 
     # Check if the transaction amount is greater than the minimum transaction size
-    if float(amount)>0 and float(amount)>usdtbalance:
+    if float(amount)>0 and (float(amount)*float(marketprice))<usdtbalance:
         logger("Enough USDT to cover purchase of ", "USDT", " balance is:", usdtbalance)
         
         # Calculate the quantity to buy
