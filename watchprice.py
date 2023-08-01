@@ -7,7 +7,7 @@ import csv
 
 from bybitapi import place_order
 from generateTPandSL import calculate_prices, save_updated_prices
-from get_last_ohlc_bybit import get_last_ohlc_bybit
+from get_last_ohlc_bybit import get_last_ohlc_binance
 
 orders = []
 last_refresh_time = 0

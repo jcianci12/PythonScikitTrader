@@ -13,7 +13,7 @@ from functions.map_range import map_range
 from functions.modelmanagement import ModelManagement
 from generateTPandSL import calculate_prices
 from get_latest_model_file import get_latest_model_filename, get_model_filename
-from get_last_ohlc_bybit import get_last_ohlc_bybit
+from get_last_ohlc_bybit import get_last_ohlc_binance
 from logic.buylogic import buylogic
 from bybitapi import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_wallet_balance
 
@@ -116,7 +116,7 @@ def trade_loop():
     end_date = datetime.now()
     start_date = end_date - timedelta(DATALENGTHFORTRAININGINDAYS)
     category = 'spot'
-    if (ALWAYSRETRAIN or is_file_older_than_n_minutes(get_latest_model_filename(symbol, INTERVAL, "ensembleinc"), 60)):
+    if (ALWAYSRETRAIN or is_file_older_than_n_minutes(get_latest_model_filename(symbol, INTERVAL, "ensembleinc"), 15)):
         # retrain the data
         retrain(start_date, end_date)
     start_date = end_date - timedelta(DATALENGTHFORTRADINGINDAYS)
@@ -142,8 +142,8 @@ def trade_loop():
 
     usdtbalance = decimal.Decimal(get_wallet_balance( "USDT"))
     btcbalance = decimal.Decimal(get_wallet_balance( "BTC"))
-    bid_price = decimal.Decimal(get_market_bid_price(TEST, "BTCUSDT"))
-    ask_price = decimal.Decimal(get_market_ask_price(TEST, "BTCUSDT"))
+    bid_price = decimal.Decimal(get_market_bid_price( "BTCUSDT"))
+    ask_price = decimal.Decimal(get_market_ask_price( "BTCUSDT"))
 
     portfolio_balance = (decimal.Decimal(
         usdtbalance) + (btcbalance * bid_price))

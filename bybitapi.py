@@ -48,6 +48,13 @@ def get_session(test=True):
     return http
 
 
+def get_min_qty_binance(symbol: str) -> float:
+    markets = exchange.load_markets()
+    market = markets[symbol]
+    min_qty = market['limits']['amount']['min']
+    return min_qty
+
+
 def convert_interval_to_timespan(interval):
     minutes = interval_map[interval]
     return datetime.timedelta(minutes=minutes)
@@ -169,71 +176,47 @@ def get_wallet_balance(symbol: str) -> float:
 # %%
 
 
-def get_market_bid_price(test, symbol):
-    from pybit.unified_trading import HTTP
-
-    response = get_session().get_tickers(
-        category="spot",
-        symbol=symbol,
-    )
-
-    if response['retCode'] == 0:
-        data = response['result']['list']
-        bid_price = data[0]['bid1Price']
-        print(f"Current bid price for {symbol}: {bid_price}")
-        return str(bid_price)
-    else:
-        print("Error:", response['retMsg'])
-        return str()
-
-
-def get_market_ask_price(test, symbol):  
-
+def get_market_bid_price(symbol: str) -> float:
     ticker = exchange.fetch_ticker(symbol)
-    return ticker['last']
+    return ticker['bid']
+
+
+
+def get_market_ask_price(symbol: str) -> float:
+    ticker = exchange.fetch_ticker(symbol)
+    return ticker['ask']
 
 
 # get_market_ask_price(True, "BTCUSDT")
 # %%
 
-def place_order(testmode, type, symbol, side, tp, sl, qty):
+def place_order(testmode, type, symbol, side, tp, sl, amount):
     # Get the market data
-    market_data = get_market_ask_price(testmode, symbol="BTCUSDT")
+    market_data = get_market_bid_price( symbol)
 
     # Get the market price
     market_price = float(market_data)
-    btcqty = float(qty)/market_price
-
-
-    # exchange.verbose = True
-
 
     # # Python
-    symbol = 'BTC/USDT'
     type = 'limit'  # or 'market'
     side = 'buy'
-    amount = btcqty  # your amount
-    price = market_price  # your price
+    price = market_price+10  # your price
     exchange.load_markets()
 
-
-
     market = exchange.market(symbol)
-
+    buyresponse = exchange.create_market_buy_order(
+        market['id'],
+        amount
+    )
+    print(buyresponse)
     response = exchange.private_post_order_oco({
         'symbol': market['id'],
-        'side': 'BUY',  # SELL, BUY
+        'side': 'SELL',  # SELL, BUY
         'quantity': exchange.amount_to_precision(symbol, amount),
         'price': exchange.price_to_precision(symbol, price),
-        'stopPrice': exchange.price_to_precision(symbol, tp),
-        'stopLimitPrice': exchange.price_to_precision(symbol, sl),  # If provided, stopLimitTimeInForce is required
+        'stopPrice': exchange.price_to_precision(symbol, sl),
+        'stopLimitPrice': exchange.price_to_precision(symbol, tp),  # If provided, stopLimitTimeInForce is required
         'stopLimitTimeInForce': 'GTC',  # GTC, FOK, IOC
-        # 'listClientOrderId': exchange.uuid(),  # A unique Id for the entire orderList
-        # 'limitClientOrderId': exchange.uuid(),  # A unique Id for the limit order
-        # 'limitIcebergQty': exchangea.amount_to_precision(symbol, limit_iceberg_quantity),
-        # 'stopClientOrderId': exchange.uuid()  # A unique Id for the stop loss/stop loss limit leg
-        # 'stopIcebergQty': exchange.amount_to_precision(symbol, stop_iceberg_quantity),
-        # 'newOrderRespType': 'ACK',  # ACK, RESULT, FULL
     })
     print(response)
 
@@ -254,7 +237,7 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
             datetime.datetime.now(),
             symbol,
             side,
-            qty,
+            amount,
             market_price,
             tp,
             sl,
