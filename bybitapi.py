@@ -187,22 +187,10 @@ def get_market_bid_price(test, symbol):
         return str()
 
 
-def get_market_ask_price(test, symbol):
-    from pybit.unified_trading import HTTP
+def get_market_ask_price(test, symbol):  
 
-    response = get_session().get_tickers(
-        category="spot",
-        symbol=symbol,
-    )
-
-    if response['retCode'] == 0:
-        data = response['result']['list']
-        ask_price = data[0]['ask1Price']
-        print(f"Current ask price for {symbol}: {ask_price}")
-        return str(ask_price)
-    else:
-        print("Error:", response['retMsg'])
-        return str()
+    ticker = exchange.fetch_ticker(symbol)
+    return ticker['last']
 
 
 # get_market_ask_price(True, "BTCUSDT")
@@ -227,8 +215,7 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
     amount = btcqty  # your amount
     price = market_price  # your price
     exchange.load_markets()
-    stopLossTriggerPrice = exchange.price_to_precision("BTC/USDT",sl)
-    TakeProfitTriggerPrice = exchange.price_to_precision("BTC/USDT",tp)
+
 
 
     market = exchange.market(symbol)
@@ -238,8 +225,8 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
         'side': 'BUY',  # SELL, BUY
         'quantity': exchange.amount_to_precision(symbol, amount),
         'price': exchange.price_to_precision(symbol, price),
-        'stopPrice': exchange.price_to_precision(symbol, stopLossTriggerPrice),
-        'stopLimitPrice': exchange.price_to_precision(symbol, TakeProfitTriggerPrice),  # If provided, stopLimitTimeInForce is required
+        'stopPrice': exchange.price_to_precision(symbol, tp),
+        'stopLimitPrice': exchange.price_to_precision(symbol, sl),  # If provided, stopLimitTimeInForce is required
         'stopLimitTimeInForce': 'GTC',  # GTC, FOK, IOC
         # 'listClientOrderId': exchange.uuid(),  # A unique Id for the entire orderList
         # 'limitClientOrderId': exchange.uuid(),  # A unique Id for the limit order
