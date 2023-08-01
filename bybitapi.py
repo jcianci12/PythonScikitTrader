@@ -217,11 +217,6 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
     btcqty = float(qty)/market_price
 
 
-    exchange = ccxt.bybit({
-        'apiKey': API_KEY,
-        'secret': API_SECRET,
-    })
-    exchange.options['defaultType'] = 'spot'
     # exchange.verbose = True
 
 
@@ -268,7 +263,7 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
 
         # Write the order details
         writer.writerow([
-            initial_order['id'],
+            response['listClientOrderId'],
             datetime.datetime.now(),
             symbol,
             side,
@@ -276,11 +271,11 @@ def place_order(testmode, type, symbol, side, tp, sl, qty):
             market_price,
             tp,
             sl,
-            take_profit_order['id'],
-            stop_loss_order['id'],
+            response['orders'][0]['clientOrderId'],
+            response['orders'][1]['clientOrderId'],
             ""
         ])
-        return initial_order
+        return response
 
 def cancel_order(symbol, id):
     try:

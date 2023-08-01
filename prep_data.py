@@ -21,6 +21,8 @@ def _produce_movement_indicators(data):
     """
     #get the takeprofit price
     tp,sl = get_tp_sl_from_ATR(data['14 period ATR'],data["close"].tail(1))
+
+    
     predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= tp
     predictionup = predictionup.iloc[:-LOOKAHEADVALUE]
     data["pred"] = predictionup.astype(int)
