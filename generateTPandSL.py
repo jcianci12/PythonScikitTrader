@@ -9,6 +9,7 @@ from bybitapi import get_market_bid_price
 from config import STOPLOSS, SYMBOL, TAKEPROFIT, TEST
 
 from get_last_ohlc_bybit import get_last_ohlc_binance
+from minimum_movement_to_take_profit import calculate_smallest_movement
 
 def save_updated_prices(filename, orders):
     # Write updated data to CSV file
@@ -17,9 +18,6 @@ def save_updated_prices(filename, orders):
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(orders)
-
-
-
 
 
 from finta import TA
@@ -39,6 +37,12 @@ def calculate_prices(ohlc):
     # Calculate take profit and stop loss prices
     tp, sl = get_tp_sl_from_ATR(atr, entry_price)
     tp = decimal.Decimal(tp)
+
+    min_movement = calculate_smallest_movement(20,"BTC/USDT")
+    min_profit_price = min_movement + entry_price
+    if(min_profit_price>tp):
+        tp = min_profit_price
+    
     sl = decimal.Decimal(sl)
 
     # Make sure stop loss is lower than market price

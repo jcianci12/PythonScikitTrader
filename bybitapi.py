@@ -189,38 +189,37 @@ def get_market_ask_price(symbol: str) -> float:
 
 # get_market_ask_price(True, "BTCUSDT")
 # %%
-
 def place_order(testmode, type, symbol, side, tp, sl, amount):
-    # Get the market data
-    market_data = get_market_bid_price( symbol)
+    try:
+        # Get the market data
+        market_data = get_market_bid_price(symbol)
 
-    # Get the market price
-    market_price = float(market_data)
+        # Get the market price
+        market_price = float(market_data)
 
-    # # Python
-    type = 'limit'  # or 'market'
-    side = 'buy'
-    price = market_price+10  # your price
-    exchange.load_markets()
+        type = 'limit'  # or 'market'
+        side = 'buy'
+        price = market_price + 2  # your price
+        exchange.load_markets()
 
-    market = exchange.market(symbol)
-    buyresponse = exchange.create_market_buy_order(
-        market['id'],
-        amount
-    )
-    print(buyresponse)
-    response = exchange.private_post_order_oco({
-        'symbol': market['id'],
-        'side': 'SELL',  # SELL, BUY
-        'quantity': exchange.amount_to_precision(symbol, amount),
-        'price': exchange.price_to_precision(symbol, price),
-        'stopPrice': exchange.price_to_precision(symbol, sl),
-        'stopLimitPrice': exchange.price_to_precision(symbol, tp),  # If provided, stopLimitTimeInForce is required
-        'stopLimitTimeInForce': 'GTC',  # GTC, FOK, IOC
-    })
-    print(response)
-
-
+        market = exchange.market(symbol)
+        buyresponse = exchange.create_market_buy_order(
+            market['id'],
+            amount
+        )
+        print(buyresponse)
+        response = exchange.private_post_order_oco({
+            'symbol': market['id'],
+            'side': 'SELL',  # SELL, BUY
+            'quantity': exchange.amount_to_precision(symbol, amount),
+            'price': exchange.price_to_precision(symbol, price),
+            'stopPrice': exchange.price_to_precision(symbol, sl),
+            'stopLimitPrice': exchange.price_to_precision(symbol, tp),  # If provided, stopLimitTimeInForce is required
+            'stopLimitTimeInForce': 'GTC',  # GTC, FOK, IOC
+        })
+        logger(response)
+    except Exception as e:
+        logger(f"An error occurred while placing the order: {e}")
 
 
 # Save the order details to a CSV file

@@ -1,5 +1,5 @@
 from config import LOOKAHEADVALUE, PERCENTCHANGEINDICATOR
-
+from minimum_movement_to_take_profit import calculate_smallest_movement
 import pandas as pd
 from finta import TA
 
@@ -20,14 +20,14 @@ def _produce_movement_indicators(data):
     :param window: number of days, or rows to look ahead to see what the price did
     """
     #get the takeprofit price
-    #tp,sl = get_tp_sl_from_ATR(data['14 period ATR'],data["close"].tail(1))
+    tp,sl = get_tp_sl_from_ATR(data['14 period ATR'],data["close"].tail(1))
+    # min_movement = calculate_smallest_movement(20,"BTC/USDT")
 
-
-    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= data['close']
+    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= tp
     predictionup = predictionup.iloc[:-LOOKAHEADVALUE]
     data["pred"] = predictionup.astype(int)
 
-    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= data['close']
+    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= sl
     predictiondec = predictiondec.iloc[:-LOOKAHEADVALUE]
     data["preddec"] = predictiondec.astype(int)
 
