@@ -62,3 +62,5 @@ def get_tp_sl_from_ATR(atr,entry_price):
     tp = float(entry_price) + TAKEPROFIT * (atr[len(atr)-1])
     sl = float(entry_price) - STOPLOSS * (atr[len(atr)-1])
     return tp,sl
+
+
