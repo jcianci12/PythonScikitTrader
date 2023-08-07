@@ -5,6 +5,7 @@ from functions.logger import logger
 from functions.map_range import map_range
 from generateTPandSL import calculate_prices
 from bybitapi import exchange
+from minimum_movement_to_take_profit import tpsl_smallest_movement
 
 def buylogic(confidence_score,  usdtbalance):
     """
@@ -35,7 +36,8 @@ def buylogic(confidence_score,  usdtbalance):
     
     logger("Decided to buy %", MAXBUYPERCENTOFCAPITAL, " of USDT balance. |USDT balance: ", usdtbalance,
            " | BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", amount)
-    tp,sl = calculate_prices(None)
+    # tp,sl = calculate_prices(None)
+    tp,sl = tpsl_smallest_movement(20,"BTC/USDT")
 
     # Check if the transaction amount is greater than the minimum transaction size
     if float(amount)>0 and (float(amount)*float(marketprice))<usdtbalance:
