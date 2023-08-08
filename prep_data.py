@@ -19,20 +19,35 @@ def _produce_movement_indicators(data):
     At a given row, it looks 'window' rows ahead to see if the price increased (1) or decreased (0)
     :param window: number of days, or rows to look ahead to see what the price did
     """
-    #get the takeprofit price
-    # tp,sl = get_tp_sl_from_ATR(data['14 period ATR'],data["close"].tail(1))
-    tp,sl = tpsl_smallest_movement(20,"BTC/USDT")
-
-    predictionup = data.shift(-LOOKAHEADVALUE)["close"] >= data['close']+tp
-    predictionup = predictionup.iloc[:-LOOKAHEADVALUE]
-    data["pred"] = predictionup.astype(int)
-
-    predictiondec = data.shift(-LOOKAHEADVALUE)["close"] <= data['close']-sl
-    predictiondec = predictiondec.iloc[:-LOOKAHEADVALUE]
-    data["preddec"] = predictiondec.astype(int)
-
+    # get the takeprofit and stoploss prices from the average true range and the current price
+    data["pred"], data["preddec"] = data.apply(signal_func, args=(data,), axis=1, result_type='expand')
     return data
 
+def signal_func(row, data):
+    """
+    Function that returns the up and down signals for a given row
+    The up signal is 1 if the price increases by more than the takeprofit threshold in the next 'window' rows
+    The down signal is 1 if the price decreases by more than the stoploss threshold in the next 'window' rows
+    :param row: the current row of the dataframe
+    :param data: the whole dataframe
+    :return: a tuple of (up_signal, down_signal)
+    """
+    # define constants for readability
+    ATR_PERIOD = 14
+    LOOKAHEAD_VALUE = 20
+    current_price = row["close"]
+    # calculate the takeprofit and stoploss thresholds from the average true range and the current price
+    tp,sl = get_tp_sl_from_ATR(row[f"{ATR_PERIOD} period ATR"], current_price)
+
+    #lookahead value
+    futurecloseprice = data.shift(-LOOKAHEAD_VALUE)["close"].iloc[:1].iloc[0]
+    # check if the price increases or decreases by more than the thresholds in the next 'window' rows
+    up_signal = int(tp <= futurecloseprice)
+    down_signal = int(sl >= futurecloseprice)
+
+    print(f"MP:{current_price}|TP:{tp}|SL:{sl}|UpSignal:{up_signal}|DownSignal:{down_signal}")   
+
+    return pd.Series([up_signal, down_signal])
 
 
 INDICATORS = [
