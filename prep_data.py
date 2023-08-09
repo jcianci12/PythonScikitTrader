@@ -21,6 +21,8 @@ def _produce_movement_indicators(data):
     """
     # get the takeprofit and stoploss prices from the average true range and the current price
     data["pred"], data["preddec"] = data.apply(signal_func, args=(data,), axis=1, result_type='expand')
+    print(data.loc[data['preddec'] == 0])
+    print(data.loc[data['preddec'] == 1])
     return data
 
 def signal_func(row, data):
@@ -42,10 +44,11 @@ def signal_func(row, data):
     #lookahead value
     futurecloseprice = data.shift(-LOOKAHEAD_VALUE)["close"].iloc[:1].iloc[0]
     # check if the price increases or decreases by more than the thresholds in the next 'window' rows
-    up_signal = int(tp <= futurecloseprice)
-    down_signal = int(sl >= futurecloseprice)
+    up_signal = int(futurecloseprice >=tp )
+    down_signal = int(futurecloseprice<=sl)
 
     print(f"MP:{current_price}|TP:{tp}|SL:{sl}|UpSignal:{up_signal}|DownSignal:{down_signal}")   
+   
 
     return pd.Series([up_signal, down_signal])
 
