@@ -67,13 +67,13 @@ class TrainingAndValidation:
             if len(df) < 40:
                 break
 #increase
-
-            y = df["pred"]
             features = [x for x in df.columns if x not in ["pred","preddec"]]
+            
+            yinc = df["pred"]
             X = df[features]
 
             X_train, X_test, y_train, y_testinc = train_test_split(
-                X, y, train_size=7 * len(X) // 10, shuffle=False
+                X, yinc, train_size=7 * len(X) // 10, shuffle=False
             )
 
             # fit models
@@ -85,22 +85,21 @@ class TrainingAndValidation:
             rf_predictioninc = rfinc.predict(X_test)
             knn_predictioninc = knninc.predict(X_test)
             ensemble_predictioninc = ensembleinc.predict(X_test)
+            print(y_testinc.values,rf_predictioninc)
+
             rf_accuracyinc = accuracy_score(y_testinc.values, rf_predictioninc)
             knn_accuracyinc = accuracy_score(y_testinc.values, knn_predictioninc)
             ensemble_accuracyinc = accuracy_score(y_testinc.values, ensemble_predictioninc)
 
-            
             self.rf_resultsinc.append(rf_accuracyinc)
             self.knn_resultsinc.append(knn_accuracyinc)
             self.ensemble_resultsinc.append(ensemble_accuracyinc)
 
 #decrease
-            y = df["preddec"]
-            features = [x for x in df.columns if x not in ["pred","preddec"]]
-            X = df[features]
+            ydec = df["preddec"]
 
             X_train, X_test, y_train, y_testdec = train_test_split(
-                X, y, train_size=7 * len(X) // 10, shuffle=False
+                X, ydec, train_size=7 * len(X) // 10, shuffle=False
             )
 
             # fit models
@@ -121,7 +120,8 @@ class TrainingAndValidation:
             self.rf_resultsdec.append(rf_accuracydec)
             self.knn_resultsdec.append(knn_accuracydec)
             self.ensemble_resultsdec.append(ensemble_accuracydec)
-        
+            # print(f"MP:{current_price}|TP:{tp}|SL:{sl}|UpSignal:{up_signal}|DownSignal:{down_signal}")   
+
        
 
 

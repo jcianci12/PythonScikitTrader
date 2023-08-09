@@ -1,3 +1,4 @@
+import random
 from config import LOOKAHEADVALUE, PERCENTCHANGEINDICATOR
 from minimum_movement_to_take_profit import calculate_smallest_movement,tpsl_smallest_movement
 import pandas as pd
@@ -42,14 +43,14 @@ def signal_func(row, data):
     tp,sl = get_tp_sl_from_ATR(row[f"{ATR_PERIOD} period ATR"], current_price)
 
     #lookahead value
-    futurecloseprice = data.shift(-LOOKAHEAD_VALUE)["close"].iloc[:1].iloc[0]
+    futurecloseprice = data.shift(-LOOKAHEAD_VALUE)["close"].iloc[row.name + LOOKAHEAD_VALUE]
     # check if the price increases or decreases by more than the thresholds in the next 'window' rows
-    up_signal = int(futurecloseprice >=tp )
+    up_signal = 1 if random.random()>=0.5 else 0
     down_signal = int(futurecloseprice<=sl)
 
     print(f"MP:{current_price}|TP:{tp}|SL:{sl}|UpSignal:{up_signal}|DownSignal:{down_signal}")   
    
-
+#it looks like this is just returning the same values for the whole series
     return pd.Series([up_signal, down_signal])
 
 
