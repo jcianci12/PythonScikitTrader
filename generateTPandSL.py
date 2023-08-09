@@ -33,6 +33,7 @@ def calculate_prices(ohlc):
 
     # Calculate ATR using finta
     atr = TA.ATR(ohlc)
+    atr = atr.iloc[-1]
 
     # Calculate take profit and stop loss prices
     tp, sl = get_tp_sl_from_ATR(atr, entry_price)
@@ -45,6 +46,7 @@ def calculate_prices(ohlc):
 min_movement = calculate_smallest_movement(20,"BTC/USDT")
 
 def get_tp_sl_from_ATR(atr,entry_price):
+
     entry_price = float(entry_price)
     #the atr is the whole range, so we should divide by two to find the centre
     atr = atr/2

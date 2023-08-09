@@ -21,9 +21,19 @@ def _produce_movement_indicators(data):
     :param window: number of days, or rows to look ahead to see what the price did
     """
     # get the takeprofit and stoploss prices from the average true range and the current price
-    data["pred"], data["preddec"] = data.apply(signal_func, args=(data, data.index), axis=1, result_type='expand')
-    print(data.loc[data['preddec'] == 0])
-    print(data.loc[data['preddec'] == 1])
+    # data["pred"], data["preddec"] = data.apply(signal_func, args=(data, data.index), axis=1, result_type='expand')
+    # print(data.loc[data['preddec'] == 0])
+    # print(data.loc[data['preddec'] == 1])
+    pred = []
+    preddec = []
+    for index, row in data.iterrows():
+        result = signal_func(row, data, index)
+        pred.append(result[0])
+        preddec.append(result[1])
+    data["pred"] = pred
+    data["preddec"] = preddec
+
+    
     return data
 
 def signal_func(row, data, index):
