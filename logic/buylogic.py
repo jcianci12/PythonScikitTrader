@@ -36,8 +36,8 @@ def buylogic(confidence_score,  usdtbalance):
     
     logger("Decided to buy %", MAXBUYPERCENTOFCAPITAL, " of USDT balance. |USDT balance: ", usdtbalance,
            " | BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", amount)
-    # tp,sl = calculate_prices(None)
-    tp,sl = tpsl_smallest_movement()
+    tp,sl = calculate_prices(None)
+    # tp,sl = tpsl_smallest_movement()
 
     # Check if the transaction amount is greater than the minimum transaction size
     if float(amount)>0 and (float(amount)*float(marketprice))<usdtbalance:

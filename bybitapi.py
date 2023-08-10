@@ -218,32 +218,33 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
             'stopLimitTimeInForce': 'GTC',  # GTC, FOK, IOC
         })
         logger(response)
+            # Save the order details to a CSV file
+        with open('orders.csv', mode='a') as file:
+            writer = csv.writer(file)
+
+            # Write the header row if the file is empty
+            if file.tell() == 0:
+                writer.writerow(ORDERCOLUMNS)
+
+            # Write the order details
+            writer.writerow([
+                response['listClientOrderId'],
+                datetime.datetime.now(),
+                symbol,
+                side,
+                amount,
+                market_price,
+                tp,
+                sl,
+                response['orders'][0]['clientOrderId'],
+                response['orders'][1]['clientOrderId'],
+                ""
+            ])
+
     except Exception as e:
         logger(f"An error occurred while placing the order: {e}")
 
 
-# Save the order details to a CSV file
-    with open('orders.csv', mode='a') as file:
-        writer = csv.writer(file)
-
-        # Write the header row if the file is empty
-        if file.tell() == 0:
-            writer.writerow(ORDERCOLUMNS)
-
-        # Write the order details
-        writer.writerow([
-            response['listClientOrderId'],
-            datetime.datetime.now(),
-            symbol,
-            side,
-            amount,
-            market_price,
-            tp,
-            sl,
-            response['orders'][0]['clientOrderId'],
-            response['orders'][1]['clientOrderId'],
-            ""
-        ])
         return response
 
 def cancel_order(symbol, id):
