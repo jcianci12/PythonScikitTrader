@@ -203,11 +203,11 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
         exchange.load_markets()
 
         market = exchange.market(symbol)
-        buyresponse = exchange.create_market_buy_order(
-            market['id'],
-            amount
-        )
-        print(buyresponse)
+        # buyresponse = exchange.create_market_buy_order(
+        #     market['id'],
+        #     amount
+        # )
+        # print(buyresponse)
         response = exchange.private_post_order_oco({
             'symbol': market['id'],
             'side': 'SELL',  # SELL, BUY
@@ -245,7 +245,7 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
         logger(f"An error occurred while placing the order: {e}")
 
 
-        return response
+        return None
 
 def cancel_order(symbol, id):
     try:
