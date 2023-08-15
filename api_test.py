@@ -7,7 +7,7 @@ import pandas as pd
 
 from KEYS import API_KEY, API_SECRET
 
-from bybitapi import cancel_all, fetch_bybit_data_v5, get_intervals, get_market_ask_price, get_market_bid_price, get_server_time, get_wallet_balance,  place_order
+from bybitapi import cancel_all, fetch_bybit_data_v5, get_intervals, get_market_ask_price, get_market_bid_price, get_server_time, get_free_balance,  place_order
 from checkorders import check_closed_orders
 from config import BUYTHRESHOLD, INTERVAL, TEST
 from functions.logger import logger
@@ -50,7 +50,7 @@ class API_Tests(unittest.TestCase):
         Function to test buying.
         """
         # Get the USDT balance
-        usdtbalance = float(get_wallet_balance(TEST, "USDT"))
+        usdtbalance = float(get_free_balance(TEST, "USDT"))
         
 
         # Calculate the quantity to buy (2% of USDT balance)
@@ -84,7 +84,7 @@ class API_Tests(unittest.TestCase):
         # Set the confidence score, buythreshold, and usdtbalance values
         confidence_score = 1
         buythreshold = BUYTHRESHOLD
-        usdtbalance = get_wallet_balance(TEST,"USDT")
+        usdtbalance = get_free_balance(TEST,"USDT")
         
         # Call the buylogic function and assert that no exceptions were raised
         try:
@@ -98,7 +98,7 @@ class API_Tests(unittest.TestCase):
         """
         # Set the confidence score, sellthreshold, btcbalance, and btcmarketvalue values
         confidence_score = 0.15
-        btcbalance = get_wallet_balance(TEST,"BTCUSDT")
+        btcbalance = get_free_balance(TEST,"BTCUSDT")
         btcmarketvalue = get_market_bid_price(TEST,"BTCUSDT")
         
         # Call the selllogic function and assert that no exceptions were raised
@@ -117,14 +117,14 @@ class API_Tests(unittest.TestCase):
         symbol = "USDT"
         # Instantiate the object containing the get_capital method
         
-        response = get_wallet_balance(test=True,coin=symbol)
+        response = get_free_balance(test=True,coin=symbol)
         print(response)
 
     def test_BTC_balance(self):
         symbol = "BTC"
         # Instantiate the object containing the get_capital method
         
-        response = get_wallet_balance(test=True,coin=symbol)
+        response = get_free_balance(test=True,coin=symbol)
         print(response)
         
         # Assert that the returned value is a float

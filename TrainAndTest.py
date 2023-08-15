@@ -9,13 +9,14 @@ import numpy as np
 
 
 import joblib
+from binance_fetch_balance import get_balance
 from functions.map_range import map_range
 from functions.modelmanagement import ModelManagement
 from generateTPandSL import calculate_prices
 from get_latest_model_file import get_latest_model_filename, get_model_filename
 from get_last_ohlc_bybit import get_last_ohlc_binance
 from logic.buylogic import buylogic
-from bybitapi import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_wallet_balance
+from bybitapi import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_free_balance
 
 from TrainingandValidation import TrainingAndValidation
 from datetime import datetime, timedelta
@@ -140,13 +141,12 @@ def trade_loop():
     confidence_scoreinc = confinc
     confidence_scoredec = confdec
 
-    usdtbalance = decimal.Decimal(get_wallet_balance( "USDT"))
-    btcbalance = decimal.Decimal(get_wallet_balance( "BTC"))
+    usdtbalance = decimal.Decimal(get_free_balance( "USDT"))
+    btcbalance = decimal.Decimal(get_free_balance( "BTC"))
     bid_price = decimal.Decimal(get_market_bid_price( "BTCUSDT"))
     ask_price = decimal.Decimal(get_market_ask_price( "BTCUSDT"))
 
-    portfolio_balance = (decimal.Decimal(
-        usdtbalance) + (btcbalance * bid_price))
+    portfolio_balance = get_balance()
     logger("Portfolio: ", portfolio_balance,
            "BTC:", btcbalance, "USDT:", usdtbalance)
     # Print the final output

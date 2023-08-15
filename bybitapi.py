@@ -21,6 +21,7 @@ import ccxt
 exchange = ccxt.binance({
     'apiKey': API_KEY,
     'secret': API_SECRET,
+    'enableRateLimit': True,
 })
 # very important set spot as default type
 exchange.options['defaultType'] = 'spot'
@@ -145,35 +146,17 @@ def fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category):
 # def get_wallet_balance(test, coin):
 
     
-def get_wallet_balance(symbol: str) -> float:
+def get_free_balance(symbol: str) -> float:
         # Set up the exchange with your API key and secret
     
 
     # Fetch the balance for the specified symbol
     balance = exchange.fetch_balance()
     return balance[symbol]['free']
-
-    # # Example usage
-    # symbol = 'BTC'
-    # balance = get_balance(symbol)
-    # print(f'Your balance for {symbol} is: {balance}')
-
-
-    # print("fetching balance on coin ", coin)
-    # http = get_session(test)
-
-    # response = http.get_wallet_balance(accountType=ACCOUNT_TYPE, coin=coin,)
-    # coins = response["result"]["list"][0]["coin"]
-
-    # for c in coins:
-    #     if c["coin"] == coin:
-    #         wallet_balance = c["availableToWithdraw"]
-    #         print("current wallet balance available is:", wallet_balance)
-    #         return str(wallet_balance)
-    # print(f"No wallet balance found for coin: {coin}")
-    # return "0"
-
-# %%
+def get_value(symbol: str) -> float:
+    # Fetch the balance for the specified symbol
+    balance = exchange.fetch_balance()
+    return balance[symbol]['free']
 
 
 def get_market_bid_price(symbol: str) -> float:
@@ -203,11 +186,11 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
         exchange.load_markets()
 
         market = exchange.market(symbol)
-        # buyresponse = exchange.create_market_buy_order(
-        #     market['id'],
-        #     amount
-        # )
-        # print(buyresponse)
+        buyresponse = exchange.create_market_buy_order(
+            market['id'],
+            amount
+        )
+        print(buyresponse)
         response = exchange.private_post_order_oco({
             'symbol': market['id'],
             'side': 'SELL',  # SELL, BUY
@@ -218,7 +201,8 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
             'stopLimitTimeInForce': 'GTC',  # GTC, FOK, IOC
         })
         logger(response)
-            # Save the order details to a CSV file
+        
+    # Save the order details to a CSV file
         with open('orders.csv', mode='a') as file:
             writer = csv.writer(file)
 
@@ -240,12 +224,11 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
                 response['orders'][1]['clientOrderId'],
                 ""
             ])
-
+            return response
     except Exception as e:
         logger(f"An error occurred while placing the order: {e}")
-
-
         return None
+
 
 def cancel_order(symbol, id):
     try:
@@ -286,7 +269,6 @@ def fetch_time(self, params={}):
 async def fetch_spot_balance(exchange):
     balance = await exchange.fetch_balance()
     print("Spot Balance:", balance)
-
 
 async def create_limit_order(exchange, symbol, order_type, side, amount, price):
     create_order = await exchange.create_order(symbol, order_type, side, amount, price)
