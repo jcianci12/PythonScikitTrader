@@ -182,26 +182,25 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
         market_price = float(market_data)
 
         type = 'limit'  # or 'market'
-        side = 'buy'
         price = market_price + 2  # your price
         exchange.load_markets()
 
         market = exchange.market(symbol)
-        buyresponse = exchange.create_market_buy_order(
-            market['id'],
+        buyresponse = exchange.create_market_order(
+            market['id'],side,
             amount
         )
         print(buyresponse)
-        ocoresponse = exchange.private_post_order_oco({
-            'symbol': market['id'],
-            'side': 'SELL',  # SELL, BUY
-            'quantity': exchange.amount_to_precision(symbol, amount),
-            'price': exchange.price_to_precision(symbol, price),
-            'stopPrice': exchange.price_to_precision(symbol, sl),
-            'stopLimitPrice': exchange.price_to_precision(symbol, tp),  # If provided, stopLimitTimeInForce is required
-            'stopLimitTimeInForce': 'GTC',  # GTC, FOK, IOC
-        })
-        logger(ocoresponse)
+        # ocoresponse = exchange.private_post_order_oco({
+        #     'symbol': market['id'],
+        #     'side': 'SELL',  # SELL, BUY
+        #     'quantity': exchange.amount_to_precision(symbol, amount),
+        #     'price': exchange.price_to_precision(symbol, price),
+        #     'stopPrice': exchange.price_to_precision(symbol, sl),
+        #     'stopLimitPrice': exchange.price_to_precision(symbol, tp),  # If provided, stopLimitTimeInForce is required
+        #     'stopLimitTimeInForce': 'GTC',  # GTC, FOK, IOC
+        # })
+        logger(buyresponse)
         
     # Save the order details to a CSV file
         with open('orders.csv', mode='a') as file:
@@ -213,7 +212,7 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
 
             # Write the order details
             writer.writerow([
-                ocoresponse['listClientOrderId'],
+                buyresponse['clientOrderId'],
                 datetime.datetime.now(),
                 symbol,
                 side,
@@ -221,11 +220,11 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
                 market_price,
                 tp,
                 sl,
-                ocoresponse['orders'][0]['clientOrderId'],
-                ocoresponse['orders'][1]['clientOrderId'],
+                "",
+                "",
                 ""
             ])
-            return ocoresponse
+            return buyresponse
     except Exception as e:
         logger(f"An error occurred while placing the order: {e}")
         return None

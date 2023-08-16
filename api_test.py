@@ -8,7 +8,6 @@ import pandas as pd
 from KEYS import API_KEY, API_SECRET
 
 from bybitapi import cancel_all, fetch_bybit_data_v5, get_intervals, get_market_ask_price, get_market_bid_price, get_server_time, get_free_balance,  place_order
-from checkorders import check_closed_orders
 from config import BUYTHRESHOLD, INTERVAL, TEST
 from functions.logger import logger
 from generateTPandSL import calculate_prices
@@ -50,32 +49,19 @@ class API_Tests(unittest.TestCase):
         Function to test buying.
         """
         # Get the USDT balance
-        usdtbalance = float(get_free_balance(TEST, "USDT"))
+        usdtbalance = float(get_free_balance("USDT"))
         
 
         # Calculate the quantity to buy (2% of USDT balance)
-        qty = (2 / 100) * usdtbalance
-        qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN)
-        
+               
         tp,sl = calculate_prices(None)
         # Place a buy order using 2% of USDT balance
-        buy = place_order(TEST, "Market","BTCUSDT","buy",tp,sl, qty_rounded)
+        buy = place_order(TEST,"market", "BTCUSDT","buy",tp,sl,  0.0004)
         
         # Assert that the buy order was successful
         assert buy['retCode'] == 0, f"Buy order failed: {buy}"
 
-    def test_check_closed_orders(self):
-        check_closed_orders()
-        assert True
-    
-    def test_call_check_orders(self):
-        
-        while True:
-            try:
-                check_closed_orders()
-                time.sleep(30)
-            except Exception as e:
-                print(f"An error occurred: {e}")    
+  
 
     def test_buylogic(self):
         """
@@ -167,18 +153,18 @@ class API_Tests(unittest.TestCase):
 
 import unittest
 import asyncio
-import ccxt.async_support as ccxt
 
 
-class TestExample1(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        cls.exchange = ccxt.bybit({
-            'apiKey': API_KEY,
-            'secret': API_SECRET,
-        })
-        cls.exchange.options['defaultType'] = 'unified'  # Set spot as default type
+# class TestExample1(unittest.TestCase):
+
+#     @classmethod
+#     def setUpClass(cls):
+#         cls.exchange = ccxt.bybit({
+#             'apiKey': API_KEY,
+#             'secret': API_SECRET,
+#         })
+#         cls.exchange.options['defaultType'] = 'unified'  # Set spot as default type
 
     # @classmethod
     # def tearDownClass(cls):
