@@ -1,5 +1,5 @@
 import time
-from checkorders import check_closed_orders
+from bybitapi import check_closed_orders
 
 
 def test_call_check_orders():        

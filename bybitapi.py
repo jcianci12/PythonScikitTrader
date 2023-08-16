@@ -22,6 +22,7 @@ exchange = ccxt.binance({
     'apiKey': API_KEY,
     'secret': API_SECRET,
     'enableRateLimit': True,
+    "timeout":10000000
 })
 # very important set spot as default type
 exchange.options['defaultType'] = 'spot'
@@ -175,7 +176,7 @@ def get_market_ask_price(symbol: str) -> float:
 def place_order(testmode, type, symbol, side, tp, sl, amount):
     try:
         # Get the market data
-        market_data = get_market_bid_price(symbol)
+        market_data = get_market_ask_price(symbol)
 
         # Get the market price
         market_price = float(market_data)
@@ -191,7 +192,7 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
             amount
         )
         print(buyresponse)
-        response = exchange.private_post_order_oco({
+        ocoresponse = exchange.private_post_order_oco({
             'symbol': market['id'],
             'side': 'SELL',  # SELL, BUY
             'quantity': exchange.amount_to_precision(symbol, amount),
@@ -200,7 +201,7 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
             'stopLimitPrice': exchange.price_to_precision(symbol, tp),  # If provided, stopLimitTimeInForce is required
             'stopLimitTimeInForce': 'GTC',  # GTC, FOK, IOC
         })
-        logger(response)
+        logger(ocoresponse)
         
     # Save the order details to a CSV file
         with open('orders.csv', mode='a') as file:
@@ -212,7 +213,7 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
 
             # Write the order details
             writer.writerow([
-                response['listClientOrderId'],
+                ocoresponse['listClientOrderId'],
                 datetime.datetime.now(),
                 symbol,
                 side,
@@ -220,11 +221,11 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
                 market_price,
                 tp,
                 sl,
-                response['orders'][0]['clientOrderId'],
-                response['orders'][1]['clientOrderId'],
+                ocoresponse['orders'][0]['clientOrderId'],
+                ocoresponse['orders'][1]['clientOrderId'],
                 ""
             ])
-            return response
+            return ocoresponse
     except Exception as e:
         logger(f"An error occurred while placing the order: {e}")
         return None
