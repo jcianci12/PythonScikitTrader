@@ -6,7 +6,7 @@ import csv
 
 import pandas as pd
 from bybitapi import get_market_bid_price
-from config import STOPLOSS, SYMBOL, TAKEPROFIT, TEST
+from config import ORDERCOLUMNS, STOPLOSS, SYMBOL, TAKEPROFIT, TEST
 
 from get_last_ohlc_bybit import get_last_ohlc_binance
 from minimum_movement_to_take_profit import calculate_smallest_movement
@@ -14,7 +14,7 @@ from minimum_movement_to_take_profit import calculate_smallest_movement
 def save_updated_prices(filename, orders):
     # Write updated data to CSV file
     with open(filename, mode='w') as file:
-        fieldnames = ['uid', 'symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice', 'profit']
+        fieldnames = ORDERCOLUMNS
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(orders)

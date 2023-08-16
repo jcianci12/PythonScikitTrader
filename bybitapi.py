@@ -174,6 +174,7 @@ def get_market_ask_price(symbol: str) -> float:
 # get_market_ask_price(True, "BTCUSDT")
 # %%
 def place_order(testmode, type, symbol, side, tp, sl, amount):
+    logger(symbol, side, tp, sl, amount)
     try:
         # Get the market data
         market_data = get_market_ask_price(symbol)
@@ -181,25 +182,16 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
         # Get the market price
         market_price = float(market_data)
 
-        type = 'limit'  # or 'market'
         price = market_price + 2  # your price
         exchange.load_markets()
-
+        amount = exchange.amount_to_precision(symbol,amount)
         market = exchange.market(symbol)
         buyresponse = exchange.create_market_order(
             market['id'],side,
             amount
         )
         print(buyresponse)
-        # ocoresponse = exchange.private_post_order_oco({
-        #     'symbol': market['id'],
-        #     'side': 'SELL',  # SELL, BUY
-        #     'quantity': exchange.amount_to_precision(symbol, amount),
-        #     'price': exchange.price_to_precision(symbol, price),
-        #     'stopPrice': exchange.price_to_precision(symbol, sl),
-        #     'stopLimitPrice': exchange.price_to_precision(symbol, tp),  # If provided, stopLimitTimeInForce is required
-        #     'stopLimitTimeInForce': 'GTC',  # GTC, FOK, IOC
-        # })
+      
         logger(buyresponse)
         
     # Save the order details to a CSV file
