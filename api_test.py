@@ -14,6 +14,8 @@ from generateTPandSL import calculate_prices
 from logic.buylogic import buylogic
 from logic.selllogic import selllogic
 from messengerservice import send_telegram_message
+import unittest
+import asyncio
 
 
 
@@ -49,14 +51,13 @@ class API_Tests(unittest.TestCase):
         Function to test buying.
         """
         # Get the USDT balance
-        usdtbalance = float(get_free_balance("USDT"))
         
 
         # Calculate the quantity to buy (2% of USDT balance)
                
         tp,sl = calculate_prices(None)
         # Place a buy order using 2% of USDT balance
-        buy = place_order(TEST,"market", "BTCUSDT","buy",tp,sl,  0.0004)
+        buy = place_order(TEST,"market", "BTCUSDT","sell",tp,sl,  0.0004)
         
         # Assert that the buy order was successful
         assert buy['retCode'] == 0, f"Buy order failed: {buy}"
@@ -151,79 +152,5 @@ class API_Tests(unittest.TestCase):
         self.assertIsNotNone(server_time)
 
 
-import unittest
-import asyncio
 
 
-
-# class TestExample1(unittest.TestCase):
-
-#     @classmethod
-#     def setUpClass(cls):
-#         cls.exchange = ccxt.bybit({
-#             'apiKey': API_KEY,
-#             'secret': API_SECRET,
-#         })
-#         cls.exchange.options['defaultType'] = 'unified'  # Set spot as default type
-
-    # @classmethod
-    # def tearDownClass(cls):
-    #     asyncio.get_event_loop().run_until_complete(cls.exchange.close())
-
-    # async def test_fetch_spot_balance(self):
-    #     balance = await fetch_spot_balance(self.exchange)
-    #     self.assertIsNotNone(balance)
-    #     self.assertIn('total', balance)
-
-    # def test_create_market_buy_order_tp_sl(self):
-    #     response = place_order(TEST,"market", "BTC/USDT","buy", 50000,10000, 0.001)
-
-    #     print(response)
-    #     self.assertIs(True,True)
-
-    # def test_create_market_sell_order(self):        
-    #     response = place_order(TEST,"market", "BTC/USDT","sell", None,None, 0.001)
-
-    #     print(response)
-    #     self.assertIs(True,True)
-
-    # async def test_create_limit_order(self):
-    #     symbol = 'LTC/USDT'
-    #     order_type = 'limit'
-    #     side = 'buy'
-    #     amount = 0.1
-    #     price = 50
-    #     created_order = await create_limit_order(self.exchange, symbol, order_type, side, amount, price)
-    #     self.assertIsNotNone(created_order)
-    #     self.assertIn('id', created_order)
-
-    # async def test_cancel_order(self):
-    #     symbol = 'LTC/USDT'
-    #     order_id = 'order_id_here'  # Replace 'order_id_here' with the actual order ID
-    #     canceled_order = await cancel_order(self.exchange, order_id, symbol)
-    #     self.assertIsNotNone(canceled_order)
-    #     self.assertIn('id', canceled_order)
-
-    # async def test_fetch_closed_orders(self):
-    #     symbol = 'LTC/USDT'
-    #     closed_orders = await fetch_closed_orders(self.exchange, symbol)
-    #     self.assertIsNotNone(closed_orders)
-    #     self.assertIsInstance(closed_orders, list)
-
-    # def run_async_test(self, coro):
-    #     loop = asyncio.get_event_loop()
-    #     return loop.run_until_complete(coro)
-
-        
-
-    # def test_async(self):
-    #     self.run_async_test(self.test_fetch_spot_balance())
-    #     self.run_async_test(self.test_create_limit_order())
-    #     self.run_async_test(self.test_cancel_order())
-    #     self.run_async_test(self.test_fetch_closed_orders())
-
-
-
-
-
-        

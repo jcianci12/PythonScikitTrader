@@ -189,7 +189,7 @@ if (TESTRETRAINATSTART):
     logger("Done.")
 
 
-call_decide_every_n_seconds(300, trade_loop)
+# call_decide_every_n_seconds(300, trade_loop)
 # startListening()
 
 

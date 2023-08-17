@@ -51,8 +51,8 @@ def get_tp_sl_from_ATR(atr,entry_price):
     #the atr is the whole range, so we should divide by two to find the centre
     atr = atr/2
     # Calculate take profit and stop loss prices
-    tp = float(entry_price) + TAKEPROFIT * atr
-    sl = float(entry_price) - STOPLOSS * atr
+    tp = float(entry_price) + (TAKEPROFIT * atr)
+    sl = float(entry_price) - (STOPLOSS * atr)
 
     min_profit_price = min_movement + entry_price
     if(min_profit_price>tp):

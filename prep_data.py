@@ -89,11 +89,11 @@ def _get_indicator_data(data):
     """
 
     for indicator in INDICATORS:
-        ind_data = eval('TA.' + indicator + '(data)')
+        ind_data = getattr(TA, indicator)(data)
         if not isinstance(ind_data, pd.DataFrame):
             ind_data = ind_data.to_frame()
-        data = data.merge(ind_data, left_index=True, right_index=True)
-    data.rename(columns={"14 period EMV.": '14 period EMV'}, inplace=True)
+        data = data.join(ind_data, rsuffix='_' + indicator)
+    data.columns = data.columns.str.replace('[^a-zA-Z0-9 ]', '')
 
     # Also calculate moving averages for features
     data['ema50'] = data['close'] / data['close'].ewm(50).mean()

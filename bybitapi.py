@@ -177,12 +177,9 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
     logger(symbol, side, tp, sl, amount)
     try:
         # Get the market data
-        market_data = get_market_ask_price(symbol)
 
         # Get the market price
-        market_price = float(market_data)
 
-        price = market_price + 2  # your price
         exchange.load_markets()
         amount = exchange.amount_to_precision(symbol,amount)
         market = exchange.market(symbol)
@@ -209,7 +206,7 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
                 symbol,
                 side,
                 amount,
-                market_price,
+                buyresponse['price'],
                 tp,
                 sl,
                 "",

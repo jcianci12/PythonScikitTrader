@@ -7,3 +7,4 @@ ccxt
 pandas
 joblib
 python-telegram-bot
+asciichartpy
