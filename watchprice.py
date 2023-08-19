@@ -1,14 +1,16 @@
-import decimal
 from pybit.unified_trading import WebSocket
-from time import sleep, time
+from time import time
 import csv
-from TrainAndTest import trade_loop
+from check_amount import check_amount, get_amount
 
-from bybitapi import place_order
-from functions.clock import call_decide_every_n_seconds
-from generateTPandSL import calculate_prices, save_updated_prices
+from generateTPandSL import save_updated_prices
 import asciichartpy
-import threading
+from binance import ThreadedWebsocketManager
+from KEYS import API_KEY,API_SECRET
+from bybitapi import exchange, get_free_balance
+
+
+
 
 
 orders = []
@@ -29,9 +31,9 @@ def refresh_orders():
 
     order_refresh_time = time()
 
+
 def check_orders(testmode, symbol, market_price):
     orders = get_open_orders()
-    print("check orders called")
 
     # Refresh the orders if it has been more than 5 seconds since the last refresh
     if time() - order_refresh_time > 5:
@@ -43,41 +45,57 @@ def check_orders(testmode, symbol, market_price):
     changed = False
 
     # Check for open orders that have reached their take profit or stop loss prices
-    for order in orders:
-        if not order['profit']:
-            # ohlc = get_last_ohlc_bybit(symbol,"5")
-            entry_price = float(order['entryprice'])
-            takeprofitprice = float(order['takeprofitprice'])
-            stoplossprice = float(order['stoplossprice'])
-            side = order['side'].lower()
-            qty =   float(order['qty'])
-            if (side == 'buy' and market_price >= takeprofitprice) or (side == 'sell' and market_price <= takeprofitprice):
-                # Take profit
-                new_side = 'Sell' if side == 'buy' else 'buy'
-                po = place_order(testmode,"market","BTC/USDT", new_side,None,None
-                            ,qty)
-                closeprice = po['price']
-                order['profit'] = ((closeprice - closeprice) * \
-                    qty if side == 'buy' else (
-                        takeprofitprice - closeprice) * (qty))
-                # Set the flag to True
-                changed = True
-            elif (side == 'buy' and market_price <= stoplossprice) or (side == 'sell' and market_price >= stoplossprice):
-                # Stop loss
-                new_side = 'Sell' if side == 'buy' else 'buy'
-                po = place_order(testmode,"market","BTC/USDT", new_side,takeprofitprice,stoplossprice,
-                            qty)
-                closeprice = po['price']
+    if len(orders)>0:
+        for order in orders:
+            if not order['profit']:
+                # ohlc = get_last_ohlc_bybit(symbol,"5")
+                entry_price = float(order['entryprice'])
+                takeprofitprice = float(order['takeprofitprice'])
+                stoplossprice = float(order['stoplossprice'])
+                side = order['side'].lower()
+                amount =   float(order['qty'])
+                
+                if (side == 'buy' and market_price >= takeprofitprice) or (side == 'sell' and market_price <= takeprofitprice):
+                    # Take profit
+                    new_side = 'Sell' if side == 'buy' else 'buy'
+                    amount = get_amount(amount,new_side,market_price)
+                    enough = check_amount(amount,market_price,new_side)
 
-                order['profit'] = ((closeprice - closeprice) * \
-                    qty if side == 'buy' else (
-                        stoplossprice - closeprice) * (qty))
-                # Set the flag to True
-                changed = True
+                    if(enough):
+                        po = exchange.create_market_order(symbol,new_side,amount)
+                        closeprice = po['price']
+                        order['profit'] = ((entry_price - closeprice) * \
+                            amount if side == 'buy' else (
+                                takeprofitprice - closeprice) * amount)
+                        # Set the flag to True
+                    else:
+                        order['profit'] = "Not enough"
 
-    # Save the updated orders back to the CSV file only if the flag is True
-    if changed:
-        save_updated_prices('orders.csv', orders)
+                    changed = True
+
+                elif (side == 'buy' and market_price <= stoplossprice) or (side == 'sell' and market_price >= stoplossprice):
+                    # Stop loss
+                    new_side = 'Sell' if side == 'buy' else 'buy'
+                    amount = get_amount(amount,new_side,market_price)
+                    enough = check_amount(amount,market_price,new_side)
+                    if(enough):
+                        po = exchange.create_market_order(symbol,new_side,amount)
+
+                    
+                        closeprice = po['price']
+
+                        order['profit'] = ((entry_price - closeprice) * \
+                            amount if side == 'buy' else (
+                                stoplossprice - closeprice) * amount)
+                    else:
+                        order['profit'] = "Not enough"
+
+                    # Set the flag to True
+                    changed = True
+
+        # Save the updated orders back to the CSV file only if the flag is True
+        if changed:
+            save_updated_prices('orders.csv', orders)
 
 
 
@@ -110,9 +128,10 @@ def print_orders():
             sl = "{:.2f}".format(float(order['stoplossprice']))
             print(tp.rjust(width) + "\t" + sl.rjust(width))
 # Define the plot_ascii_chart function
+# Define the plot_ascii_chart function
 def plot_ascii_chart(data):
     # Extract the usdIndexPrice from the data
-    usd_index_price = float(data["data"]["usdIndexPrice"])
+    usd_index_price = float(data['k']['c'])
 
     # Append the usdIndexPrice to the global list
     global prices
@@ -121,40 +140,48 @@ def plot_ascii_chart(data):
     # Clear the console
     print("\033[H\033[J")
     print_orders()
-
     # Plot the prices using asciichart
     print(asciichartpy.plot(prices[-40:]))
 
 
 # Define the handle_message function
 def handle_message(message):
-  print(message['data']['usdIndexPrice'])
+    print(message['k']['c'])
   
-  if 'topic' in message and message['topic'] == 'tickers.BTCUSDT':
-    usdindexprice = message['data']['usdIndexPrice']
+#   if 'topic' in message and message['topic'] == 'tickers.BTCUSDT':
+    usdindexprice = message['k']['c']
     if(usdindexprice!=''):
-      last_price = float(message['data']['usdIndexPrice'])
-      check_orders(True, "BTCUSDT", last_price)
-      # Call the plot_ascii_chart function with the message as an argument
-      plot_ascii_chart(message)
+        last_price = float(message['k']['c'])
+        check_orders(True, "BTCUSDT", last_price)
+        # Call the plot_ascii_chart function with the message as an argument
+        plot_ascii_chart(message)
 
- 
 def startListening():
-    getws().ticker_stream(
-        symbol="BTCUSDT",
-        callback=handle_message
-    )
-    
-    while True:
-        sleep(1)
-        
+
+    symbol = 'BTCUSDT'
+
+    twm = ThreadedWebsocketManager(api_key=API_KEY, api_secret=API_SECRET)
+    # start is required to initialise its internal loop
+    twm.start()
+
+    def handle_socket_message(msg):
+        # print(f"message type: {msg}")
+        # print(msg)
+        handle_message(msg)
+
+    twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
+
+    # multiple sockets can be started
+    # twm.start_depth_socket(callback=handle_socket_message, symbol=symbol)
+
+    # or a multiplex socket can be started like this
+    # see Binance docs for stream names
+    twm.join()
 
 
 
-# create two thread objects
-t1 = threading.Thread(target=startListening)
-t2 = threading.Thread(target=call_decide_every_n_seconds, args=(300, trade_loop))
-t1.start()
-t2.start()
-# check_orders(True, "BTCUSDT", 30000)
 
+
+
+
+startListening()

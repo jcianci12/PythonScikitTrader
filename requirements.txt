@@ -8,3 +8,4 @@ pandas
 joblib
 python-telegram-bot
 asciichartpy
+python-binance

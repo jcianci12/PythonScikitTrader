@@ -173,7 +173,7 @@ def get_market_ask_price(symbol: str) -> float:
 
 # get_market_ask_price(True, "BTCUSDT")
 # %%
-def place_order(testmode, type, symbol, side, tp, sl, amount):
+def place_order_tp_sl(testmode, type, symbol, side, tp, sl, amount):
     logger(symbol, side, tp, sl, amount)
     try:
         # Get the market data
@@ -205,7 +205,7 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
                 datetime.datetime.now(),
                 symbol,
                 side,
-                amount,
+                buyresponse['amount'],
                 buyresponse['price'],
                 tp,
                 sl,
@@ -227,48 +227,9 @@ def cancel_order(symbol, id):
         logger(f"An error occurred: {e}")
 
 
-# print(Test_Buy_and_Sell())
-# %%
-def cancel_all(test, coin):
-    session = get_session(test)
-    response = session.cancel_all_orders(category="spot", settleCoin=coin)
-    return response
-
-
-def get_server_time():
-    response = requests.get('https://api.bybit.com/v2/public/time')
-    data = response.json()
-    server_time = data['time_now']
-    logger("server time is:", server_time)
-    return server_time
-
-
-def load_time_difference(self, params={}):
-    serverTime = self.fetch_time(params)
-    after = self.milliseconds()
-    self.options['timeDifference'] = after - serverTime
-    return self.options['timeDifference']
-
-
-def fetch_time(self, params={}):
-    response = self.publicGetTime(params)
-    return self.safe_timestamp(response, 'time_now')
 
 
 async def fetch_spot_balance(exchange):
     balance = await exchange.fetch_balance()
     print("Spot Balance:", balance)
 
-async def create_limit_order(exchange, symbol, order_type, side, amount, price):
-    create_order = await exchange.create_order(symbol, order_type, side, amount, price)
-    print('Created Order ID:', create_order['id'])
-
-
-# async def cancel_order(exchange, order_id, symbol):
-#     canceled_order = await exchange.cancel_order(order_id, symbol)
-#     print('Canceled Order ID:', canceled_order['id'])
-
-
-async def fetch_closed_orders(exchange, symbol):
-    orders = await exchange.fetch_closed_orders(symbol)
-    print("Canceled Orders:", orders)

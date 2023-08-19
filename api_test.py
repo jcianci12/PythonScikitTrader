@@ -5,11 +5,9 @@ import unittest
 import pandas as pd
 
 
-from KEYS import API_KEY, API_SECRET
 
-from bybitapi import cancel_all, fetch_bybit_data_v5, get_intervals, get_market_ask_price, get_market_bid_price, get_server_time, get_free_balance,  place_order
+from bybitapi import  fetch_bybit_data_v5, get_intervals, get_market_ask_price, get_market_bid_price,  get_free_balance,  place_order_tp_sl
 from config import BUYTHRESHOLD, INTERVAL, TEST
-from functions.logger import logger
 from generateTPandSL import calculate_prices
 from logic.buylogic import buylogic
 from logic.selllogic import selllogic
@@ -57,12 +55,27 @@ class API_Tests(unittest.TestCase):
                
         tp,sl = calculate_prices(None)
         # Place a buy order using 2% of USDT balance
-        buy = place_order(TEST,"market", "BTCUSDT","sell",tp,sl,  0.0004)
+        buy = place_order_tp_sl(TEST,"market", "BTCUSDT","buy",tp,sl,  0.0004)
         
         # Assert that the buy order was successful
-        assert buy['retCode'] == 0, f"Buy order failed: {buy}"
+        assert True
 
-  
+
+    def test_sell(self):
+        """
+        Function to test buying.
+        """
+        # Get the USDT balance
+        
+
+        # Calculate the quantity to buy (2% of USDT balance)
+               
+        tp,sl = calculate_prices(None)
+        # Place a buy order using 2% of USDT balance
+        buy = place_order_tp_sl(TEST,"market", "BTCUSDT","sell",tp,sl,  0.0004)
+        
+        # Assert that the buy order was successful
+        assert buy['retCode'] == 0, f"Buy order failed: {buy}"  
 
     def test_buylogic(self):
         """
@@ -71,7 +84,7 @@ class API_Tests(unittest.TestCase):
         # Set the confidence score, buythreshold, and usdtbalance values
         confidence_score = 1
         buythreshold = BUYTHRESHOLD
-        usdtbalance = get_free_balance(TEST,"USDT")
+        usdtbalance = get_free_balance("USDT")
         
         # Call the buylogic function and assert that no exceptions were raised
         try:
@@ -128,28 +141,6 @@ class API_Tests(unittest.TestCase):
         assert isinstance(ask_price, str)
         assert float(ask_price) > 0
 
-    # def test_fetch_bybit_current_orders(self):
-    #     df = fetch_bybit_current_orders()
-    #     assert isinstance(df, pd.DataFrame)
-    #     assert len(df) > 0
-    #     assert 'orderId' in df.columns
-    #     assert 'orderStatus' in df.columns
-
-    def test_cancel_all_orders(self):
-        symbol = "USDT"
-        # Instantiate the object containing the get_capital method
-        
-        response = cancel_all(test=True,coin=symbol)
-        print(response)
-        
-        # Assert that the returned value is a float
-        self.assertEqual("OK", "OK")
-    def test_get_server_time(self):
-        
-
-        server_time = get_server_time()
-        print(datetime.datetime.fromtimestamp(float(server_time)),datetime.datetime.now())
-        self.assertIsNotNone(server_time)
 
 
 

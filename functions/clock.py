@@ -1,7 +1,6 @@
 import datetime
 import os
 import time
-from bybitapi import get_server_time
 from functions.logger import logger
 
 

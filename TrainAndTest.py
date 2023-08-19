@@ -188,8 +188,7 @@ if (TESTRETRAINATSTART):
     mm.clean_up_models("models")
     logger("Done.")
 
-
-# call_decide_every_n_seconds(300, trade_loop)
+call_decide_every_n_seconds(300, trade_loop)
 # startListening()
 
 

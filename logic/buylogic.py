@@ -1,5 +1,6 @@
 import decimal
-from bybitapi import get_market_ask_price, get_market_bid_price, get_min_qty_binance, place_order
+from bybitapi import get_market_ask_price, get_market_bid_price, get_min_qty_binance, place_order_tp_sl
+from check_amount import check_amount, get_amount
 from config import *
 from functions.logger import logger
 from functions.map_range import map_range
@@ -31,7 +32,7 @@ def buylogic(confidence_score,  usdtbalance):
     # formatted_amount = exchange.amount_to_precision('BTC/USDT', buyamountinusdt)
     # formatted_price = float(exchange.price_to_precision('BTC/USDT', buyamountinusdt))
     amount = buyamountinusdt+20
-    amount =   exchange.amount_to_precision("BTC/USDT",float(amount)/float(marketprice))
+    amount =   get_amount(amount,"buy",marketprice)
     
     
     logger("Decided to buy %", MAXBUYPERCENTOFCAPITAL, " of USDT balance. |USDT balance: ", usdtbalance,
@@ -40,7 +41,7 @@ def buylogic(confidence_score,  usdtbalance):
     # tp,sl = tpsl_smallest_movement()
 
     # Check if the transaction amount is greater than the minimum transaction size
-    if float(amount)>0 and (float(amount)*float(marketprice))<usdtbalance:
+    if check_amount(amount,marketprice,"buy"):
         logger("Enough USDT to cover purchase of ", "USDT", " balance is:", usdtbalance)
         
         # Calculate the quantity to buy
@@ -50,7 +51,7 @@ def buylogic(confidence_score,  usdtbalance):
         # Place the buy order
         # response = place_order(TEST, "BTCUSDT", "USDT",TAKEPROFIT,STOPLOSS, qty_rounded)
         tp,sl = calculate_prices(None)
-        response = place_order(TEST,"market", "BTCUSDT","buy",tp,sl,  amount)
+        response = place_order_tp_sl(TEST,"market", "BTCUSDT","buy",tp,sl,  amount)
 
         print(response)
     else:
