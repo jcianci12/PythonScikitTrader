@@ -31,17 +31,17 @@ def buylogic(confidence_score,  usdtbalance):
 
     # formatted_amount = exchange.amount_to_precision('BTC/USDT', buyamountinusdt)
     # formatted_price = float(exchange.price_to_precision('BTC/USDT', buyamountinusdt))
-    amount = buyamountinusdt+20
-    amount =   get_amount(amount,"buy",marketprice)
+    amount = buyamountinusdt
     
     
     logger("Decided to buy %", MAXBUYPERCENTOFCAPITAL, " of USDT balance. |USDT balance: ", usdtbalance,
            " | BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", amount)
     tp,sl = calculate_prices(None)
     # tp,sl = tpsl_smallest_movement()
-
+    amount = get_amount(amount,"buy",marketprice)
+    enough = check_amount(amount,marketprice,"buy")
     # Check if the transaction amount is greater than the minimum transaction size
-    if check_amount(amount,marketprice,"buy"):
+    if enough:
         logger("Enough USDT to cover purchase of ", "USDT", " balance is:", usdtbalance)
         
         # Calculate the quantity to buy
