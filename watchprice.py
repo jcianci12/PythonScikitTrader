@@ -32,70 +32,65 @@ def refresh_orders():
     order_refresh_time = time()
 
 
+# Define constants
+REFRESH_INTERVAL = 5
+BUY = 'buy'
+SELL = 'sell'
+
+# Define a function to calculate the profit or loss
+def calculate_profit_loss(entry_price, close_price, side, amount):
+    if side == BUY:
+        return (close_price - entry_price) * amount
+    elif side == SELL:
+        return (entry_price - close_price) * amount
+
+# Define a function to check if the market price has reached the take profit or stop loss prices
+def check_price_reached(market_price, take_profit_price, stop_loss_price, side):
+    if side == BUY:
+        return market_price >= take_profit_price or market_price <= stop_loss_price
+    elif side == SELL:
+        return market_price <= take_profit_price or market_price >= stop_loss_price
+
 def check_orders(testmode, symbol, market_price):
     orders = get_open_orders()
 
-    # Refresh the orders if it has been more than 5 seconds since the last refresh
-    if time() - order_refresh_time > 5:
+    # Refresh the orders if it has been more than REFRESH_INTERVAL seconds since the last refresh
+    if time() - order_refresh_time > REFRESH_INTERVAL:
         refresh_orders()
-
-   
-
+        
     # Initialize a boolean flag to False
     changed = False
 
     # Check for open orders that have reached their take profit or stop loss prices
-    if len(orders)>0:
-        for order in orders:
-            if not order['profit']:
-                # ohlc = get_last_ohlc_bybit(symbol,"5")
-                entry_price = float(order['entryprice'])
-                takeprofitprice = float(order['takeprofitprice'])
-                stoplossprice = float(order['stoplossprice'])
-                side = order['side'].lower()
-                amount =   float(order['qty'])
-                
-                if (side == 'buy' and market_price >= takeprofitprice) or (side == 'sell' and market_price <= takeprofitprice):
-                    # Take profit
-                    new_side = 'Sell' if side == 'buy' else 'buy'
-                    amount = get_amount(amount,new_side,market_price)
-                    enough = check_amount(amount,market_price,new_side)
+    for order in orders:
+        if not order['profit']:
+            entry_price = float(order['entryprice'])
+            take_profit_price = float(order['takeprofitprice'])
+            stop_loss_price = float(order['stoplossprice'])
+            side = order['side'].lower()
+            amount =   float(order['qty'])
+            
+            # Check if the market price has reached the take profit or stop loss prices
+            if check_price_reached(market_price, take_profit_price, stop_loss_price, side):
+                # Close the order at the market price
+                new_side = SELL if side == BUY else BUY
+                amount = get_amount(amount,new_side,market_price)
+                enough = check_amount(amount,market_price,new_side)
 
-                    if(enough):
-                        po = exchange.create_market_order(symbol,new_side,amount)
-                        closeprice = po['price']
-                        order['profit'] = ((entry_price - closeprice) * \
-                            amount if side == 'buy' else (
-                                takeprofitprice - closeprice) * amount)
-                        # Set the flag to True
-                    else:
-                        order['profit'] = "Not enough"
+                if(enough):
+                    order_result = exchange.create_market_order(symbol,new_side,amount)
+                    close_price = order_result['price']
+                    # Calculate the profit or loss
+                    order['profit'] = calculate_profit_loss(entry_price, close_price, side, amount)
+                else:
+                    order['profit'] = "Not enough"
 
-                    changed = True
+                # Set the flag to True
+                changed = True
+            # Save the updated orders back to the CSV file only if the flag is True
+    if changed:
+        save_updated_prices('orders.csv', orders)
 
-                elif (side == 'buy' and market_price <= stoplossprice) or (side == 'sell' and market_price >= stoplossprice):
-                    # Stop loss
-                    new_side = 'Sell' if side == 'buy' else 'buy'
-                    amount = get_amount(amount,new_side,market_price)
-                    enough = check_amount(amount,market_price,new_side)
-                    if(enough):
-                        po = exchange.create_market_order(symbol,new_side,amount)
-
-                    
-                        closeprice = po['price']
-
-                        order['profit'] = ((entry_price - closeprice) * \
-                            amount if side == 'buy' else (
-                                stoplossprice - closeprice) * amount)
-                    else:
-                        order['profit'] = "Not enough"
-
-                    # Set the flag to True
-                    changed = True
-
-        # Save the updated orders back to the CSV file only if the flag is True
-        if changed:
-            save_updated_prices('orders.csv', orders)
 
 
 
