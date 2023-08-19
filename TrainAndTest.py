@@ -2,6 +2,7 @@
 import asyncio
 import datetime
 import decimal
+import json
 import os
 import time
 import pandas as pd
@@ -9,6 +10,7 @@ import numpy as np
 
 
 import joblib
+from KEYS import API_KEY, API_SECRET
 from binance_fetch_balance import get_balance
 from functions.map_range import map_range
 from functions.modelmanagement import ModelManagement
@@ -30,6 +32,7 @@ import multiprocessing as mp
 from messengerservice import send_telegram_message
 
 from prep_data import prep_data
+from binance import ThreadedWebsocketManager
 
 
 # %%
@@ -188,7 +191,42 @@ if (TESTRETRAINATSTART):
     mm.clean_up_models("models")
     logger("Done.")
 
-call_decide_every_n_seconds(300, trade_loop)
-# startListening()
+firstrun = True
+
+def handle_socket_message(msg):
+        global firstrun
+        # get the kline data from the message
+        kline = msg['k']
+        print(kline)
+        # check if the kline is closed
+        if(firstrun):
+            trade_loop()
+            firstrun = False
+        elif kline['x']:
+            # if yes, then use its data to trade
+            
+            trade_loop()
+        else:
+            # if no, then wait for the next message
+            pass
+        
+def startListening():
+
+    symbol = 'BTCUSDT'
+
+    twm = ThreadedWebsocketManager(api_key=API_KEY, api_secret=API_SECRET)
+    # start is required to initialise its internal loop
+    twm.start()
+    
+
+    twm.start_kline_socket(handle_socket_message, symbol,'5m')
+
+    twm.join()
+
+startListening()
+
+
+
+
 
 

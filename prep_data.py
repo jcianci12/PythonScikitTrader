@@ -33,7 +33,8 @@ def _produce_movement_indicators(data):
     data["pred"] = pred
     data["preddec"] = preddec
 
-    
+    data = removecols(data)
+
     return data
 
 def signal_func(row, data, index):
@@ -48,15 +49,18 @@ def signal_func(row, data, index):
 
 
     #lookahead value
-    futurecloseprice = data["close"].shift(-LOOKAHEAD_VALUE+index).iloc[:1].iloc[0]
+    highesthigh = data['high'].rolling(LOOKAHEAD_VALUE).max().shift(-LOOKAHEAD_VALUE+1).iloc[index]
+    lowestlow = data['low'].rolling(LOOKAHEAD_VALUE).min().shift(-LOOKAHEAD_VALUE+1).iloc[index]
+    # hitstp = data['low'].rolling(LOOKAHEAD_VALUE).min().shift(-LOOKAHEAD_VALUE+1).iloc[index]
     # check if the price increases or decreases by more than the thresholds in the next 'window' rows
-    up_signal = 1 if random.random()>=0.5 else 0
-    down_signal = int(futurecloseprice<=sl)
+    HitsTP = 1 if int(highesthigh>=tp) else 0
+    HitsSL = int(lowestlow<=sl)
 
-    print(f"MP:{current_price}|TP:{tp}|SL:{sl}|UpSignal:{up_signal}|DownSignal:{down_signal}")   
-   
+    print(f"MP:{current_price}|TP:{tp}|SL:{sl}|UpSignal:{HitsTP}|DownSignal:{HitsSL}|HighestHigh:{highesthigh}|LowestLow:{lowestlow}")   
+    #remove uneeded columns
+
 #it looks like this is just returning the same values for the whole series
-    return pd.Series([up_signal, down_signal])
+    return pd.Series([HitsTP, HitsSL])
 
 
 
@@ -105,20 +109,23 @@ def _get_indicator_data(data):
     data['normVol'] = data['volume'] / data['volume'].ewm(5).mean()
 
     # Remove columns that won't be used as features
+    
+    return data
+def removecols(data):
     del (data['open'])
     del (data['high'])
     del (data['low'])
     del (data['volume'])
-    
     return data
-    
 
 def prep_data(data):
      #smooth the data
     data = _exponential_smooth(data,0.65)
+
     data= _get_indicator_data(data)
-    #produce indicators
     data = _produce_movement_indicators(data)
+
+    #produce indicators
     #drop na data
     data = (
         data.dropna()
