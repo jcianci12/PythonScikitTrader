@@ -162,7 +162,8 @@ def startListening():
     def handle_socket_message(msg):
         # print(f"message type: {msg}")
         # print(msg)
-        handle_message(msg)
+        if(msg['e']=='error'):
+            handle_message(msg)
 
     twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
 

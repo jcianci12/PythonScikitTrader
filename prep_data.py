@@ -40,7 +40,7 @@ def _produce_movement_indicators(data):
 def signal_func(row, data, window_position):
     # define constants for readability
     ATR_PERIOD = 14
-    LOOKAHEAD_PERIOD = 14
+    LOOKAHEAD_PERIOD = 28
     current_price = row["close"]
     
     # calculate the takeprofit and stoploss thresholds from the average true range and the current price
@@ -50,12 +50,12 @@ def signal_func(row, data, window_position):
     row_position = data.index.get_loc(row.name)
 
     # shift and roll the data to get the highest high and lowest low in a lookahead window
-    highs = data.shift(-LOOKAHEAD_PERIOD + row_position).rolling(LOOKAHEAD_PERIOD)['high'].max()
-    lows = data.shift(-LOOKAHEAD_PERIOD + row_position).rolling(LOOKAHEAD_PERIOD)['low'].min()
+    highs = data.iloc[row_position:row_position+LOOKAHEAD_PERIOD]['high']
+    lows = data.iloc[row_position:row_position+LOOKAHEAD_PERIOD]['low']
 
     # get the values of highest high and lowest low at the row position
-    highesthigh = highs.iloc[row_position]
-    lowestlow = lows.iloc[row_position]
+    highesthigh = highs.max()
+    lowestlow = lows.min()
     
     # get the index labels of the minimum and maximum values in lows and highs respectively
     lowestindex= lows.idxmin()
