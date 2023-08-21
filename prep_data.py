@@ -37,30 +37,47 @@ def _produce_movement_indicators(data):
 
     return data
 
-def signal_func(row, data, index):
+def signal_func(row, data, window_position):
     # define constants for readability
     ATR_PERIOD = 14
-    LOOKAHEAD_VALUE = 20
+    LOOKAHEAD_PERIOD = 14
     current_price = row["close"]
+    
     # calculate the takeprofit and stoploss thresholds from the average true range and the current price
-    tp,sl = get_tp_sl_from_ATR(row[f"{ATR_PERIOD} period ATR"], current_price)
+    tp, sl = get_tp_sl_from_ATR(row[f"{ATR_PERIOD} period ATR"], current_price)
 
-    index = data.index.get_loc(row.name)
+    # get the integer location of the row in the data index
+    row_position = data.index.get_loc(row.name)
 
+    # shift and roll the data to get the highest high and lowest low in a lookahead window
+    highs = data.shift(-LOOKAHEAD_PERIOD + row_position).rolling(LOOKAHEAD_PERIOD)['high'].max()
+    lows = data.shift(-LOOKAHEAD_PERIOD + row_position).rolling(LOOKAHEAD_PERIOD)['low'].min()
 
-    #lookahead value
-    highesthigh = data['high'].rolling(LOOKAHEAD_VALUE).max().shift(-LOOKAHEAD_VALUE+1).iloc[index]
-    lowestlow = data['low'].rolling(LOOKAHEAD_VALUE).min().shift(-LOOKAHEAD_VALUE+1).iloc[index]
-    # hitstp = data['low'].rolling(LOOKAHEAD_VALUE).min().shift(-LOOKAHEAD_VALUE+1).iloc[index]
-    # check if the price increases or decreases by more than the thresholds in the next 'window' rows
-    HitsTP = 1 if int(highesthigh>=tp) else 0
-    HitsSL = int(lowestlow<=sl)
+    # get the values of highest high and lowest low at the row position
+    highesthigh = highs.iloc[row_position]
+    lowestlow = lows.iloc[row_position]
+    
+    # get the index labels of the minimum and maximum values in lows and highs respectively
+    lowestindex= lows.idxmin()
+    highestindex = highs.idxmax()
 
-    print(f"MP:{current_price}|TP:{tp}|SL:{sl}|UpSignal:{HitsTP}|DownSignal:{HitsSL}|HighestHigh:{highesthigh}|LowestLow:{lowestlow}")   
-    #remove uneeded columns
+    
+    # create a bool which is true if the hightest index was reached before the lowest index
+    highestfirst = (highestindex < lowestindex)
+    reachestp = (highesthigh >= tp)
+    reachessl = (lowestlow <= sl)
+    # check if the price hits the tp first or sl first and assign signals accordingly
+    HitsTPandBeforeLow = int(reachestp and highestfirst)
+    HitsSL = int(reachessl and not highestfirst)
+    
+    # print some information to the console
+    print(f"UpSignal:{HitsTPandBeforeLow}|DownSignal:{HitsSL}")   
 
+    
 #it looks like this is just returning the same values for the whole series
-    return pd.Series([HitsTP, HitsSL])
+# return a Series object with HitsTPandBeforeLow and HitsSL as values
+    return pd.Series([HitsTPandBeforeLow, HitsSL])
+
 
 
 

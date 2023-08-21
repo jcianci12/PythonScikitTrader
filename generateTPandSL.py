@@ -49,7 +49,7 @@ def get_tp_sl_from_ATR(atr,entry_price):
 
     entry_price = float(entry_price)
     #the atr is the whole range, so we should divide by two to find the centre
-    atr = atr/2
+    atr = atr
     # Calculate take profit and stop loss prices
     tp = float(entry_price) + (TAKEPROFIT * atr)
     sl = float(entry_price) - (STOPLOSS * atr)

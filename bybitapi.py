@@ -104,33 +104,27 @@ def fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category):
         params = {
             'symbol': symbol,
             'interval': interval,
-            'start': start_ts,
-            'end': end_ts,
-            'category': category,
+            'startTime': start_ts,
+            'endTime': end_ts,
         }
 
-        if test:
-            url = "https://api-testnet.bybit.com/v5/market/kline"
-        else:
-            url = "https://api.bybit.com/v5/market/kline"
-
         try:
-            response = requests.get(url, params=params)
-            if response.status_code == 200:
-                data += response.json()['result']['list']
+            response = exchange.fetch_ohlcv(symbol, interval, params=params)
+            if response:
+                data += response
             else:
-                print(f"Error fetching data: {response.status_code}")
-        except requests.exceptions.RequestException as e:
+                print(f"No data returned for this interval")
+        except ccxt.BaseError as e:
             print("An error occurred while making the request:")
             print(e)
             print("Retrying after 1 minute...")
             time.sleep(60)  # Wait for 1 minute before retrying
             # Recursive call to retry fetching data
-            return fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category)
+            return fetch_bybit_data_v5(exchange, start_date, end_date, symbol, interval)
 
-    # Convert the data to a DataFrame
+# Convert the data to a DataFrame
     df_new = pd.DataFrame(data, columns=[
-                          'open_time', 'open', 'high', 'low', 'close', 'volume', 'turnover'])
+                        'open_time', 'open', 'high', 'low', 'close', 'volume'])
     df_new['timestamp'] = pd.to_datetime(df_new['open_time'], unit='ms')
     df_new.set_index('timestamp', inplace=True)
     df_new.sort_values(by=['open_time'], inplace=True)

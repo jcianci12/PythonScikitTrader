@@ -195,21 +195,23 @@ firstrun = True
 
 def handle_socket_message(msg):
         global firstrun
+        if(msg['e']!='error'):
+
         # get the kline data from the message
-        kline = msg['k']
-        print(kline)
-        # check if the kline is closed
-        if(firstrun):
-            trade_loop()
-            firstrun = False
-        elif kline['x']:
-            # if yes, then use its data to trade
-            
-            trade_loop()
-        else:
-            # if no, then wait for the next message
-            pass
-        
+            kline = msg['k']
+            print(kline)
+            # check if the kline is closed
+            if(firstrun):
+                trade_loop()
+                firstrun = False
+            elif kline['x']:
+                # if yes, then use its data to trade
+                
+                trade_loop()
+            else:
+                # if no, then wait for the next message
+                pass
+
 def startListening():
 
     symbol = 'BTCUSDT'
