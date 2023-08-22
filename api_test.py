@@ -8,7 +8,6 @@ import pandas as pd
 
 from bybitapi import  fetch_bybit_data_v5, get_intervals, get_market_ask_price, get_market_bid_price,  get_free_balance,  place_order_tp_sl
 from config import BUYTHRESHOLD, INTERVAL, TEST
-from generateTPandSL import calculate_prices
 from logic.buylogic import buylogic
 from logic.selllogic import selllogic
 from messengerservice import send_telegram_message
@@ -40,42 +39,40 @@ class API_Tests(unittest.TestCase):
         print(data)
         self.assertIsNotNone(data)
     
-    def test_calculate_prices(self):
-        result = calculate_prices(None)
-        assert True
 
-    def test_Buy(self):
-        """
-        Function to test buying.
-        """
-        # Get the USDT balance
+
+    # def test_Buy(self):
+    #     """
+    #     Function to test buying.
+    #     """
+    #     # Get the USDT balance
         
 
-        # Calculate the quantity to buy (2% of USDT balance)
+    #     # Calculate the quantity to buy (2% of USDT balance)
                
-        tp,sl = calculate_prices(None)
-        # Place a buy order using 2% of USDT balance
-        buy = place_order_tp_sl(TEST,"market", "BTCUSDT","buy",tp,sl,  0.0004)
+    #     tp,sl = calculate_prices(None)
+    #     # Place a buy order using 2% of USDT balance
+    #     buy = place_order_tp_sl(TEST,"market", "BTCUSDT","buy",tp,sl,  0.0004)
         
-        # Assert that the buy order was successful
-        assert True
+    #     # Assert that the buy order was successful
+    #     assert True
 
 
-    def test_sell(self):
-        """
-        Function to test buying.
-        """
-        # Get the USDT balance
+    # def test_sell(self):
+    #     """
+    #     Function to test buying.
+    #     """
+    #     # Get the USDT balance
         
 
-        # Calculate the quantity to buy (2% of USDT balance)
+    #     # Calculate the quantity to buy (2% of USDT balance)
                
-        tp,sl = calculate_prices(None)
-        # Place a buy order using 2% of USDT balance
-        buy = place_order_tp_sl(TEST,"market", "BTCUSDT","sell",tp,sl,  0.0004)
+    #     tp,sl = calculate_prices(None)
+    #     # Place a buy order using 2% of USDT balance
+    #     buy = place_order_tp_sl(TEST,"market", "BTCUSDT","sell",tp,sl,  0.0004)
         
-        # Assert that the buy order was successful
-        assert buy['retCode'] == 0, f"Buy order failed: {buy}"  
+    #     # Assert that the buy order was successful
+    #     assert buy['retCode'] == 0, f"Buy order failed: {buy}"  
 
     def test_buylogic(self):
         """

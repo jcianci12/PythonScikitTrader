@@ -8,6 +8,7 @@ import asciichartpy
 from binance import ThreadedWebsocketManager
 from KEYS import API_KEY,API_SECRET
 from bybitapi import exchange, get_free_balance
+from messengerservice import send_telegram_message
 
 
 
@@ -87,9 +88,15 @@ def check_orders(testmode, symbol, market_price):
                     order_result = exchange.create_market_order(symbol,new_side,amount)
                     close_price = order_result['price']
                     # Calculate the profit or loss
-                    order['profit'] = calculate_profit_loss(entry_price, close_price, side, amount)
+                    profit= calculate_profit_loss(entry_price, close_price, side, amount)
+                    order['profit'] = profit
+                    profit =  order['profit']
+                    send_telegram_message(f"Order closed|Entry:{entry_price}|Close:{close_price}|Amount|{amount}|P+L:{profit}")
                 else:
-                    order['profit'] = "Not enough"
+                    profit = "Not enough"
+                    order['profit'] = profit
+                    send_telegram_message(f"Not enough to close|Entry:{entry_price}|Close:NA|Amount|{amount}|P+L:{profit}")
+
 
                 # Set the flag to True
                 changed = True

@@ -132,10 +132,10 @@ def trade_loop():
     data = prep_data(data)
 
 
-
-    logger("making decision based on ", data.to_string())
-    confinc = getconfidencescore(data.tail(1), "ensembleinc")
-    confdec = getconfidencescore(data.tail(1), "ensembledec")
+    decisiondata = data.tail(1)
+    logger("making decision based on ", decisiondata.to_json())
+    confinc = getconfidencescore(decisiondata, "ensembleinc")
+    confdec = getconfidencescore(decisiondata, "ensembledec")
 
     confidence_scoreinc = confinc
     confidence_scoredec = confdec
