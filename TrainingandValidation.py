@@ -17,14 +17,13 @@ from functions.modelmanagement import ModelManagement
 from get_latest_model_file import compare_dates, get_latest_model_filename, get_model_filename
 from prep_data import prep_data
 
-class TrainingAndValidation:
 
+class TrainingAndValidation:
 
     def __init__(self):
 
         self.stock_name = "BTCUSDT"
         self.ledger = []
-
 
         self.item = AssetTracker()
         self.capital_tracker = CapitalTracker(10000)
@@ -53,7 +52,7 @@ class TrainingAndValidation:
 
         # Create a tuple list of our models
         estimatorsinc = [("knninc", knninc), ("rfinc", rfinc)]
-        estimatorsdec = [("rfdec",rfdec),("knndec",knndec)]
+        estimatorsdec = [("rfdec", rfdec), ("knndec", knndec)]
 
         ensembleinc = VotingClassifier(estimatorsinc, voting="soft")
         ensembledec = VotingClassifier(estimatorsdec, voting="soft")
@@ -61,14 +60,15 @@ class TrainingAndValidation:
         logger("Starting training")
         while True:
             # Partition the data into chunks of size len_train every num_train days
-            df = data.iloc[i * self.num_train : (i * self.num_train) + self.len_train]
+            df = data.iloc[i *
+                           self.num_train: (i * self.num_train) + self.len_train]
             i += 1
 
             if len(df) < 40:
                 break
-#increase
-            features = [x for x in df.columns if x not in ["pred","preddec",'open','high','low','volume']]
-            
+# increase
+            features = [x for x in df.columns if x not in EXCLUDECOLUMNS]
+
             yinc = df["pred"]
             X = df[features]
 
@@ -85,17 +85,19 @@ class TrainingAndValidation:
             rf_predictioninc = rfinc.predict(X_test)
             knn_predictioninc = knninc.predict(X_test)
             ensemble_predictioninc = ensembleinc.predict(X_test)
-            print(y_testinc.values,rf_predictioninc)
+            print(y_testinc.values, rf_predictioninc)
 
             rf_accuracyinc = accuracy_score(y_testinc.values, rf_predictioninc)
-            knn_accuracyinc = accuracy_score(y_testinc.values, knn_predictioninc)
-            ensemble_accuracyinc = accuracy_score(y_testinc.values, ensemble_predictioninc)
+            knn_accuracyinc = accuracy_score(
+                y_testinc.values, knn_predictioninc)
+            ensemble_accuracyinc = accuracy_score(
+                y_testinc.values, ensemble_predictioninc)
 
             self.rf_resultsinc.append(rf_accuracyinc)
             self.knn_resultsinc.append(knn_accuracyinc)
             self.ensemble_resultsinc.append(ensemble_accuracyinc)
 
-#decrease
+# decrease
             ydec = df["preddec"]
 
             X_train, X_test, y_train, y_testdec = train_test_split(
@@ -113,40 +115,37 @@ class TrainingAndValidation:
             ensemble_predictiondec = ensembledec.predict(X_test)
 # determine accuracy and append to results
             rf_accuracydec = accuracy_score(y_testdec.values, rf_predictiondec)
-            knn_accuracydec = accuracy_score(y_testdec.values, knn_predictiondec)
-            ensemble_accuracydec = accuracy_score(y_testdec.values, ensemble_predictiondec)
+            knn_accuracydec = accuracy_score(
+                y_testdec.values, knn_predictiondec)
+            ensemble_accuracydec = accuracy_score(
+                y_testdec.values, ensemble_predictiondec)
 
-            
             self.rf_resultsdec.append(rf_accuracydec)
             self.knn_resultsdec.append(knn_accuracydec)
             self.ensemble_resultsdec.append(ensemble_accuracydec)
-            # print(f"MP:{current_price}|TP:{tp}|SL:{sl}|UpSignal:{up_signal}|DownSignal:{down_signal}")   
+            # print(f"MP:{current_price}|TP:{tp}|SL:{sl}|UpSignal:{up_signal}|DownSignal:{down_signal}")
 
-       
+            print(X_train.index[0])
 
+        logger(
+            f"Ensemble Accuracy Inc = {sum(self.get_ensemble_resultsinc()) / len(self.get_ensemble_resultsinc())}")
+        logger(
+            f"Ensemble Accuracy Dec = {sum(self.get_ensemble_resultsdec()) / len(self.get_ensemble_resultsdec())}")
 
-            print(X_train.index[0])            
-
-        logger(f"Ensemble Accuracy Inc = {sum(self.get_ensemble_resultsinc()) / len(self.get_ensemble_resultsinc())}")
-        logger(f"Ensemble Accuracy Dec = {sum(self.get_ensemble_resultsdec()) / len(self.get_ensemble_resultsdec())}")
-         
-       
-        self.models = {"rfinc": rfinc, "knninc": knninc, "ensembleinc": ensembleinc,"rf":rfdec,"knninc":knndec,"ensembledec":ensembledec}
+        self.models = {"rfinc": rfinc, "knninc": knninc, "ensembleinc": ensembleinc,
+                       "rf": rfdec, "knninc": knndec, "ensembledec": ensembledec}
         mm = ModelManagement()
         mm.clean_up_models("models")
         mm.save_models(self.models, symbol, interval, start, end)
 
         logger("Finished training")
 
-
-
-    
-
-
     def get_results_df(self):
         return self.results_df
+
     def get_ledger(self):
-        return  pd.DataFrame( self.ledger)
+        return pd.DataFrame(self.ledger)
+
     def get_rf_results(self):
         return self.rf_results
 
@@ -165,22 +164,8 @@ class TrainingAndValidation:
     #     kelly_fraction = minimumfraction
     # return capital_tracker.capital * kelly_fraction
 
-    
-
-
     def getLedgerdf(self):
-        return  pd.DataFrame( self.ledger)
+        return pd.DataFrame(self.ledger)
 
-    def save_dataframe(self,dataframe):
+    def save_dataframe(self, dataframe):
         dataframe.to_csv('backtest.csv', index=False)
-    
-
-
-
-
-
-
-
-
-
-

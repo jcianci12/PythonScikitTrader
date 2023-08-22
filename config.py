@@ -43,3 +43,18 @@ GRAPHVIEWWINDOW = 30
 ALLOWEDTOSELL = False
 
 ORDERCOLUMNS = ['uid', 'date','symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice', 'takeprofitid', 'stoplossid', 'profit', 'completedtime']
+EXCLUDECOLUMNS = ['open_time', 'open', 'high', 'low', 'close', 'volume', '14 period RSI',
+                                                           #'MACD', 
+                                                           'SIGNAL', '14 period STOCH %K', 'MFV', '14 period ATR', 'MOM',
+                                                           '14 period MFI', 
+                                                           #'ROC', 
+                                                           'OBV',
+                                                        '20 period CCI',
+                                                           #'14 period EMV.',
+                                                           'VIm',
+                                                           'VIp', 'ema50', 
+                                                           #'ema21', 
+                                                           #'ema15', 
+                                                           #'ema5', 
+                                                           'normVol']
+PREDCOLUMNS = ['pred', 'preddec']

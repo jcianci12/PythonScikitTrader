@@ -9,3 +9,4 @@ joblib
 python-telegram-bot
 asciichartpy
 python-binance
+flask-socketio

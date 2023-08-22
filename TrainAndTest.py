@@ -103,7 +103,7 @@ def getconfidencescore(data, modelname):
 
 # we only want the last row to predict on
 
-    data = data.drop(['pred','preddec','high','low','open','volume'], axis=1)
+    data = data.drop(EXCLUDECOLUMNS, axis=1)
 
     prediction = model.predict(data)
     # logger("prediction",prediction)
