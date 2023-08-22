@@ -2,8 +2,8 @@ from pybit.unified_trading import WebSocket
 from time import time
 import csv
 from check_amount import check_amount, get_amount
+from config import ORDERCOLUMNS
 
-from generateTPandSL import save_updated_prices
 import asciichartpy
 from binance import ThreadedWebsocketManager
 from KEYS import API_KEY,API_SECRET
@@ -17,7 +17,13 @@ orders = []
 order_refresh_time = 0
 trade_refresh_time = 0
 
-
+def save_updated_prices(filename, orders):
+    # Write updated data to CSV file
+    with open(filename, mode='w') as file:
+        fieldnames = ORDERCOLUMNS
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(orders)
 
 def refresh_orders():
     global orders
@@ -107,13 +113,13 @@ def get_open_orders():
     global orders
     return orders
 
-def print_orders():
+def print_orders(entry_price):
     orders = get_open_orders()
     # Define the width of each column
     width = 10
 
     # Print the header
-    print("TP".rjust(width) + "\t" + "SL".rjust(width))
+    print("TP".rjust(width) + "\t" + "SL".rjust(width) + "\t" + "TP Dist.".rjust(width) + "\t" + "SL Dist.".rjust(width))
 
     # Print the data
     for order in orders:
@@ -121,7 +127,10 @@ def print_orders():
             # Format the numbers to two decimal places
             tp = "{:.2f}".format(float(order['takeprofitprice']))
             sl = "{:.2f}".format(float(order['stoplossprice']))
-            print(tp.rjust(width) + "\t" + sl.rjust(width))
+            tp_dist = "{:.2f}".format(float(order['takeprofitprice'])-entry_price)
+            sl_dist = "{:.2f}".format(entry_price-float(order['entryprice']) )
+            print(tp.rjust(width) + "\t" + sl.rjust(width) + "\t" + tp_dist.rjust(width) + "\t" + sl_dist.rjust(width))
+
 # Define the plot_ascii_chart function
 # Define the plot_ascii_chart function
 def plot_ascii_chart(data):
@@ -134,7 +143,7 @@ def plot_ascii_chart(data):
 
     # Clear the console
     print("\033[H\033[J")
-    print_orders()
+    print_orders(usd_index_price)
     # Plot the prices using asciichart
     print(asciichartpy.plot(prices[-40:]))
 
@@ -162,7 +171,7 @@ def startListening():
     def handle_socket_message(msg):
         # print(f"message type: {msg}")
         # print(msg)
-        if(msg['e']=='error'):
+        if(msg['e']!='error'):
             handle_message(msg)
 
     twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
@@ -173,11 +182,6 @@ def startListening():
     # or a multiplex socket can be started like this
     # see Binance docs for stream names
     twm.join()
-
-
-
-
-
 
 
 startListening()
