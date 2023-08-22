@@ -20,8 +20,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 def plot_graph(btc_price, confidence_signalinc,confidence_signaldec, portfolio_balance,usdtbalance,btcbalanceUSDT, chartfilename,csvfilename, viewwindow):
-    if(viewwindow==None):
-        viewwindow = 10000
+  
     # Check if the performance.csv file exists
     if not os.path.exists(csvfilename):
         # If the file doesn't exist, create it and write the header row

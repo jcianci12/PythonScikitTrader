@@ -3,12 +3,11 @@ from bybitapi import get_market_ask_price, get_market_bid_price, get_min_qty_bin
 from check_amount import check_amount, get_amount
 from config import *
 from functions.logger import logger
-from functions.map_range import map_range
-from generateTPandSL import calculate_prices
 from bybitapi import exchange
+from get_tp_sl import get_tp_sl
 from minimum_movement_to_take_profit import tpsl_smallest_movement
 
-def buylogic(confidence_score,  usdtbalance):
+def buylogic(confidence_score,  usdtbalance,data):
     """
     Function to determine if a buy order should be placed based on the confidence score and other parameters.
     :param confidence_score: The confidence score for the buy decision.
@@ -36,7 +35,7 @@ def buylogic(confidence_score,  usdtbalance):
     
     logger("Decided to buy %", MAXBUYPERCENTOFCAPITAL, " of USDT balance. |USDT balance: ", usdtbalance,
            " | BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", amount)
-    tp,sl = calculate_prices(None)
+    tp,sl = get_tp_sl(data,len(data)-1)
     # tp,sl = tpsl_smallest_movement()
     amount = get_amount(amount,"buy",marketprice)
     enough = check_amount(amount,marketprice,"buy")
@@ -50,7 +49,7 @@ def buylogic(confidence_score,  usdtbalance):
         
         # Place the buy order
         # response = place_order(TEST, "BTCUSDT", "USDT",TAKEPROFIT,STOPLOSS, qty_rounded)
-        tp,sl = calculate_prices(None)
+
         response = place_order_tp_sl(TEST,"market", "BTCUSDT","buy",tp,sl,  amount)
 
         print(response)

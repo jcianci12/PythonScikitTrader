@@ -14,7 +14,6 @@ from KEYS import API_KEY, API_SECRET
 from binance_fetch_balance import get_balance
 from functions.map_range import map_range
 from functions.modelmanagement import ModelManagement
-from generateTPandSL import calculate_prices
 from get_latest_model_file import get_latest_model_filename, get_model_filename
 from get_last_ohlc_bybit import get_last_ohlc_binance
 from logic.buylogic import buylogic
@@ -104,8 +103,8 @@ def getconfidencescore(data, modelname):
 
 # we only want the last row to predict on
 
-    data = data.drop('pred', axis=1)
-    data = data.drop('preddec', axis=1)
+    data = data.drop(['pred','preddec','high','low','open','volume'], axis=1)
+
     prediction = model.predict(data)
     # logger("prediction",prediction)
     # Calculate the mean of the binary values
@@ -131,12 +130,12 @@ def trade_loop():
     # data = old_fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",interval,category)
     # smooth the data
     data = prep_data(data)
-    data = data.tail(1)
+
 
 
     logger("making decision based on ", data.to_string())
-    confinc = getconfidencescore(data, "ensembleinc")
-    confdec = getconfidencescore(data, "ensembledec")
+    confinc = getconfidencescore(data.tail(1), "ensembleinc")
+    confdec = getconfidencescore(data.tail(1), "ensembledec")
 
     confidence_scoreinc = confinc
     confidence_scoredec = confdec
@@ -159,7 +158,7 @@ def trade_loop():
 
     # buylogic(1, usdtbalance)
     if (confidence_scoreinc == 1 and confidence_scoredec == 0):
-        buylogic(1, usdtbalance)
+        buylogic(1, usdtbalance,data)
 
         # asyncio.run(send_telegram_message('Update'))
 

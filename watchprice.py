@@ -128,7 +128,7 @@ def print_orders(entry_price):
             tp = "{:.2f}".format(float(order['takeprofitprice']))
             sl = "{:.2f}".format(float(order['stoplossprice']))
             tp_dist = "{:.2f}".format(float(order['takeprofitprice'])-entry_price)
-            sl_dist = "{:.2f}".format(entry_price-float(order['entryprice']) )
+            sl_dist = "{:.2f}".format(entry_price-float(order['stoplossprice']) )
             print(tp.rjust(width) + "\t" + sl.rjust(width) + "\t" + tp_dist.rjust(width) + "\t" + sl_dist.rjust(width))
 
 # Define the plot_ascii_chart function
@@ -141,9 +141,8 @@ def plot_ascii_chart(data):
     global prices
     prices.append(usd_index_price)
 
-    # Clear the console
-    print("\033[H\033[J")
-    print_orders(usd_index_price)
+
+    
     # Plot the prices using asciichart
     print(asciichartpy.plot(prices[-40:]))
 
@@ -158,7 +157,12 @@ def handle_message(message):
         last_price = float(message['k']['c'])
         check_orders(True, "BTCUSDT", last_price)
         # Call the plot_ascii_chart function with the message as an argument
+            # Clear the console
+        print("\033[H\033[J")
+        print_orders(last_price)
+
         plot_ascii_chart(message)
+
 
 def startListening():
 

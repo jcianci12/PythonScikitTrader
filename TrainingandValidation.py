@@ -67,7 +67,7 @@ class TrainingAndValidation:
             if len(df) < 40:
                 break
 #increase
-            features = [x for x in df.columns if x not in ["pred","preddec"]]
+            features = [x for x in df.columns if x not in ["pred","preddec",'open','high','low','volume']]
             
             yinc = df["pred"]
             X = df[features]

@@ -1,10 +1,8 @@
-import random
-from config import LOOKAHEADVALUE, PERCENTCHANGEINDICATOR
-from minimum_movement_to_take_profit import calculate_smallest_movement,tpsl_smallest_movement
 import pandas as pd
 from finta import TA
 
-from generateTPandSL import calculate_prices, get_tp_sl_from_ATR
+from signal_func import signal_func
+
 
 def _exponential_smooth(data, alpha):
     """
@@ -33,54 +31,9 @@ def _produce_movement_indicators(data):
     data["pred"] = pred
     data["preddec"] = preddec
 
-    data = removecols(data)
+    # data = removecols(data)
 
     return data
-
-def signal_func(row, data, window_position):
-    # define constants for readability
-    ATR_PERIOD = 14
-    LOOKAHEAD_PERIOD = 28
-    current_price = row["close"]
-    
-    # calculate the takeprofit and stoploss thresholds from the average true range and the current price
-    tp, sl = get_tp_sl_from_ATR(row[f"{ATR_PERIOD} period ATR"], current_price)
-
-    # get the integer location of the row in the data index
-    row_position = data.index.get_loc(row.name)
-
-    # shift and roll the data to get the highest high and lowest low in a lookahead window
-    highs = data.iloc[row_position:row_position+LOOKAHEAD_PERIOD]['high']
-    lows = data.iloc[row_position:row_position+LOOKAHEAD_PERIOD]['low']
-
-    # get the values of highest high and lowest low at the row position
-    highesthigh = highs.max()
-    lowestlow = lows.min()
-    
-    # get the index labels of the minimum and maximum values in lows and highs respectively
-    lowestindex= lows.idxmin()
-    highestindex = highs.idxmax()
-
-    
-    # create a bool which is true if the hightest index was reached before the lowest index
-    highestfirst = (highestindex < lowestindex)
-    reachestp = (highesthigh >= tp)
-    reachessl = (lowestlow <= sl)
-    # check if the price hits the tp first or sl first and assign signals accordingly
-    HitsTPandBeforeLow = int(reachestp and highestfirst)
-    HitsSL = int(reachessl and not highestfirst)
-    
-    # print some information to the console
-    print(f"UpSignal:{HitsTPandBeforeLow}|DownSignal:{HitsSL}")   
-
-    
-#it looks like this is just returning the same values for the whole series
-# return a Series object with HitsTPandBeforeLow and HitsSL as values
-    return pd.Series([HitsTPandBeforeLow, HitsSL])
-
-
-
-
 
 INDICATORS = [
     "RSI",
@@ -128,12 +81,12 @@ def _get_indicator_data(data):
     # Remove columns that won't be used as features
     
     return data
-def removecols(data):
-    del (data['open'])
-    del (data['high'])
-    del (data['low'])
-    del (data['volume'])
-    return data
+# def removecols(data):
+#     del (data['open'])
+#     del (data['high'])
+#     del (data['low'])
+#     del (data['volume'])
+#     return data
 
 def prep_data(data):
      #smooth the data
