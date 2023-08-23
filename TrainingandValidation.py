@@ -15,6 +15,8 @@ from config import *
 from functions.logger import plot_graph, logger
 from functions.modelmanagement import ModelManagement
 from get_latest_model_file import compare_dates, get_latest_model_filename, get_model_filename
+from getlatestmodels import initialisemodels
+from is_file_older_than_n_minutes import is_file_older_than_n_minutes
 from prep_data import prep_data
 
 
@@ -27,6 +29,8 @@ class TrainingAndValidation:
 
         self.item = AssetTracker()
         self.capital_tracker = CapitalTracker(10000)
+
+
 
     def train_and_cross_validate(self, data, symbol, start, end, interval):
         # data = prep_data(data)
@@ -42,20 +46,8 @@ class TrainingAndValidation:
         self.knn_resultsdec = []
         self.rf_resultsdec = []
         self.ensemble_resultsdec = []
-
-        # Models which will be used
-        rfinc = RandomForestClassifier()
-        knninc = KNeighborsClassifier()
-
-        rfdec = RandomForestClassifier()
-        knndec = KNeighborsClassifier()
-
-        # Create a tuple list of our models
-        estimatorsinc = [("knninc", knninc), ("rfinc", rfinc)]
-        estimatorsdec = [("rfdec", rfdec), ("knndec", knndec)]
-
-        ensembleinc = VotingClassifier(estimatorsinc, voting="soft")
-        ensembledec = VotingClassifier(estimatorsdec, voting="soft")
+        
+        rfinc , knninc , rfdec  , knndec ,estimatorsinc , estimatorsdec,ensembleinc ,ensembledec = initialisemodels()
 
         logger("Starting training")
         while True:

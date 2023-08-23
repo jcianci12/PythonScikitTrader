@@ -3,8 +3,6 @@ import asyncio
 import datetime
 import decimal
 import json
-import os
-import time
 import pandas as pd
 import numpy as np
 
@@ -16,6 +14,8 @@ from functions.map_range import map_range
 from functions.modelmanagement import ModelManagement
 from get_latest_model_file import get_latest_model_filename, get_model_filename
 from get_last_ohlc_bybit import get_last_ohlc_binance
+from getlatestmodels import parse_dates_from_file_name
+from is_file_older_than_n_minutes import is_file_older_than_n_minutes
 from logic.buylogic import buylogic
 from bybitapi import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_free_balance
 
@@ -50,11 +50,6 @@ test = True
 days = 2
 
 
-# %%
-# %%
-
-# %%
-
 # # Retrain the model using the latest data
 def retrain(start_date, end_date):
     validator = TrainingAndValidation()
@@ -84,21 +79,16 @@ def retrain(start_date, end_date):
         f"Ensemble Accuracy dec = {sum(validator.get_ensemble_resultsdec()) / len(validator.get_ensemble_resultsdec())}")
 
 
-def is_file_older_than_n_minutes(file_path, n):
-    if ((file_path == None) or not os.path.exists(file_path)):
-        logger("File doesnt exist")
-
-        return True
-    logger("time is ", time.time(), "|file time is",
-           os.path.getmtime(file_path))
-    return time.time() - os.path.getmtime(file_path) > n * 60
-
-
-def getconfidencescore(data, modelname):
-
+def returnLatestModels(modelname):
     filename = get_latest_model_filename(symbol, INTERVAL, modelname)
     logger("Loading model from ", filename)
     model = joblib.load(filename)
+    return model
+
+def getconfidencescore(data, modelname):
+
+    
+    model = returnLatestModels(modelname)
 
 
 # we only want the last row to predict on
@@ -117,10 +107,17 @@ def trade_loop():
     logger("Starting loop")
 
     end_date = datetime.now()
-    start_date = end_date - timedelta(DATALENGTHFORTRAININGINDAYS)
     category = 'spot'
-    if (ALWAYSRETRAIN or is_file_older_than_n_minutes(get_latest_model_filename(symbol, INTERVAL, "ensembleinc"), 15)):
+    latestmodelfilename = get_latest_model_filename(symbol, INTERVAL, "ensembleinc")
+    if(latestmodelfilename):
+        start_date,end_date = parse_dates_from_file_name(latestmodelfilename)
+    else:
+        start_date = end_date - timedelta(DATALENGTHFORTRAININGINDAYS)
+
+    if (ALWAYSRETRAIN or is_file_older_than_n_minutes(latestmodelfilename, 15)):
         # retrain the data
+
+
         retrain(start_date, end_date)
     start_date = end_date - timedelta(DATALENGTHFORTRADINGINDAYS)
 

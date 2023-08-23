@@ -18,7 +18,18 @@ class ModelManagement:
             filename = get_model_filename(symbol,interval,start,end,model_name)
             logger("saving model file as ",filename)
             joblib.dump(model, f"models/{filename}" )
-
+    def load_models(self, model_names, symbol, interval, start, end):
+        models = {}
+        for model_name in model_names:
+            filename = get_model_filename(symbol,interval,start,end,model_name)
+            filepath = f"models/{filename}"
+            if os.path.exists(filepath):
+                logger("loading model file ",filename)
+                model = joblib.load(filepath)
+                models[model_name] = model
+            else:
+                logger(f"model file {filename} not found")
+        return models
 
     def clean_up_models(self,directory):
         if os.path.isdir(directory):
