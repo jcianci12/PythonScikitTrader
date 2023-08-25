@@ -1,13 +1,14 @@
 from pybit.unified_trading import WebSocket
 from time import time
 import csv
-from check_amount import check_amount, get_amount
+from check_amount import check_amount, Adjust_Amount_for_fees
 from config import ORDERCOLUMNS
 
 import asciichartpy
 from binance import ThreadedWebsocketManager
 from KEYS import API_KEY,API_SECRET
-from bybitapi import exchange, get_free_balance
+from api import exchange, get_free_balance
+from functions.logger import logger
 from messengerservice import send_telegram_message
 
 
@@ -57,7 +58,6 @@ def check_price_reached(market_price, take_profit_price, stop_loss_price, side):
         return market_price >= take_profit_price or market_price <= stop_loss_price
     elif side == SELL:
         return market_price <= take_profit_price or market_price >= stop_loss_price
-
 def check_orders(testmode, symbol, market_price):
     orders = get_open_orders()
 
@@ -76,26 +76,27 @@ def check_orders(testmode, symbol, market_price):
             stop_loss_price = float(order['stoplossprice'])
             side = order['side'].lower()
             amount =   float(order['qty'])
-            
+            new_side = SELL if side == BUY else BUY
+
+            error_message = check_amount(amount,market_price,new_side)
+
             # Check if the market price has reached the take profit or stop loss prices
             if check_price_reached(market_price, take_profit_price, stop_loss_price, side):
                 # Close the order at the market price
-                new_side = SELL if side == BUY else BUY
-                amount = get_amount(amount,new_side,market_price)
-                enough = check_amount(amount,market_price,new_side)
-
-                if(enough):
+                if(error_message ==None):
                     order_result = exchange.create_market_order(symbol,new_side,amount)
                     close_price = order_result['price']
                     # Calculate the profit or loss
                     profit= calculate_profit_loss(entry_price, close_price, side, amount)
                     order['profit'] = profit
+                    order['exitprice'] = close_price
                     profit =  order['profit']
-                    send_telegram_message(f"Order closed|Entry:{entry_price}|Close:{close_price}|Amount|{amount}|P+L:{profit}")
+                    # send_telegram_message(f"Order closed|Entry:{entry_price}|Close:{close_price}|Amount|{amount}|P+L:{profit}")
                 else:
-                    profit = "Not enough"
+                    logger(error_message)
+                    profit = error_message
                     order['profit'] = profit
-                    send_telegram_message(f"Not enough to close|Entry:{entry_price}|Close:NA|Amount|{amount}|P+L:{profit}")
+                    # send_telegram_message(f"Not enough to close|Entry:{entry_price}|Close:NA|Amount|{amount}|P+L:{profit}")
 
 
                 # Set the flag to True
@@ -103,8 +104,6 @@ def check_orders(testmode, symbol, market_price):
             # Save the updated orders back to the CSV file only if the flag is True
     if changed:
         save_updated_prices('orders.csv', orders)
-
-
 
 
 
@@ -162,7 +161,8 @@ def handle_message(message):
     usdindexprice = message['k']['c']
     if(usdindexprice!=''):
         last_price = float(message['k']['c'])
-        check_orders(True, "BTCUSDT", last_price)
+        if(last_price!=None):
+            check_orders(True, "BTC/USDT", last_price)
         # Call the plot_ascii_chart function with the message as an argument
             # Clear the console
         print("\033[H\033[J")

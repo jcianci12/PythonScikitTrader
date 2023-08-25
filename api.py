@@ -156,13 +156,13 @@ def get_value(symbol: str) -> float:
 
 def get_market_bid_price(symbol: str) -> float:
     ticker = exchange.fetch_ticker(symbol)
-    return ticker['bid']
+    return float(ticker['bid'])
 
 
 
 def get_market_ask_price(symbol: str) -> float:
     ticker = exchange.fetch_ticker(symbol)
-    return ticker['ask']
+    return float(exchange.price_to_precision(symbol,  ticker['ask']))
 
 
 # get_market_ask_price(True, "BTCUSDT")

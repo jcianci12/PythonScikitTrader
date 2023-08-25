@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 import ccxt
 import pandas as pd
-from bybitapi import exchange
+from api import exchange
 
 def get_last_ohlc_binance(symbol: str, timeframe: str) -> pd.DataFrame:
     ohlcv = exchange.fetch_ohlcv(symbol, timeframe, limit=14)

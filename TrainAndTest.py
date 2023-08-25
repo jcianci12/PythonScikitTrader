@@ -17,7 +17,7 @@ from functions.modelmanagement import ModelManagement
 from get_latest_model_file import get_latest_model_filename, get_model_filename
 from get_last_ohlc_bybit import get_last_ohlc_binance
 from logic.buylogic import buylogic
-from bybitapi import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_free_balance
+from api import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_free_balance
 
 from TrainingandValidation import TrainingAndValidation
 from datetime import datetime, timedelta
@@ -103,7 +103,7 @@ def getconfidencescore(data, modelname):
 
 # we only want the last row to predict on
 
-    data = data.drop(EXCLUDECOLUMNS, axis=1)
+    data = data.drop(EXCLUDECOLUMNS+PREDCOLUMNS, axis=1)
 
     prediction = model.predict(data)
     # logger("prediction",prediction)
@@ -112,6 +112,7 @@ def getconfidencescore(data, modelname):
 
     return prediction[0]
 
+    
 
 def trade_loop():
     logger("Starting loop")
@@ -158,7 +159,7 @@ def trade_loop():
 
     # buylogic(1, usdtbalance)
     if (confidence_scoreinc == 1 and confidence_scoredec == 0):
-        buylogic(1, usdtbalance,data)
+        buylogic(data)
 
         # asyncio.run(send_telegram_message('Update'))
 

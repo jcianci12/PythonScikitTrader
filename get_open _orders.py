@@ -1,5 +1,5 @@
 import time
-from bybitapi import exchange
+from api import exchange
 
 def fetch_open_orders(symbol,minutes):
     orders = exchange.fetch_open_orders(symbol)

@@ -1,4 +1,4 @@
-from bybitapi import exchange
+from api import exchange
 
 allorders = exchange.fetch_closed_orders()
 canceled_orders = exchange.fetch_canceled_orders()

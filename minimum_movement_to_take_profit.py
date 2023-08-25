@@ -1,4 +1,4 @@
-from bybitapi import exchange
+from api import exchange
 
 def calculate_smallest_movement(amount: float, symbol: str) -> float:
   

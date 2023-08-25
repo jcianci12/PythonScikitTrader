@@ -1,6 +1,6 @@
 import decimal
 from KEYS import API_KEY, API_SECRET
-from bybitapi import get_market_bid_price
+from api import get_market_bid_price
 from config import *
 from functions.logger import logger
 from functions.map_range import map_range

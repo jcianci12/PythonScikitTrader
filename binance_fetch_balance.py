@@ -1,4 +1,4 @@
-from bybitapi import exchange
+from api import exchange
 
 def convert_to_usdt(symbol:str,amount:float)->float:
     #get the latest price using the ccxt api. The exchange is binance

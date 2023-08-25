@@ -6,13 +6,15 @@ import pandas as pd
 
 
 
-from bybitapi import  fetch_bybit_data_v5, get_intervals, get_market_ask_price, get_market_bid_price,  get_free_balance,  place_order_tp_sl
-from config import BUYTHRESHOLD, INTERVAL, TEST
+from api import  fetch_bybit_data_v5, get_intervals, get_market_ask_price, get_market_bid_price,  get_free_balance,  place_order_tp_sl
+from config import BUYTHRESHOLD, DATALENGTHFORTRADINGINDAYS, DATALENGTHFORTRAININGINDAYS, INTERVAL, TEST
 from logic.buylogic import buylogic
 from logic.selllogic import selllogic
 from messengerservice import send_telegram_message
 import unittest
 import asyncio
+
+from prep_data import prep_data
 
 
 
@@ -49,8 +51,8 @@ class API_Tests(unittest.TestCase):
         
 
     #     # Calculate the quantity to buy (2% of USDT balance)
-               
-    #     tp,sl = calculate_prices(None)
+        
+    #     # tp,sl = check_tp_sl(None)
     #     # Place a buy order using 2% of USDT balance
     #     buy = place_order_tp_sl(TEST,"market", "BTCUSDT","buy",tp,sl,  0.0004)
         
@@ -81,11 +83,20 @@ class API_Tests(unittest.TestCase):
         # Set the confidence score, buythreshold, and usdtbalance values
         confidence_score = 1
         buythreshold = BUYTHRESHOLD
-        usdtbalance = get_free_balance("USDT")
-        
+        end_date = datetime.datetime.now()
+        category = 'spot'
+        start_date = end_date - datetime.timedelta(DATALENGTHFORTRADINGINDAYS)
+
+        # fetch the kline (historical data)
+        data = fetch_bybit_data_v5(
+            TEST, start_date, end_date, "BTCUSDT", INTERVAL, category)
+        # data = old_fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",interval,category)
+        # smooth the data
+        data = prep_data(data)
+        decisiondata = data.tail(1)
         # Call the buylogic function and assert that no exceptions were raised
         try:
-            buylogic(confidence_score,  usdtbalance)
+            buylogic(decisiondata)
         except Exception as e:
             self.fail(f"buylogic raised an exception: {e}")
 

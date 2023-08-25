@@ -1,6 +1,6 @@
 import csv
 import datetime
-from bybitapi import exchange, get_market_ask_price
+from api import exchange, get_market_ask_price
 from config import ORDERCOLUMNS, TEST
 from functions.logger import logger
 from generateTPandSL import calculate_prices

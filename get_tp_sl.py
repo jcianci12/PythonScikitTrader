@@ -31,3 +31,4 @@ def get_tp_sl(data,row_position):
     if(min_sl<sl):
         sl = min_sl
     return tp,sl
+    

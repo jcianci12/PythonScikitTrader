@@ -1,47 +1,31 @@
 import decimal
-from bybitapi import get_market_ask_price, get_market_bid_price, get_min_qty_binance, place_order_tp_sl
-from check_amount import check_amount, get_amount
+from api import get_free_balance, get_market_ask_price,  get_min_qty_binance, place_order_tp_sl
+from check_amount import check_amount, Adjust_Amount_for_fees, get_investment_amount
 from config import *
 from functions.logger import logger
-from bybitapi import exchange
+from api import exchange
 from get_tp_sl import get_tp_sl
-from minimum_movement_to_take_profit import tpsl_smallest_movement
 
-def buylogic(confidence_score,  usdtbalance,data):
+def buylogic(data):
     """
     Function to determine if a buy order should be placed based on the confidence score and other parameters.
     :param confidence_score: The confidence score for the buy decision.
     :param buythreshold: The threshold for the confidence score to trigger a buy.
     :param usdtbalance: The current balance of USDT.
     """
-    marketprice = get_market_ask_price("BTCUSDT")
-    usdtbalance = float(usdtbalance)
-    
-    exchange.load_markets()
-    
 
-    # Calculate the percentage of capital to buy based on the confidence score
-    # capitalpercent = map_range(confidence_score, 0, 1, float(getminimumtransactionamountUSDT()), MAXBUYPERCENTOFCAPITAL)
-    # capitalpercent = decimal.Decimal(capitalpercent)
-    buyamountinbtc = usdtbalance*(MAXBUYPERCENTOFCAPITAL/100)/marketprice
-    # buyamountinbtc = exchange.amount_to_precision("BTC/USDT",amount)
-    buyamountinusdt = usdtbalance*(MAXBUYPERCENTOFCAPITAL/100)
-    # buyamountinusdt = round(buyamountinusdt,2)
+    
+    logger("Decided to buy %", MAXBUYPERCENTOFCAPITAL, " of USDT balance. Checking if enough...")
 
-    # formatted_amount = exchange.amount_to_precision('BTC/USDT', buyamountinusdt)
-    # formatted_price = float(exchange.price_to_precision('BTC/USDT', buyamountinusdt))
-    amount = buyamountinusdt
-    
-    
-    logger("Decided to buy %", MAXBUYPERCENTOFCAPITAL, " of USDT balance. |USDT balance: ", usdtbalance,
-           " | BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", amount)
+    side = 'buy'
     tp,sl = get_tp_sl(data,len(data)-1)
     # tp,sl = tpsl_smallest_movement()
-    amount = get_amount(amount,"buy",marketprice)
-    enough = check_amount(amount,marketprice,"buy")
+    amount,market_price,buyamountinbtc,buyamountinusdt,usdtbalance,error = get_investment_amount(side)
     # Check if the transaction amount is greater than the minimum transaction size
-    if enough:
-        logger("Enough USDT to cover purchase of ", "USDT", " balance is:", usdtbalance)
+    if error==None:
+
+        logger("Enough USDT to cover purchase of ", "USDT", "|USDT balance: ", usdtbalance,
+           " |BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", amount)
         
         # Calculate the quantity to buy
         # qty = (capitalpercent / 100) * usdtbalance
@@ -54,7 +38,7 @@ def buylogic(confidence_score,  usdtbalance,data):
 
         print(response)
     else:
-        logger("Not enough ", "USDT", " balance is:", usdtbalance)
+        logger(error)
 
 def getminimumtransactionamountUSDT():
     return get_min_qty_binance("BTC/USDT")*get_market_ask_price("BTC/USDT")

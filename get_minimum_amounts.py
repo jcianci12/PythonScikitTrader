@@ -1,4 +1,4 @@
-from  bybitapi import exchange
+from  api import exchange
 
 # Python
 exchange.load_markets()

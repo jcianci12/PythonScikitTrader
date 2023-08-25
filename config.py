@@ -12,8 +12,8 @@ ACCOUNT_TYPE = "SPOT" if TEST else "UNIFIED"
 
 SYMBOL = "BTCUSDT"
 
-MAXBUYPERCENTOFCAPITAL = 10
-MAXSELLPERCENTOFCAPITAL = 10
+MAXBUYPERCENTOFCAPITAL = 20
+MAXSELLPERCENTOFCAPITAL = 20
 
 MINIMUMBTCTRANSACTIONSIZE = 0.000048
 
@@ -33,7 +33,7 @@ TESTRETRAINATSTART = False
 
 
 PERCENTCHANGEINDICATOR = 0.005
-LOOKAHEADVALUE = 15
+LOOKAHEADVALUE = 30
 
 PLOTBACKTEST = False
 PLOTPROGRESS = True
@@ -42,7 +42,7 @@ SIMULATETRADE = False
 GRAPHVIEWWINDOW = 30
 ALLOWEDTOSELL = False
 
-ORDERCOLUMNS = ['uid', 'date','symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice', 'takeprofitid', 'stoplossid', 'profit', 'completedtime']
+ORDERCOLUMNS = ['uid', 'date','symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice', 'takeprofitid', 'stoplossid', 'profit', 'completedtime','exitprice']
 EXCLUDECOLUMNS = ['open_time', 'open', 'high', 'low', 'close', 'volume', '14 period RSI',
                                                            #'MACD', 
                                                            'SIGNAL', '14 period STOCH %K', 'MFV', '14 period ATR', 'MOM',
