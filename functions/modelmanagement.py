@@ -14,10 +14,9 @@ class ModelManagement:
             os.makedirs("models")
 
         # Save the models with the specified naming convention
-        for model_name, model in models.items():
-            filename = get_model_filename(symbol,interval,start,end,model_name)
-            logger("saving model file as ",filename)
-            joblib.dump(model, f"models/{filename}" )
+        filename = get_model_filename(symbol,interval,start,end)
+        logger("saving model file as ",filename)
+        joblib.dump(models, f"models/{filename}" )
 
 
     def clean_up_models(self,directory):

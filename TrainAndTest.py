@@ -90,9 +90,9 @@ def is_file_older_than_n_minutes(file_path, n):
     return time.time() - os.path.getmtime(file_path) > n * 60
 
 
-def getconfidencescore(data, modelname):
+def getconfidencescore(data,modelname):
 
-    filename = get_latest_model_filename(symbol, INTERVAL, modelname)
+    filename = get_latest_model_filename(symbol, INTERVAL)
     logger("Loading model from ", filename)
     model = joblib.load(filename)
 
@@ -100,7 +100,7 @@ def getconfidencescore(data, modelname):
 # we only want the last row to predict on
 
     data = data.drop(EXCLUDECOLUMNS+PREDCOLUMNS, axis=1)
-
+    model = model[modelname]
     prediction = model.predict(data)
     # logger("prediction",prediction)
     # Calculate the mean of the binary values
@@ -116,7 +116,7 @@ def trade_loop():
     end_date = datetime.now()
     start_date = end_date - timedelta(DATALENGTHFORTRAININGINDAYS)
     category = 'spot'
-    if (ALWAYSRETRAIN or is_file_older_than_n_minutes(get_latest_model_filename(symbol, INTERVAL, "ensembleinc"), 15)):
+    if (ALWAYSRETRAIN or is_file_older_than_n_minutes(get_latest_model_filename(symbol, INTERVAL), 15)):
         # retrain the data
         retrain(start_date, end_date)
     start_date = end_date - timedelta(DATALENGTHFORTRADINGINDAYS)
@@ -131,8 +131,8 @@ def trade_loop():
 
     decisiondata = data.tail(1)
     logger("making decision based on ", decisiondata.to_json())
-    confinc = getconfidencescore(decisiondata, "ensembleinc")
-    confdec = getconfidencescore(decisiondata, "ensembledec")
+    confinc = getconfidencescore(decisiondata,"ensembleinc")
+    confdec = getconfidencescore(decisiondata,"ensembledec")
 
     confidence_scoreinc = confinc
     confidence_scoredec = confdec
@@ -178,8 +178,8 @@ if (TESTRETRAINATSTART):
     logger("Testing prediction")
     data = fetch_bybit_data_v5(
         TEST, start_date, end_date, "BTCUSDT", INTERVAL, 'spot')
-    confinc = getconfidencescore(data, "ensembleinc")
-    confdec = getconfidencescore(data, "ensembledec")
+    confinc = getconfidencescore(data)
+    confdec = getconfidencescore(data)
     logger("prediction is:", confinc, confdec)
 
     logger("Done. Claning up models...")
