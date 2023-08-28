@@ -11,7 +11,7 @@ from api import exchange, get_free_balance
 from functions.logger import logger
 from messengerservice import send_telegram_message
 
-
+from config import TRADINGPAIR
 
 
 
