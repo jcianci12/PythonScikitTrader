@@ -67,14 +67,32 @@ class TrainingAndValidation:
             if len(df) < 40:
                 break
 # increase
-            features = [x for x in df.columns if x not in (EXCLUDECOLUMNS+PREDCOLUMNS)]
+            features = [x for x in df.columns if x not in (
+                EXCLUDECOLUMNS+PREDCOLUMNS)]
 
             yinc = df["pred"]
             X = df[features]
+            if (TRAINONLY == True):
+                X_train = X
+                y_train = yinc
+            else:
+                X_train, X_test, y_train, y_testinc = train_test_split(
+                    X, yinc, train_size=7 * len(X) // 10, shuffle=False
+                )
+                rf_predictioninc = rfinc.predict(X_test)
+                knn_predictioninc = knninc.predict(X_test)
+                ensemble_predictioninc = ensembleinc.predict(X_test)
+                print(y_testinc.values, rf_predictioninc)
 
-            X_train, X_test, y_train, y_testinc = train_test_split(
-                X, yinc, train_size=7 * len(X) // 10, shuffle=False
-            )
+                rf_accuracyinc = accuracy_score(y_testinc.values, rf_predictioninc)
+                knn_accuracyinc = accuracy_score(
+                y_testinc.values, knn_predictioninc)
+                ensemble_accuracyinc = accuracy_score(
+                y_testinc.values, ensemble_predictioninc)
+
+                self.rf_resultsinc.append(rf_accuracyinc)
+                self.knn_resultsinc.append(knn_accuracyinc)
+                self.ensemble_resultsinc.append(ensemble_accuracyinc)
 
             # fit models
             rfinc.fit(X_train, y_train)
@@ -82,55 +100,47 @@ class TrainingAndValidation:
             ensembleinc.fit(X_train, y_train)
 
             # get predictions
-            rf_predictioninc = rfinc.predict(X_test)
-            knn_predictioninc = knninc.predict(X_test)
-            ensemble_predictioninc = ensembleinc.predict(X_test)
-            print(y_testinc.values, rf_predictioninc)
 
-            rf_accuracyinc = accuracy_score(y_testinc.values, rf_predictioninc)
-            knn_accuracyinc = accuracy_score(
-                y_testinc.values, knn_predictioninc)
-            ensemble_accuracyinc = accuracy_score(
-                y_testinc.values, ensemble_predictioninc)
-
-            self.rf_resultsinc.append(rf_accuracyinc)
-            self.knn_resultsinc.append(knn_accuracyinc)
-            self.ensemble_resultsinc.append(ensemble_accuracyinc)
 
 # decrease
             ydec = df["preddec"]
 
-            X_train, X_test, y_train, y_testdec = train_test_split(
-                X, ydec, train_size=7 * len(X) // 10, shuffle=False
-            )
+            if (TRAINONLY == True):
+                X_train = X
+                y_train = ydec
 
+            else:
+                X_train, X_test, y_train, y_testdec = train_test_split(
+                    X, ydec, train_size=7 * len(X) // 10, shuffle=False
+                )
+                # # get predictions
+                rf_predictiondec = rfdec.predict(X_test)
+                knn_predictiondec = knndec.predict(X_test)
+                ensemble_predictiondec = ensembledec.predict(X_test)
+                # determine accuracy and append to results
+                rf_accuracydec = accuracy_score(y_testdec.values, rf_predictiondec)
+                knn_accuracydec = accuracy_score(
+                y_testdec.values, knn_predictiondec)
+                ensemble_accuracydec = accuracy_score(
+                y_testdec.values, ensemble_predictiondec)
+
+                self.rf_resultsdec.append(rf_accuracydec)
+                self.knn_resultsdec.append(knn_accuracydec)
+                self.ensemble_resultsdec.append(ensemble_accuracydec)
             # fit models
             rfdec.fit(X_train, y_train)
             knndec.fit(X_train, y_train)
             ensembledec.fit(X_train, y_train)
 
-            # # get predictions
-            rf_predictiondec = rfdec.predict(X_test)
-            knn_predictiondec = knndec.predict(X_test)
-            ensemble_predictiondec = ensembledec.predict(X_test)
-# determine accuracy and append to results
-            rf_accuracydec = accuracy_score(y_testdec.values, rf_predictiondec)
-            knn_accuracydec = accuracy_score(
-                y_testdec.values, knn_predictiondec)
-            ensemble_accuracydec = accuracy_score(
-                y_testdec.values, ensemble_predictiondec)
-
-            self.rf_resultsdec.append(rf_accuracydec)
-            self.knn_resultsdec.append(knn_accuracydec)
-            self.ensemble_resultsdec.append(ensemble_accuracydec)
+          
             # print(f"MP:{current_price}|TP:{tp}|SL:{sl}|UpSignal:{up_signal}|DownSignal:{down_signal}")
 
             print(X_train.index[0])
-
-        logger(
-            f"Ensemble Accuracy Inc = {sum(self.get_ensemble_resultsinc()) / len(self.get_ensemble_resultsinc())}")
-        logger(
-            f"Ensemble Accuracy Dec = {sum(self.get_ensemble_resultsdec()) / len(self.get_ensemble_resultsdec())}")
+        if(not TRAINONLY):
+            logger(
+                f"Ensemble Accuracy Inc = {sum(self.get_ensemble_resultsinc()) / len(self.get_ensemble_resultsinc())}")
+            logger(
+                f"Ensemble Accuracy Dec = {sum(self.get_ensemble_resultsdec()) / len(self.get_ensemble_resultsdec())}")
 
         self.models = {"rfinc": rfinc, "knninc": knninc, "ensembleinc": ensembleinc,
                        "rf": rfdec, "knninc": knndec, "ensembledec": ensembledec}

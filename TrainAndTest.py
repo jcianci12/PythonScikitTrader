@@ -78,10 +78,6 @@ def retrain(start_date, end_date):
 
     validator.train_and_cross_validate(
         trainingdata, symbol, start_date, end_date, INTERVAL)
-    logger(
-        f"Ensemble Accuracy inc = {sum(validator.get_ensemble_resultsinc()) / len(validator.get_ensemble_resultsinc())}")
-    logger(
-        f"Ensemble Accuracy dec = {sum(validator.get_ensemble_resultsdec()) / len(validator.get_ensemble_resultsdec())}")
 
 
 def is_file_older_than_n_minutes(file_path, n):

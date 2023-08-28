@@ -58,3 +58,5 @@ EXCLUDECOLUMNS = ['open_time', 'open', 'high', 'low', 'close', 'volume', '14 per
                                                            #'ema5', 
                                                            'normVol']
 PREDCOLUMNS = ['pred', 'preddec']
+
+TRAINONLY = True
