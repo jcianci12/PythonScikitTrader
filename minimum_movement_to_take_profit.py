@@ -1,4 +1,5 @@
 from api import exchange
+from config import TRADINGPAIR
 
 def calculate_smallest_movement(amount: float, symbol: str) -> float:
   
@@ -16,5 +17,5 @@ def calculate_smallest_movement(amount: float, symbol: str) -> float:
     return smallest_movement
 
 def tpsl_smallest_movement():
-    sm = calculate_smallest_movement(20,"BTC/USDT")
+    sm = calculate_smallest_movement(20,TRADINGPAIR)
     return sm*2,sm

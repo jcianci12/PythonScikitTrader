@@ -162,7 +162,7 @@ def handle_message(message):
     if(usdindexprice!=''):
         last_price = float(message['k']['c'])
         if(last_price!=None):
-            check_orders(True, "BTC/USDT", last_price)
+            check_orders(True, TRADINGPAIR, last_price)
         # Call the plot_ascii_chart function with the message as an argument
             # Clear the console
         print("\033[H\033[J")

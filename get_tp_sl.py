@@ -3,9 +3,10 @@
 from getLows import getLows
 from getHighs import getHighs
 from minimum_movement_to_take_profit import calculate_smallest_movement
+from config import TRADINGPAIR
 
 
-min_movement = calculate_smallest_movement(20,"BTC/USDT")
+min_movement = calculate_smallest_movement(20,TRADINGPAIR)
 
 def get_tp_sl(data,row_position):
 

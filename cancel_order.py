@@ -11,4 +11,4 @@ for number in closed_orders:
             print(number['info']['orderId'])
 
 
-exchange.cancel_order("1473690407914266880","BTC/USDT")
+exchange.cancel_order("1473690407914266880",TRADINGPAIR)

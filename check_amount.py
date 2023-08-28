@@ -5,7 +5,7 @@ from functions.logger import logger
 
 def get_min_notional():
     markets = exchange.load_markets()
-    market = markets["BTC/USDT"]
+    market = markets[TRADINGPAIR]
     min_notional = float(market['info']['filters'][6]['minNotional'])
     return min_notional
 
@@ -24,7 +24,7 @@ def check_amount(amount,market_price,side)->bool:
     else:
         free_balance = float(get_free_balance("BTC"))
     
-    if float(exchange.amount_to_precision("BTC/USDT",free_balance*market_price)) <amount:
+    if float(exchange.amount_to_precision(TRADINGPAIR,free_balance*market_price)) <amount:
         errormsg = f"balance too low. Balance:{free_balance*market_price}|amount:{amount}"  
         return errormsg    
 
@@ -33,7 +33,7 @@ def check_amount(amount,market_price,side)->bool:
 
 def Adjust_Amount_for_fees(amount,market_price, side): 
     markets = exchange.load_markets()
-    symbol = "BTC/USDT"
+    symbol = TRADINGPAIR
     market = markets[symbol]
     taker_fee = market['taker']
     maker_fee = market['maker']
@@ -52,7 +52,7 @@ def Adjust_Amount_for_fees(amount,market_price, side):
 
 
 def get_investment_amount(side):
-    market_price = get_market_ask_price("BTC/USDT")
+    market_price = get_market_ask_price(TRADINGPAIR)
     usdtbalance = get_free_balance("USDT")
 # Calculate the percentage of capital to buy based on the confidence score
     buyamountinbtc = usdtbalance*(MAXBUYPERCENTOFCAPITAL/100)/market_price

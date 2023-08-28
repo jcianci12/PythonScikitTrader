@@ -215,7 +215,7 @@ def place_order_tp_sl(testmode, type, symbol, side, tp, sl, amount):
 
 def cancel_order(symbol, id):
     try:
-        exchange.cancel_order(id,"BTC/USDT")
+        exchange.cancel_order(id,TRADINGPAIR)
 
     except Exception as e:
         logger(f"An error occurred: {e}")

@@ -41,7 +41,7 @@ def buylogic(data):
         logger(error)
 
 def getminimumtransactionamountUSDT():
-    return get_min_qty_binance("BTC/USDT")*get_market_ask_price("BTC/USDT")
+    return get_min_qty_binance(TRADINGPAIR)*get_market_ask_price(TRADINGPAIR)
 def getminimumtransactionamountBTC():
-    return decimal.Decimal(get_min_qty_binance("BTC/USDT"))
+    return decimal.Decimal(get_min_qty_binance(TRADINGPAIR))
 

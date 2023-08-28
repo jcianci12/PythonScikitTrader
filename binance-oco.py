@@ -86,4 +86,4 @@ def place_order(testmode, type, symbol, side, tp, sl, amount):
 
     
 tp,sl = calculate_prices(None)
-place_order(TEST,"","BTC/USDT","BUY",tp,sl,0.0004)
+place_order(TEST,"",TRADINGPAIR,"BUY",tp,sl,0.0004)
