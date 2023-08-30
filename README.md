@@ -2,10 +2,11 @@
 Thanks for checking out my project!
 
 What this project does:
-- Demonstrates how to interface with the bybit exchange (sometimes the bybit documentation was a bit sparse - there is some trial and error in here)
+- Demonstrates how to interface with the binance exchange
+- Creates indicator data including take profit and stop loss
 - Demonstrates in a not so elegant way how RN, KNN, and Ensemble model classifiers can be trained
-- Auto trades the BTCUSDT spot pair on bybit unified exchange
-- Produces signals based on training data for a +5 price increase or a -5 increase
+- Auto trades the BTCUSDT spot pair on binance unified exchange
+- Produces signals that indicate wether the dynamic tp or sl will be hit
 - Uses those signals to buy or sell
 - Produces a performance graph showing the btc close price, the signals, and the portfoio balance
 - Includes some python unit tests for checking connection to the exchange (these tests could really be improved quite a bit)
@@ -16,7 +17,7 @@ What this project probably doesnt do:
 - Time the market very well... 
 
 What I would love this project to do:
-- Update the models more efficiently - currently it is fetching all historic data and training on all the data every 60 minutes instead of just updating the models with the newest data
+- Update the models more efficiently - this is currently in testing phase
 - Incorporate backtest.py so that I can, well... backtest!
 
 Startup guide (how im doing it on a windows machine)
