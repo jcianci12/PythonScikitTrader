@@ -2,6 +2,7 @@
 from api import get_free_balance,exchange, get_market_ask_price
 from config import MAXBUYPERCENTOFCAPITAL
 from functions.logger import logger
+from config import TRADINGPAIR
 
 def get_min_notional():
     markets = exchange.load_markets()

@@ -6,8 +6,9 @@ import pandas as pd
 def get_model_filename(symbol,interval,startdate,enddate):
     return f"{symbol}_{interval}_{str(startdate)}_{str(enddate)}.joblib"
 
-def get_latest_model_filename(symbol, interval):
+def get_latest_model_filename(symbol:str, interval):
     # Get a list of all model files that match the symbol and interval
+    symbol = symbol.replace("/","_")
 
     model_files = glob.glob(f"models/{symbol}_{interval}_*_*.joblib")
 

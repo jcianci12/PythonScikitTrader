@@ -8,7 +8,8 @@ from functions.logger import plot_graph, logger
 
 
 class ModelManagement:
-    def save_models(self, models, symbol, interval, start, end):
+    def save_models(self, models, symbol:str, interval, start, end):
+        symbol = symbol.replace("/","_")
         # Create a models directory if it doesn't exist
         if not os.path.exists("models"):
             os.makedirs("models")

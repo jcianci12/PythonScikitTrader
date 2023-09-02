@@ -28,6 +28,31 @@ class TrainingAndValidation:
         self.item = AssetTracker()
         self.capital_tracker = CapitalTracker(10000)
 
+    def returnExistingModelOrCreateFresh(self,latestmodelfilename):
+        if(latestmodelfilename):
+            model = joblib.load(latestmodelfilename)
+            return model
+        else:
+# Models which will be used
+            rfinc = RandomForestClassifier()
+            knninc = KNeighborsClassifier()
+
+            rfdec = RandomForestClassifier()
+            knndec = KNeighborsClassifier()
+
+            # Create a tuple list of our models
+            estimatorsinc = [("knninc", knninc), ("rfinc", rfinc)]
+            estimatorsdec = [("rfdec", rfdec), ("knndec", knndec)]
+
+            ensembleinc = VotingClassifier(estimatorsinc, voting="soft")
+            ensembledec = VotingClassifier(estimatorsdec, voting="soft")
+            return  rfinc, knninc, ensembleinc, rfdec,knndec,  ensembledec
+    def get_model_training_dates(self,filename:str):
+        parts = filename.split("_")
+        start_date = parts[2]
+        end_date = parts[3]
+        return start_date,end_date
+
     def train_and_cross_validate(self, data, symbol, start, end, interval):
         # data = prep_data(data)
         i = 0
@@ -42,20 +67,13 @@ class TrainingAndValidation:
         self.knn_resultsdec = []
         self.rf_resultsdec = []
         self.ensemble_resultsdec = []
+        #trim the data off that we have already trained on:
+       
+        # Filter the rows to only include dates newer than the end date
+        latestmodelfilename = get_latest_model_filename(TRADINGPAIR, INTERVAL)
+        rfinc, knninc,ensembleinc,rfdec, knndec, ensembledec = self.returnExistingModelOrCreateFresh(latestmodelfilename)
+        
 
-        # Models which will be used
-        rfinc = RandomForestClassifier()
-        knninc = KNeighborsClassifier()
-
-        rfdec = RandomForestClassifier()
-        knndec = KNeighborsClassifier()
-
-        # Create a tuple list of our models
-        estimatorsinc = [("knninc", knninc), ("rfinc", rfinc)]
-        estimatorsdec = [("rfdec", rfdec), ("knndec", knndec)]
-
-        ensembleinc = VotingClassifier(estimatorsinc, voting="soft")
-        ensembledec = VotingClassifier(estimatorsdec, voting="soft")
 
         logger("Starting training")
         while True:
@@ -142,8 +160,7 @@ class TrainingAndValidation:
             logger(
                 f"Ensemble Accuracy Dec = {sum(self.get_ensemble_resultsdec()) / len(self.get_ensemble_resultsdec())}")
 
-        self.models = {"rfinc": rfinc, "knninc": knninc, "ensembleinc": ensembleinc,
-                       "rf": rfdec, "knninc": knndec, "ensembledec": ensembledec}
+        self.models =  rfinc,  knninc,  ensembleinc,rfdec, knndec, ensembledec
         mm = ModelManagement()
         mm.clean_up_models("models")
         mm.save_models(self.models, symbol, interval, start, end)
