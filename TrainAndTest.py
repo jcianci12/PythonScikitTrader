@@ -45,15 +45,8 @@ pd.set_option("display.max_rows", 5)
 # symbol = "BTC/USD"  # Symbol of the desired stock
 
 
-symbol = "BTCUSD"
 test = True
 days = 2
-
-
-# %%
-# %%
-
-# %%
 
 # # Retrain the model using the latest data
 def retrain(start_date, end_date):
@@ -73,12 +66,18 @@ def retrain(start_date, end_date):
     # trainingdata.tail()
     validator = TrainingAndValidation()
     # retrain the data
-    logger("retraining...")
-    # get the simulated ledger
+
+    latestmodelfilename = get_latest_model_filename(TRADINGPAIR, INTERVAL)
+
+    if(latestmodelfilename):            
+        s,e = validator.get_model_training_dates(latestmodelfilename)
+        trainingdata.loc[trainingdata.index>e]        #
+        logger(f"there is a model file and the latest date is {e}. so the training data is ")
+        logger(trainingdata)
 
     validator.train_and_cross_validate(
-        trainingdata, symbol, start_date, end_date, INTERVAL)
-
+        trainingdata, TRADINGPAIR, start_date, end_date, INTERVAL)
+    
 
 def is_file_older_than_n_minutes(file_path, n):
     if ((file_path == None) or not os.path.exists(file_path)):
@@ -90,9 +89,9 @@ def is_file_older_than_n_minutes(file_path, n):
     return time.time() - os.path.getmtime(file_path) > n * 60
 
 
-def getconfidencescore(data,modelname):
+def getconfidencescore(data,modelindex:int):
 
-    filename = get_latest_model_filename(symbol, INTERVAL)
+    filename = get_latest_model_filename(TRADINGPAIR, INTERVAL)
     logger("Loading model from ", filename)
     model = joblib.load(filename)
 
@@ -100,7 +99,7 @@ def getconfidencescore(data,modelname):
 # we only want the last row to predict on
 
     data = data.drop(EXCLUDECOLUMNS+PREDCOLUMNS, axis=1)
-    model = model[modelname]
+    model = model[modelindex]
     prediction = model.predict(data)
     # logger("prediction",prediction)
     # Calculate the mean of the binary values
@@ -116,7 +115,7 @@ def trade_loop():
     end_date = datetime.now()
     start_date = end_date - timedelta(DATALENGTHFORTRAININGINDAYS)
     category = 'spot'
-    if (ALWAYSRETRAIN or is_file_older_than_n_minutes(get_latest_model_filename(symbol, INTERVAL), 15)):
+    if (ALWAYSRETRAIN or is_file_older_than_n_minutes(get_latest_model_filename(TRADINGPAIR, INTERVAL), 15)):
         # retrain the data
         retrain(start_date, end_date)
     start_date = end_date - timedelta(DATALENGTHFORTRADINGINDAYS)
@@ -131,8 +130,8 @@ def trade_loop():
 
     decisiondata = data.tail(1)
     logger("making decision based on ", decisiondata.to_json())
-    confinc = getconfidencescore(decisiondata,"ensembleinc")
-    confdec = getconfidencescore(decisiondata,"ensembledec")
+    confinc = getconfidencescore(decisiondata,2)
+    confdec = getconfidencescore(decisiondata,5)
 
     confidence_scoreinc = confinc
     confidence_scoredec = confdec
