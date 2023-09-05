@@ -19,14 +19,9 @@ def signal_func(row, data, window_position):
     highs = getHighs(data,row_position)
     lows = getLows(data,row_position)
 
-
-
     # get the values of highest high and lowest low at the row position
     highesthigh = highs.max()
     lowestlow = lows.min()
-
-           
-
 
     tp = highesthigh
     sl = lowestlow
@@ -36,22 +31,27 @@ def signal_func(row, data, window_position):
     lowestindex= lows.idxmin()
     highestindex = highs.idxmax()
 
-
     # create a bool which is true if the hightest index was reached before the lowest index
     highestfirst = (highestindex < lowestindex)
     reachestp = (highesthigh >= tp)
     reachessl = (lowestlow <= sl)
     # check if the price hits the tp first or sl first and assign signals accordingly
-    HitsTPandBeforeLow = int(reachestp and highestfirst)
-    HitsSL = int(reachessl and not highestfirst)
+
+    returnvalue = 0 #initial value
+    if reachestp and highestfirst:
+        returnvalue = 10
+    elif reachessl:
+        returnvalue = 0
+    else:
+        returnvalue = 5
 
     # print some information to the console
-    print(f"entry:{current_price}|tp:{tp}|sl:{sl}|UpSignal:{HitsTPandBeforeLow}|DownSignal:{HitsSL}")
+    print(f"entry:{current_price}|tp:{tp}|sl:{sl}|return signal:{returnvalue}")
 
 
 #it looks like this is just returning the same values for the whole series
 # return a Series object with HitsTPandBeforeLow and HitsSL as values
-    return pd.Series([HitsTPandBeforeLow, HitsSL])
+    return pd.Series([returnvalue])
 
 
 def check_tp_sl(tp, sl, current_price, min_tp,  min_sl):

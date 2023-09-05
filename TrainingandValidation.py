@@ -47,7 +47,7 @@ class TrainingAndValidation:
         if(result==None):
             #get a new model.
             result = get_new_model()
-        rfinc,rfdec,knninc,knndec,ensembleinc,ensembledec = result
+        rfinc,knninc,ensembleinc = result
 
         logger("Starting training")
         while True:
@@ -105,50 +105,14 @@ class TrainingAndValidation:
             knninc.fit(X_train, y_train)
             ensembleinc.fit(X_train, y_train)
 
-            # get predictions
-
-
-# decrease
-            ydec = df["preddec"]
-
-            if (TRAINONLY == True):
-                X_train = X
-                y_train = ydec
-
-            else:
-                X_train, X_test, y_train, y_testdec = train_test_split(
-                    X, ydec, train_size=7 * len(X) // 10, shuffle=False
-                )
-                # # get predictions
-                rf_predictiondec = rfdec.predict(X_test)
-                knn_predictiondec = knndec.predict(X_test)
-                ensemble_predictiondec = ensembledec.predict(X_test)
-                # determine accuracy and append to results
-                rf_accuracydec = accuracy_score(y_testdec.values, rf_predictiondec)
-                knn_accuracydec = accuracy_score(
-                y_testdec.values, knn_predictiondec)
-                ensemble_accuracydec = accuracy_score(
-                y_testdec.values, ensemble_predictiondec)
-
-                self.rf_resultsdec.append(rf_accuracydec)
-                self.knn_resultsdec.append(knn_accuracydec)
-                self.ensemble_resultsdec.append(ensemble_accuracydec)
-            # fit models
-            rfdec.fit(X_train, y_train)
-            knndec.fit(X_train, y_train)
-            ensembledec.fit(X_train, y_train)
-
-          
-            # print(f"MP:{current_price}|TP:{tp}|SL:{sl}|UpSignal:{up_signal}|DownSignal:{down_signal}")
 
             print(X_train.index[0])
         if(not TRAINONLY):
             logger(
                 f"Ensemble Accuracy Inc = {sum(self.get_ensemble_resultsinc()) / len(self.get_ensemble_resultsinc())}")
-            logger(
-                f"Ensemble Accuracy Dec = {sum(self.get_ensemble_resultsdec()) / len(self.get_ensemble_resultsdec())}")
+          
 
-        self.models =  rfinc,knninc,  ensembleinc, rfdec,  knndec, ensembledec
+        self.models =  rfinc,knninc,ensembleinc
         mm = ModelManagement()
         mm.clean_up_models("models")
         mm.save_models(self.models, symbol, interval, start, end)

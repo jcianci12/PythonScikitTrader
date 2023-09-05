@@ -57,7 +57,7 @@ EXCLUDECOLUMNS = ['opentime', 'open', 'high', 'low', 'close', 'volume', '14 peri
                                                            #'ema15', 
                                                            #'ema5', 
                                                            'normVol']
-PREDCOLUMNS = ['pred', 'preddec']
+PREDCOLUMNS = ['pred']
 
 TRAINONLY = True
 TRADINGPAIR = "BTC/USDT"

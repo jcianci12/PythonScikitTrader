@@ -27,9 +27,7 @@ def _produce_movement_indicators(data):
     for index, row in data.iterrows():
         result = signal_func(row, data, index)
         pred.append(result[0])
-        preddec.append(result[1])
     data["pred"] = pred
-    data["preddec"] = preddec
 
     # data = removecols(data)
 

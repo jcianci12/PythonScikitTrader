@@ -141,13 +141,9 @@ def trade_loop():
     logger("making decision based on ", decisiondata.to_json())
     model = load_latest_model()
     confinc = getconfidencescore(decisiondata,model[2])
-    confdec = getconfidencescore(decisiondata,model[5])
 
     confidence_scoreinc = confinc
-    confidence_scoredec = confdec
 
-    confidence_scoreinc = confinc
-    confidence_scoredec = confdec
 
     usdtbalance = decimal.Decimal(get_free_balance( "USDT"))
     btcbalance = decimal.Decimal(get_free_balance( "BTC"))
@@ -158,22 +154,20 @@ def trade_loop():
     logger("Portfolio: ", portfolio_balance,
            "BTC:", btcbalance, "USDT:", usdtbalance)
     # Print the final output
-    logger("buy signal:", confidence_scoreinc,
-           "sell signal:", confidence_scoredec)
     
 
     # buylogic(1, usdtbalance)
-    if (confidence_scoreinc == 1 and confidence_scoredec == 0):
+    if (confidence_scoreinc == 10):
         buylogic(data)
 
         # asyncio.run(send_telegram_message('Update'))
 
-    elif (confidence_scoreinc == 0 and confidence_scoredec == 1):
+    elif (confidence_scoreinc == 0):
         selllogic(1, btcbalance, bid_price)
         
     else:
         logger(str("Didnt act"))
-    plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
+    plot_graph(bid_price, confidence_scoreinc, 0, portfolio_balance,
             usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
 
 
@@ -188,8 +182,7 @@ if (TESTRETRAINATSTART):
     data = fetch_bybit_data_v5(
         TEST, start_date, end_date, "BTCUSDT", INTERVAL, 'spot')
     confinc = getconfidencescore(data)
-    confdec = getconfidencescore(data)
-    logger("prediction is:", confinc, confdec)
+    logger("prediction is:", confinc)
 
     logger("Done. Claning up models...")
     mm = ModelManagement()

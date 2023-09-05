@@ -58,17 +58,13 @@ def get_new_model():
         rfinc = RandomForestClassifier()
         knninc = KNeighborsClassifier()
 
-        rfdec = RandomForestClassifier()
-        knndec = KNeighborsClassifier()
 
         # Create a tuple list of our models
         estimatorsinc = [("knninc", knninc), ("rfinc", rfinc)]
-        estimatorsdec = [("rfdec", rfdec), ("knndec", knndec)]
 
         ensembleinc = VotingClassifier(estimatorsinc, voting="soft")
-        ensembledec = VotingClassifier(estimatorsdec, voting="soft")
 
-        return rfinc,rfdec,knninc,knndec,ensembleinc,ensembledec
+        return rfinc,knninc,ensembleinc
 
 
 
