@@ -13,8 +13,7 @@ import joblib
 from KEYS import API_KEY, API_SECRET
 from binance_fetch_balance import get_balance
 from functions.map_range import map_range
-from functions.modelmanagement import ModelManagement
-from get_latest_model_file import get_latest_model_filename, get_model_filename
+from functions.modelmanagement import ModelManagement, get_latest_model_filename, load_latest_model
 from get_last_ohlc_bybit import get_last_ohlc_binance
 from logic.buylogic import buylogic
 from api import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_free_balance
@@ -60,7 +59,7 @@ days = 2
 def retrain(start_date, end_date):
     validator = TrainingAndValidation()
     category = 'spot'
-    symbol = 'BTC/USDT'
+    symbol = 'BTCUSDT'
     #get the training dates from the model
     result = parse_file_name()
     if result is None:
@@ -78,19 +77,21 @@ def retrain(start_date, end_date):
 
     logger("Training data sample before prep:",
            trainingdata.tail(1).to_string())
+    if(trainingdata.empty):
+        logger("No training data")
+    else:
+        # smooth the data
+        trainingdata = prep_data(trainingdata)
+        logger("Training data sample after prep:",
+            trainingdata.tail(1).to_string())
+        # trainingdata.tail()
+        validator = TrainingAndValidation()
+        # retrain the data
+        logger("retraining...")
+        # get the simulated ledger
 
-    # smooth the data
-    trainingdata = prep_data(trainingdata)
-    logger("Training data sample after prep:",
-           trainingdata.tail(1).to_string())
-    # trainingdata.tail()
-    validator = TrainingAndValidation()
-    # retrain the data
-    logger("retraining...")
-    # get the simulated ledger
-
-    validator.train_and_cross_validate(
-        trainingdata, symbol, start_date, end_date, INTERVAL)
+        validator.train_and_cross_validate(
+            trainingdata, symbol, start_date, end_date, INTERVAL)
 
 
 def is_file_older_than_n_minutes(file_path, n):
@@ -103,17 +104,11 @@ def is_file_older_than_n_minutes(file_path, n):
     return time.time() - os.path.getmtime(file_path) > n * 60
 
 
-def getconfidencescore(data,modelname):
+def getconfidencescore(data,model):
 
-    filename = get_latest_model_filename(symbol, INTERVAL)
-    logger("Loading model from ", filename)
-    model = joblib.load(filename)
-
-
-# we only want the last row to predict on
-
+    
+   
     data = data.drop(EXCLUDECOLUMNS+PREDCOLUMNS, axis=1)
-    model = model[modelname]
     prediction = model.predict(data)
     # logger("prediction",prediction)
     # Calculate the mean of the binary values
@@ -144,8 +139,9 @@ def trade_loop():
 
     decisiondata = data.tail(1)
     logger("making decision based on ", decisiondata.to_json())
-    confinc = getconfidencescore(decisiondata,"ensembleinc")
-    confdec = getconfidencescore(decisiondata,"ensembledec")
+    model = load_latest_model()
+    confinc = getconfidencescore(decisiondata,model[2])
+    confdec = getconfidencescore(decisiondata,model[5])
 
     confidence_scoreinc = confinc
     confidence_scoredec = confdec

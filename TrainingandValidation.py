@@ -1,7 +1,6 @@
 import glob
 import os
 import shutil
-from get_latest_model import get_new_model, load_latest_model
 import joblib
 from matplotlib import pyplot as plt
 import pandas as pd
@@ -14,8 +13,7 @@ from Simulation.assettracker import AssetTracker
 from Simulation.capitaltracker import CapitalTracker
 from config import *
 from functions.logger import plot_graph, logger
-from functions.modelmanagement import ModelManagement
-from get_latest_model_file import compare_dates, get_latest_model_filename, get_model_filename
+from functions.modelmanagement import ModelManagement, get_new_model, load_latest_model
 from prep_data import prep_data
 
 
@@ -49,14 +47,20 @@ class TrainingAndValidation:
         if(result==None):
             #get a new model.
             result = get_new_model()
-        rfinc,rfdec,knninc,knndec,estimatorsinc,estimatorsdec,ensembleinc,ensembledec = result
+        rfinc,rfdec,knninc,knndec,ensembleinc,ensembledec = result
 
         logger("Starting training")
         while True:
             if(TRAINONLY==True):
                 # if we are only training. we dont need to divide the data and so we dont need to make sure the
                 #data is large enough
-                df = data
+                s = i*100
+                e = s+100
+                df = data.iloc[s:e]
+                # increase
+                i += 1
+                if len(df)<1:
+                    break
             
             else:
                 # Partition the data into chunks of size len_train every num_train days
@@ -65,7 +69,7 @@ class TrainingAndValidation:
                 # increase
                 i += 1
 
-                if len(df) < 40:
+                if len(df) < self.len_train:
                     break
             
 
@@ -144,8 +148,7 @@ class TrainingAndValidation:
             logger(
                 f"Ensemble Accuracy Dec = {sum(self.get_ensemble_resultsdec()) / len(self.get_ensemble_resultsdec())}")
 
-        self.models = {"rfinc": rfinc, "knninc": knninc, "ensembleinc": ensembleinc,
-                       "rf": rfdec, "knninc": knndec, "ensembledec": ensembledec}
+        self.models =  rfinc,knninc,  ensembleinc, rfdec,  knndec, ensembledec
         mm = ModelManagement()
         mm.clean_up_models("models")
         mm.save_models(self.models, symbol, interval, start, end)

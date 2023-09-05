@@ -43,9 +43,9 @@ GRAPHVIEWWINDOW = 30
 ALLOWEDTOSELL = False
 
 ORDERCOLUMNS = ['uid', 'date','symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice', 'takeprofitid', 'stoplossid', 'profit', 'completedtime','exitprice']
-EXCLUDECOLUMNS = ['open_time', 'open', 'high', 'low', 'close', 'volume', '14 period RSI',
+EXCLUDECOLUMNS = ['opentime', 'open', 'high', 'low', 'close', 'volume', '14 period RSI',
                                                            #'MACD', 
-                                                           'SIGNAL', '14 period STOCH %K', 'MFV', '14 period ATR', 'MOM',
+                                                           'SIGNAL', '14 period STOCH K', 'MFV', '14 period ATR', 'MOM',
                                                            '14 period MFI', 
                                                            #'ROC', 
                                                            'OBV',
