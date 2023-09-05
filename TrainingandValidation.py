@@ -49,19 +49,26 @@ class TrainingAndValidation:
         if(result==None):
             #get a new model.
             result = get_new_model()
-        rfinc,knninc,rfdec,knndec,estimatorsinc,estimatorsdec,ensembleinc,ensembledec = result
-
+        rfinc,rfdec,knninc,knndec,estimatorsinc,estimatorsdec,ensembleinc,ensembledec = result
 
         logger("Starting training")
         while True:
-            # Partition the data into chunks of size len_train every num_train days
-            df = data.iloc[i *
-                           self.num_train: (i * self.num_train) + self.len_train]
-            i += 1
+            if(TRAINONLY==True):
+                # if we are only training. we dont need to divide the data and so we dont need to make sure the
+                #data is large enough
+                df = data
+            
+            else:
+                # Partition the data into chunks of size len_train every num_train days
+                df = data.iloc[i *
+                            self.num_train: (i * self.num_train) + self.len_train]
+                # increase
+                i += 1
 
-            if len(df) < 40:
-                break
-# increase
+                if len(df) < 40:
+                    break
+            
+
             features = [x for x in df.columns if x not in (
                 EXCLUDECOLUMNS+PREDCOLUMNS)]
 

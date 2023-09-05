@@ -60,6 +60,7 @@ days = 2
 def retrain(start_date, end_date):
     validator = TrainingAndValidation()
     category = 'spot'
+    symbol = 'BTC/USDT'
     #get the training dates from the model
     result = parse_file_name()
     if result is None:

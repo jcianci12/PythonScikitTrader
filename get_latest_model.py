@@ -32,4 +32,4 @@ def get_new_model():
         ensembleinc = VotingClassifier(estimatorsinc, voting="soft")
         ensembledec = VotingClassifier(estimatorsdec, voting="soft")
 
-        return rfinc,knninc,rfdec,knndec,estimatorsinc,estimatorsdec,ensembleinc,ensembledec
+        return rfinc,rfdec,knninc,knndec,estimatorsinc,estimatorsdec,ensembleinc,ensembledec
