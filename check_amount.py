@@ -1,6 +1,6 @@
 
 from api import get_free_balance,exchange, get_market_ask_price
-from config import MAXBUYPERCENTOFCAPITAL
+from config import MAXBUYPERCENTOFCAPITAL, TRADINGPAIR
 from functions.logger import logger
 
 def get_min_notional():

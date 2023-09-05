@@ -7,3 +7,11 @@ TODO:
 [ ] train the INC value on hitting the take profit mark
 [ ] train the DEC value on hitting the stop loss mark.
 [ ] fix issue where orders are not closed out. First order closes and the loop doesnt continue
+
+
+
+The model training dates should drive the data fetch. we only need to train the model on the missing data.
+train the model
+if the model has been trained on the minimum period, get the delta data
+else get the minimum period
+train

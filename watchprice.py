@@ -1,4 +1,3 @@
-from pybit.unified_trading import WebSocket
 from time import time
 import csv
 from check_amount import check_amount, Adjust_Amount_for_fees
