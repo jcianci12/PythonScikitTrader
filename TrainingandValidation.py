@@ -1,6 +1,7 @@
 import glob
 import os
 import shutil
+from get_latest_model import get_new_model, load_latest_model
 import joblib
 from matplotlib import pyplot as plt
 import pandas as pd
@@ -28,6 +29,7 @@ class TrainingAndValidation:
         self.item = AssetTracker()
         self.capital_tracker = CapitalTracker(10000)
 
+
     def train_and_cross_validate(self, data, symbol, start, end, interval):
         # data = prep_data(data)
         i = 0
@@ -42,20 +44,13 @@ class TrainingAndValidation:
         self.knn_resultsdec = []
         self.rf_resultsdec = []
         self.ensemble_resultsdec = []
+#get the latest model otherwise...
+        result = load_latest_model()
+        if(result==None):
+            #get a new model.
+            result = get_new_model()
+        rfinc,knninc,rfdec,knndec,estimatorsinc,estimatorsdec,ensembleinc,ensembledec = result
 
-        # Models which will be used
-        rfinc = RandomForestClassifier()
-        knninc = KNeighborsClassifier()
-
-        rfdec = RandomForestClassifier()
-        knndec = KNeighborsClassifier()
-
-        # Create a tuple list of our models
-        estimatorsinc = [("knninc", knninc), ("rfinc", rfinc)]
-        estimatorsdec = [("rfdec", rfdec), ("knndec", knndec)]
-
-        ensembleinc = VotingClassifier(estimatorsinc, voting="soft")
-        ensembledec = VotingClassifier(estimatorsdec, voting="soft")
 
         logger("Starting training")
         while True:

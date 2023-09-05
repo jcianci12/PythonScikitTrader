@@ -29,6 +29,7 @@ from logic.selllogic import selllogic
 
 import multiprocessing as mp
 from messengerservice import send_telegram_message
+from parse_file_name import parse_file_name
 
 from prep_data import prep_data
 from binance import ThreadedWebsocketManager
@@ -59,10 +60,21 @@ days = 2
 def retrain(start_date, end_date):
     validator = TrainingAndValidation()
     category = 'spot'
-
+    #get the training dates from the model
+    result = parse_file_name()
+    if result is None:
+        print(f'No .joblib files exist in the models folder.')
+        #if there is no mode, we can fetch the data using the defaults
+        trainingdata = fetch_bybit_data_v5(
+            True, start_date, end_date, "BTCUSDT", INTERVAL, category)
+    else:
+        start_date, end_date, symbol, interval = result
+        print(f'Start date: {start_date}, End date: {end_date}, Symbol: {symbol}, Interval: {interval}')
+        #the model exists, fetch the data using the updated start and end date.
+        trainingdata = fetch_bybit_data_v5(
+            True, end_date, datetime.now(), "BTCUSDT", INTERVAL, category)
     # fetch the kline (historical data)
-    trainingdata = fetch_bybit_data_v5(
-        True, start_date, end_date, "BTCUSDT", INTERVAL, category)
+
     logger("Training data sample before prep:",
            trainingdata.tail(1).to_string())
 
