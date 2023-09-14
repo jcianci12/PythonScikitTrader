@@ -1,4 +1,3 @@
-from pybit.unified_trading import WebSocket
 from time import time
 import csv
 from check_amount import check_amount, Adjust_Amount_for_fees
@@ -12,8 +11,6 @@ from functions.logger import logger
 from messengerservice import send_telegram_message
 
 from config import TRADINGPAIR
-
-
 
 orders = []
 order_refresh_time = 0
@@ -31,14 +28,12 @@ def refresh_orders():
     global orders
     global order_refresh_time
 
-
     # Load the orders from the CSV file
     with open('orders.csv', mode='r') as orders_file:
         reader = csv.DictReader(orders_file)
         orders = list(reader)
 
     order_refresh_time = time()
-
 
 # Define constants
 REFRESH_INTERVAL = 5

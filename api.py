@@ -7,7 +7,6 @@ from logging import Logger
 import time
 import uuid
 import pandas as pd
-from pybit.unified_trading import HTTP
 import requests
 from KEYS import API_KEY, API_SECRET
 from config import *

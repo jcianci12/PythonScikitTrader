@@ -187,26 +187,39 @@ if (TESTRETRAINATSTART):
     mm.clean_up_models("models")
     logger("Done.")
 
-firstrun = True
+firstrun = False
+ohlvc = pd.DataFrame()
 
 def handle_socket_message(msg):
-        global firstrun
-        if(msg['e']!='error'):
-
+    global firstrun
+    if msg['e'] != 'error':
         # get the kline data from the message
-            kline = msg['k']
-            print(kline)
-            # check if the kline is closed
-            if(firstrun):
-                trade_loop()
-                firstrun = False
-            elif kline['x']:
-                # if yes, then use its data to trade
-                
-                trade_loop()
-            else:
-                # if no, then wait for the next message
-                pass
+        kline = msg['k']
+        ohlcv_data = {
+            "time": kline["t"],
+            "open": float(kline["o"]),
+            "high": float(kline["h"]),
+            "low": float(kline["l"]),
+            "close": float(kline["c"]),
+            "volume": float(kline["v"])
+        }
+
+        # ohlcv_data = pd.DataFrame(ohlcv_data,index=[0])
+        # ohlcv_data.set_index('time', inplace=True)
+        # ohlcv_data = prep_data(ohlcv_data)
+        # ohlvc.append(ohlcv_data)
+        # print(ohlcv_data, len(ohlvc))
+        # check if the kline is closed
+        if firstrun:
+            trade_loop()
+            firstrun = False
+        elif kline['x']:
+            # if yes, then use its data to trade
+            trade_loop()
+        else:
+            # if no, then wait for the next message
+            pass
+
 
 def startListening():
 

@@ -78,7 +78,7 @@ def _get_indicator_data(data):
     # Instead of using the actual volume value (which changes over time), we normalize it with a moving volume average
     data['normVol'] = data['volume'] / data['volume'].ewm(5).mean()
 
-    # Remove columns that won't be used as features
+    
     
     return data
 # def removecols(data):
@@ -88,12 +88,31 @@ def _get_indicator_data(data):
 #     del (data['volume'])
 #     return data
 
+import pandas as pd
+
+import pandas as pd
+
+def add_time_columns(df, column):
+    # Convert Unix timestamp (in milliseconds) to datetime
+    df[column] = pd.to_datetime(df[column], unit='ms')
+
+    # Extract day of week as a number (1=Monday, 7=Sunday)
+    df['day_of_week'] = df[column].dt.dayofweek + 1
+
+    # Extract hour of day in 24-hour format
+    df['time_of_day'] = df[column].dt.hour
+
+    return df
+
+
+
 def prep_data(data):
      #smooth the data
     data = _exponential_smooth(data,0.65)
 
     data= _get_indicator_data(data)
     data = _produce_movement_indicators(data)
+    data = add_time_columns(data,"opentime")
     data.to_csv("new.csv")
     #produce indicators
     #drop na data
