@@ -73,10 +73,11 @@ def check_orders(testmode, symbol, market_price):
             amount =   float(order['qty'])
             new_side = SELL if side == BUY else BUY
 
-            error_message = check_amount(amount,market_price,new_side)
 
             # Check if the market price has reached the take profit or stop loss prices
             if check_price_reached(market_price, take_profit_price, stop_loss_price, side):
+                error_message = check_amount(amount,market_price,new_side)
+
                 # Close the order at the market price
                 if(error_message ==None):
                     order_result = exchange.create_market_order(symbol,new_side,amount)
