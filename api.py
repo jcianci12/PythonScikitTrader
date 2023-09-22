@@ -183,7 +183,8 @@ def place_order_tp_sl(testmode, type, symbol, side, tp, sl, amount):
         print(buyresponse)
       
         logger(buyresponse)
-        
+        fee = buyresponse['fees'][0]['cost']
+
     # Save the order details to a CSV file
         with open('orders.csv', mode='a') as file:
             writer = csv.writer(file)
@@ -198,7 +199,7 @@ def place_order_tp_sl(testmode, type, symbol, side, tp, sl, amount):
                 datetime.datetime.now(),
                 symbol,
                 side,
-                buyresponse['amount'],
+                buyresponse['filled']-fee,
                 buyresponse['price'],
                 tp,
                 sl,

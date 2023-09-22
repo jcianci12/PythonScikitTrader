@@ -41,7 +41,7 @@ BUY = 'buy'
 SELL = 'sell'
 
 # Define a function to calculate the profit or loss
-def calculate_profit_loss(entry_price, close_price, side, amount):
+def calculate_profit_loss(entry_price, close_price, side, amount,fee):
     if side == BUY:
         return (close_price - entry_price) * amount
     elif side == SELL:
@@ -80,9 +80,10 @@ def check_orders(testmode, symbol, market_price):
                 # Close the order at the market price
                 if(error_message ==None):
                     order_result = exchange.create_market_order(symbol,new_side,amount)
+                    fee =order_result['fees'][0]['cost']
                     close_price = order_result['price']
                     # Calculate the profit or loss
-                    profit= calculate_profit_loss(entry_price, close_price, side, amount)
+                    profit= calculate_profit_loss(entry_price, close_price, side, amount,fee)
                     order['profit'] = profit
                     order['exitprice'] = close_price
                     profit =  order['profit']

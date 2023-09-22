@@ -24,8 +24,8 @@ def get_tp_sl(data,row_position):
 
 
 
-    min_tp =(entry_price+40)
-    min_sl = (entry_price-40)
+    min_tp =(entry_price+80)
+    min_sl = (entry_price-80)
 
     if(min_tp>tp):
         tp = min_tp
