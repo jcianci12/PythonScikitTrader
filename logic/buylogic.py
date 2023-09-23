@@ -27,12 +27,7 @@ def buylogic(data):
         logger("Enough USDT to cover purchase of ", "USDT", "|USDT balance: ", usdtbalance,
            " |BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", amount)
         
-        # Calculate the quantity to buy
-        # qty = (capitalpercent / 100) * usdtbalance
-        # qty_rounded = decimal.Decimal(qty).quantize(decimal.Decimal('.000001'), rounding=decimal.ROUND_DOWN) 
-        
-        # Place the buy order
-        # response = place_order(TEST, "BTCUSDT", "USDT",TAKEPROFIT,STOPLOSS, qty_rounded)
+
 
         response = place_order_tp_sl(TEST,"market", "BTCUSDT","buy",tp,sl,  amount)
 
