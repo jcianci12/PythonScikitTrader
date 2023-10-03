@@ -1,9 +1,8 @@
 import decimal
 from api import get_free_balance, get_market_ask_price,  get_min_qty_binance, place_order_tp_sl
-from check_amount import check_amount, Adjust_Amount_for_fees, get_investment_amount
+from check_amount import get_investment_amount
 from config import *
 from functions.logger import logger
-from api import exchange
 from get_tp_sl import get_tp_sl
 
 def buylogic(data):
@@ -27,9 +26,10 @@ def buylogic(data):
         logger("Enough USDT to cover purchase of ", "USDT", "|USDT balance: ", usdtbalance,
            " |BTC TSCN QTY: ", buyamountinbtc, "USDT TSCN QTY:", amount)
         
+        btcbalance = get_free_balance("BTC")
 
 
-        response = place_order_tp_sl(TEST,"market", "BTCUSDT","buy",tp,sl,  amount)
+        response = place_order_tp_sl(TEST,"market", "BTCUSDT","buy",usdtbalance,btcbalance,tp,sl,  amount)
 
         print(response)
     else:

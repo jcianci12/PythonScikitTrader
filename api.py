@@ -166,13 +166,10 @@ def get_market_ask_price(symbol: str) -> float:
 
 # get_market_ask_price(True, "BTCUSDT")
 # %%
-def place_order_tp_sl(testmode, type, symbol, side, tp, sl, amount):
+def place_order_tp_sl(testmode, type, symbol, side,usdtbalance,btcbalance, tp, sl, amount):
     logger(symbol, side, tp, sl, amount)
     try:
         # Get the market data
-
-        # Get the market price
-
         exchange.load_markets()
         amount = exchange.amount_to_precision(symbol,amount)
         market = exchange.market(symbol)
@@ -184,35 +181,39 @@ def place_order_tp_sl(testmode, type, symbol, side, tp, sl, amount):
       
         logger(buyresponse)
         fee = buyresponse['fees'][0]['cost']
-
-    # Save the order details to a CSV file
-        with open('orders.csv', mode='a') as file:
-            writer = csv.writer(file)
-
-            # Write the header row if the file is empty
-            if file.tell() == 0:
-                writer.writerow(ORDERCOLUMNS)
-
-            # Write the order details
-            writer.writerow([
-                buyresponse['clientOrderId'],
-                datetime.datetime.now(),
-                symbol,
-                side,
-                buyresponse['filled']-fee,
-                buyresponse['price'],
-                tp,
-                sl,
-                "",
-                "",
-                ""
-            ])
-            return buyresponse
+        log_order(buyresponse,fee,symbol,side,usdtbalance,btcbalance,tp,sl)
+   
+        return buyresponse
     except Exception as e:
         logger(f"An error occurred while placing the order: {e}")
         return None
 
+def log_order(buyresponse,fee,symbol,side,usdtbalance,btcbalance,tp,sl):
+ # Save the order details to a CSV file
+    with open('orders.csv', mode='a') as file:
+        writer = csv.writer(file)
 
+        # Write the header row if the file is empty
+        if file.tell() == 0:
+            writer.writerow(ORDERCOLUMNS)
+
+        # Write the order details
+        writer.writerow([
+            buyresponse['clientOrderId'],
+            datetime.datetime.now(),
+            symbol,
+            side,
+            usdtbalance,
+            btcbalance,
+            buyresponse['filled']-fee,
+            buyresponse['price'],
+            tp,
+            sl,
+            "",
+            "",
+            ""
+        ])
+    
 def cancel_order(symbol, id):
     try:
         exchange.cancel_order(id,TRADINGPAIR)

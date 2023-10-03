@@ -152,7 +152,8 @@ def trade_loop():
     logger("buy signal:", confidence_scoreinc,
            "sell signal:", confidence_scoredec)
     
-
+    # confidence_scoredec = 0
+    # confidence_scoreinc = 1
     # buylogic(1, usdtbalance)
     if (confidence_scoreinc == 1 and confidence_scoredec == 0):
         buylogic(data)

@@ -77,7 +77,8 @@ def check_orders(testmode, symbol, market_price):
             # Check if the market price has reached the take profit or stop loss prices
             if check_price_reached(market_price, take_profit_price, stop_loss_price, side):
                 error_message = check_amount(amount,market_price,new_side)
-
+                usdt = get_free_balance("USDT")
+                btc = get_free_balance("BTC")
                 # Close the order at the market price
                 if(error_message ==None):
                     order_result = exchange.create_market_order(symbol,new_side,amount)
@@ -88,6 +89,9 @@ def check_orders(testmode, symbol, market_price):
                     order['profit'] = profit
                     order['exitprice'] = close_price
                     profit =  order['profit']
+                    order["usdt"]=usdt
+                    order['btc']=btc
+                    
                     # send_telegram_message(f"Order closed|Entry:{entry_price}|Close:{close_price}|Amount|{amount}|P+L:{profit}")
                 else:
                     logger(error_message)

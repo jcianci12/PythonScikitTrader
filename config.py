@@ -12,7 +12,7 @@ ACCOUNT_TYPE = "SPOT" if TEST else "UNIFIED"
 
 SYMBOL = "BTCUSDT"
 
-MAXBUYPERCENTOFCAPITAL = 20
+MAXBUYPERCENTOFCAPITAL = 99
 MAXSELLPERCENTOFCAPITAL = 20
 
 MINIMUMBTCTRANSACTIONSIZE = 0.000048
@@ -42,7 +42,7 @@ SIMULATETRADE = False
 GRAPHVIEWWINDOW = 30
 ALLOWEDTOSELL = False
 
-ORDERCOLUMNS = ['uid', 'date','symbol', 'side', 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice', 'takeprofitid', 'stoplossid', 'profit', 'completedtime','exitprice']
+ORDERCOLUMNS = ['uid', 'date','symbol', 'side',"usdt","btc", 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice', 'takeprofitid', 'stoplossid', 'profit', 'completedtime','exitprice']
 EXCLUDECOLUMNS = ['opentime', 'open', 'high', 'low', 'close', 'volume', '14 period RSI',
                                                            #'MACD', 
                                                            'SIGNAL', '14 period STOCH K', 'MFV', '14 period ATR', 'MOM',
