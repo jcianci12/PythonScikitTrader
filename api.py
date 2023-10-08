@@ -205,6 +205,7 @@ def log_order(buyresponse,fee,symbol,side,usdtbalance,btcbalance,tp,sl):
             side,
             usdtbalance,
             btcbalance,
+            usdtbalance + btcbalance*buyresponse['price'],
             buyresponse['filled']-fee,
             buyresponse['price'],
             tp,

@@ -12,6 +12,8 @@ from messengerservice import send_telegram_message
 
 from config import TRADINGPAIR
 
+PENDINGORDER = False
+
 orders = []
 order_refresh_time = 0
 trade_refresh_time = 0
@@ -54,6 +56,9 @@ def check_price_reached(market_price, take_profit_price, stop_loss_price, side):
     elif side == SELL:
         return market_price <= take_profit_price or market_price >= stop_loss_price
 def check_orders(testmode, symbol, market_price):
+    global PENDINGORDER
+    PENDINGORDER = True
+
     orders = get_open_orders()
 
     # Refresh the orders if it has been more than REFRESH_INTERVAL seconds since the last refresh
@@ -70,7 +75,7 @@ def check_orders(testmode, symbol, market_price):
             take_profit_price = float(order['takeprofitprice'])
             stop_loss_price = float(order['stoplossprice'])
             side = order['side'].lower()
-            amount =   float(order['qty'])
+            amount =   float(order['qty']) 
             new_side = SELL if side == BUY else BUY
 
 
@@ -91,7 +96,7 @@ def check_orders(testmode, symbol, market_price):
                     profit =  order['profit']
                     order["usdt"]=usdt
                     order['btc']=btc
-                    
+
                     # send_telegram_message(f"Order closed|Entry:{entry_price}|Close:{close_price}|Amount|{amount}|P+L:{profit}")
                 else:
                     logger(error_message)
@@ -105,6 +110,7 @@ def check_orders(testmode, symbol, market_price):
             # Save the updated orders back to the CSV file only if the flag is True
     if changed:
         save_updated_prices('orders.csv', orders)
+    PENDINGORDER = False
 
 
 
@@ -129,6 +135,7 @@ def print_orders(entry_price):
     print("TP".rjust(width) + "\t" + "SL".rjust(width) + "\t" + "TP Dist.".rjust(width) + "\t" + "SL Dist.".rjust(width))
 
     # Print the data
+    profit = 0
     for order in orders:
         if not order['profit']:
             # Format the numbers to two decimal places
@@ -137,6 +144,12 @@ def print_orders(entry_price):
             tp_dist = "{:.2f}".format(float(order['takeprofitprice'])-entry_price)
             sl_dist = "{:.2f}".format(entry_price-float(order['stoplossprice']) )
             print(tp.rjust(width) + "\t" + sl.rjust(width) + "\t" + tp_dist.rjust(width) + "\t" + sl_dist.rjust(width))
+
+        if order['profit']and not str(order['profit']).startswith("balance"):
+            profit+=    float(order['profit'])    
+    
+    print("PROFIT")
+    print(profit)
 
 # Define the plot_ascii_chart function
 # Define the plot_ascii_chart function
@@ -152,6 +165,8 @@ def plot_ascii_chart(data):
     
     # Plot the prices using asciichart
     print(asciichartpy.plot(prices[-40:]))
+    print("Pending http orders:",PENDINGORDER)
+
 
 
 # Define the handle_message function
@@ -183,7 +198,7 @@ def startListening():
     def handle_socket_message(msg):
         # print(f"message type: {msg}")
         # print(msg)
-        if(msg['e']!='error'):
+        if(msg['e']!='error' and PENDINGORDER==False):
             handle_message(msg)
 
     twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
