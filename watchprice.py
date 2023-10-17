@@ -1,3 +1,4 @@
+from asyncio import sleep
 from time import time
 import csv
 from check_amount import check_amount, Adjust_Amount_for_fees
@@ -55,9 +56,23 @@ def check_price_reached(market_price, take_profit_price, stop_loss_price, side):
         return market_price >= take_profit_price or market_price <= stop_loss_price
     elif side == SELL:
         return market_price <= take_profit_price or market_price >= stop_loss_price
-def check_orders(testmode, symbol, market_price):
+def setpending(value):
+    logger("setting pending order to ",value)
     global PENDINGORDER
-    PENDINGORDER = True
+    PENDINGORDER = value
+
+def getpending():
+    global PENDINGORDER
+    # logger("returning pending order ",PENDINGORDER)
+    return PENDINGORDER
+
+def check_orders(testmode, symbol, market_price):
+    
+    while getpending()==True:
+        logger("there is a pending order.... returning.")
+        return
+    
+    print("Pending http orders:",getpending())
 
     orders = get_open_orders()
 
@@ -85,24 +100,35 @@ def check_orders(testmode, symbol, market_price):
                 usdt = get_free_balance("USDT")
                 btc = get_free_balance("BTC")
                 # Close the order at the market price
+                setpending(True)
+
                 if(error_message ==None):
-                    order_result = exchange.create_market_order(symbol,new_side,amount)
-                    fee =order_result['fees'][0]['cost']
-                    close_price = order_result['price']
-                    # Calculate the profit or loss
-                    profit= calculate_profit_loss(entry_price, close_price, side, amount,fee)
-                    order['profit'] = profit
-                    order['exitprice'] = close_price
-                    profit =  order['profit']
-                    order["usdt"]=usdt
-                    order['btc']=btc
+                    logger("Closing order ",order['uid'])
+                    try:
+                        order_result = exchange.create_market_order(symbol, new_side, amount)
+                        logger("Order closed:",order_result)
+                        fee =order_result['fees'][0]['cost']
+                        close_price = order_result['price']
+                        # Calculate the profit or loss
+                        profit= calculate_profit_loss(entry_price, close_price, side, amount,fee)
+                        order['profit'] = profit
+                        order['exitprice'] = close_price
+                        profit =  order['profit']
+                        order["usdt"]=usdt
+                        order['btc']=btc
+                        order['total']=(usdt+(btc*close_price))
+                    except Exception as e:
+                            logger("Error:", e)
+                            order['profit']=e
+                    
 
                     # send_telegram_message(f"Order closed|Entry:{entry_price}|Close:{close_price}|Amount|{amount}|P+L:{profit}")
                 else:
-                    logger(error_message)
+                    logger("Error",error_message)
                     profit = error_message
                     order['profit'] = profit
                     # send_telegram_message(f"Not enough to close|Entry:{entry_price}|Close:NA|Amount|{amount}|P+L:{profit}")
+                setpending(False)
 
 
                 # Set the flag to True
@@ -110,22 +136,22 @@ def check_orders(testmode, symbol, market_price):
             # Save the updated orders back to the CSV file only if the flag is True
     if changed:
         save_updated_prices('orders.csv', orders)
+
     PENDINGORDER = False
 
-
-
-def getws():
-
-    return WebSocket(
-        testnet=True,
-        channel_type="spot",
-    )
 prices = []
 
 def get_open_orders():
     global orders
     return orders
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+    
 def print_orders(entry_price):
     orders = get_open_orders()
     # Define the width of each column
@@ -145,11 +171,15 @@ def print_orders(entry_price):
             sl_dist = "{:.2f}".format(entry_price-float(order['stoplossprice']) )
             print(tp.rjust(width) + "\t" + sl.rjust(width) + "\t" + tp_dist.rjust(width) + "\t" + sl_dist.rjust(width))
 
-        if order['profit']and not str(order['profit']).startswith("balance"):
+        if  is_number(order['profit']):
             profit+=    float(order['profit'])    
     
     print("PROFIT")
     print(profit)
+
+
+
+
 
 # Define the plot_ascii_chart function
 # Define the plot_ascii_chart function
@@ -187,6 +217,7 @@ def handle_message(message):
         plot_ascii_chart(message)
 
 
+
 def startListening():
 
     symbol = 'BTCUSDT'
@@ -198,7 +229,7 @@ def startListening():
     def handle_socket_message(msg):
         # print(f"message type: {msg}")
         # print(msg)
-        if(msg['e']!='error' and PENDINGORDER==False):
+        if(msg['e']!='error' ):
             handle_message(msg)
 
     twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
