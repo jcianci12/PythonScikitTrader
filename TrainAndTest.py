@@ -17,7 +17,7 @@ from functions.modelmanagement import ModelManagement
 from get_latest_model_file import get_latest_model_filename, get_model_filename
 from get_last_ohlc_bybit import get_last_ohlc_binance
 from logic.buylogic import buylogic
-from api import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_free_balance
+from api import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_free_balance,initDB
 
 from TrainingandValidation import TrainingAndValidation
 from datetime import datetime, timedelta
@@ -32,6 +32,7 @@ from messengerservice import send_telegram_message
 
 from prep_data import prep_data
 from binance import ThreadedWebsocketManager
+
 
 
 # %%
@@ -156,6 +157,8 @@ def trade_loop():
     # confidence_scoreinc = 1
     # buylogic(1, usdtbalance)
     if (confidence_scoreinc == 1 and confidence_scoredec == 0):
+        
+
         buylogic(data)
 
         # asyncio.run(send_telegram_message('Update'))
@@ -167,6 +170,7 @@ def trade_loop():
         logger(str("Didnt act"))
     plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
             usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
+
 
 
     
@@ -191,7 +195,7 @@ if (TESTRETRAINATSTART):
 firstrun = False
 ohlvc = pd.DataFrame()
 
-def handle_socket_message(msg):
+def handle_socket_message_train(msg):
     global firstrun
     if msg['e'] != 'error':
         # get the kline data from the message
@@ -205,12 +209,6 @@ def handle_socket_message(msg):
             "volume": float(kline["v"])
         }
 
-        # ohlcv_data = pd.DataFrame(ohlcv_data,index=[0])
-        # ohlcv_data.set_index('time', inplace=True)
-        # ohlcv_data = prep_data(ohlcv_data)
-        # ohlvc.append(ohlcv_data)
-        # print(ohlcv_data, len(ohlvc))
-        # check if the kline is closed
         if firstrun:
             trade_loop()
             firstrun = False
@@ -226,15 +224,16 @@ def startListening():
 
     symbol = 'BTCUSDT'
 
-    twm = ThreadedWebsocketManager(api_key=API_KEY, api_secret=API_SECRET)
+    train_twm = ThreadedWebsocketManager(api_key=API_KEY, api_secret=API_SECRET)
     # start is required to initialise its internal loop
-    twm.start()
+    train_twm.start()
     
 
-    twm.start_kline_socket(handle_socket_message, symbol,'5m')
+    train_twm.start_kline_socket(handle_socket_message_train, symbol,'5m')
 
-    twm.join()
+    train_twm.join()
 
+initDB()
 startListening()
 
 

@@ -188,17 +188,28 @@ def place_order_tp_sl(testmode, type, symbol, side,usdtbalance,btcbalance, tp, s
         logger(f"An error occurred while placing the order: {e}")
         return None
 
-def log_order(buyresponse,fee,symbol,side,usdtbalance,btcbalance,tp,sl):
- # Save the order details to a CSV file
-    with open('orders.csv', mode='a') as file:
-        writer = csv.writer(file)
-
-        # Write the header row if the file is empty
-        if file.tell() == 0:
-            writer.writerow(ORDERCOLUMNS)
-
-        # Write the order details
-        writer.writerow([
+def log_order(conn, buyresponse, fee, symbol, side, usdtbalance, btcbalance, tp, sl):
+    """ log order to the SQLite database """
+    try:
+        cur = conn.cursor()
+        cur.execute('''
+            INSERT INTO orders (
+                clientOrderId,
+                datetime,
+                symbol,
+                side,
+                usdtbalance,
+                btcbalance,
+                totalbalance,
+                filled,
+                price,
+                tp,
+                sl,
+                column1,
+                column2,
+                column3
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
             buyresponse['clientOrderId'],
             datetime.datetime.now(),
             symbol,
@@ -213,7 +224,10 @@ def log_order(buyresponse,fee,symbol,side,usdtbalance,btcbalance,tp,sl):
             "",
             "",
             ""
-        ])
+        ))
+        conn.commit()
+    except Error as e:
+        print(e)
     
 def cancel_order(symbol, id):
     try:
@@ -223,9 +237,56 @@ def cancel_order(symbol, id):
         logger(f"An error occurred: {e}")
 
 
+import sqlite3
+
+def create_connection():
+    db_file = "orders.db"
+    """ create a database connection to an SQLite database """
+    conn = None;
+    try:
+        conn = sqlite3.connect(db_file)
+        print(f"SQLite version: {sqlite3.version}")
+        return conn
+    except Error as e:
+        print(e)
+    return conn
+
+
+def create_table(conn):
+    """ create a table in the SQLite database """
+    try:
+        cur = conn.cursor()
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS orders (
+                clientOrderId TEXT,
+                datetime TEXT,
+                symbol TEXT,
+                side TEXT,
+                usdtbalance REAL,
+                btcbalance REAL,
+                totalbalance REAL,
+                filled REAL,
+                price REAL,
+                tp REAL,
+                sl REAL,
+                column1 TEXT,
+                column2 TEXT,
+                column3 TEXT
+            )
+        ''')
+    except Error as e:
+        print(e)
+
+def initDB():
+    conn = create_connection()
+    if conn is not None:
+        create_table(conn)
+        # You can now use 'conn' to log orders to your database
+        # For example: log_order(conn, buyresponse, fee, symbol, side, usdtbalance, btcbalance, tp, sl)
+    else:
+        print("Error! cannot create the database connection.")
 
 
 async def fetch_spot_balance(exchange):
     balance = await exchange.fetch_balance()
     print("Spot Balance:", balance)
-
