@@ -111,7 +111,7 @@ def check_orders(testmode, symbol, market_price):
 
     # Refresh the orders if it has been more than REFRESH_INTERVAL seconds since the last refresh
     if time() - order_refresh_time > REFRESH_INTERVAL:
-        refresh_orders()
+        refresh_orders(create_connection())
         
     # Initialize a boolean flag to False
     changed = False
