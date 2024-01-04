@@ -181,7 +181,8 @@ def place_order_tp_sl(testmode, type, symbol, side,usdtbalance,btcbalance, tp, s
       
         logger(buyresponse)
         fee = buyresponse['fees'][0]['cost']
-        log_order(buyresponse,fee,symbol,side,usdtbalance,btcbalance,tp,sl)
+        conn = create_connection()
+        log_order(conn,buyresponse,fee,symbol,side,usdtbalance,btcbalance,tp,sl)
    
         return buyresponse
     except Exception as e:
@@ -205,8 +206,8 @@ def log_order(conn, buyresponse, fee, symbol, side, usdtbalance, btcbalance, tp,
                 price,
                 tp,
                 sl,
-                column1,
-                column2,
+                profit,
+                exitprice,
                 column3
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
@@ -226,8 +227,50 @@ def log_order(conn, buyresponse, fee, symbol, side, usdtbalance, btcbalance, tp,
             ""
         ))
         conn.commit()
-    except Error as e:
+    except sqlite3.Error as e:
         print(e)
+
+def save_closed_order(conn, order):
+    """ Save a closed order to the database """
+    try:
+        cur = conn.cursor()
+        cur.execute('''
+            INSERT INTO closed_orders (
+                clientOrderId,
+                datetime,
+                symbol,
+                side,
+                usdtbalance,
+                btcbalance,
+                totalbalance,
+                filled,
+                price,
+                tp,
+                sl,
+                profit,
+                exitprice,
+                column3
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (
+            order['clientOrderId'],
+            order['datetime'],
+            order['symbol'],
+            order['side'],
+            order['usdt'],
+            order['btc'],
+            order['total'],
+            order['filled'],
+            order['exitprice'],
+            order['tp'],
+            order['sl'],
+            order['profit'],
+            order['exitprice'],
+            order['column3']
+        ))
+        conn.commit()
+    except sqlite3.Error as e:
+        print(e)
+
     
 def cancel_order(symbol, id):
     try:
@@ -247,12 +290,12 @@ def create_connection():
         conn = sqlite3.connect(db_file)
         print(f"SQLite version: {sqlite3.version}")
         return conn
-    except Error as e:
+    except sqlite3.Error as e:
         print(e)
     return conn
 
 
-def create_table(conn):
+def create_tables(conn):
     """ create a table in the SQLite database """
     try:
         cur = conn.cursor()
@@ -269,18 +312,36 @@ def create_table(conn):
                 price REAL,
                 tp REAL,
                 sl REAL,
-                column1 TEXT,
-                column2 TEXT,
+                profit TEXT,
+                exitprice TEXT,
                 column3 TEXT
             )
         ''')
-    except Error as e:
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS closed_orders (
+                clientOrderId TEXT,
+                datetime TEXT,
+                symbol TEXT,
+                side TEXT,
+                usdtbalance REAL,
+                btcbalance REAL,
+                totalbalance REAL,
+                filled REAL,
+                price REAL,
+                tp REAL,
+                sl REAL,
+                profit TEXT,
+                exitprice TEXT,
+                column3 TEXT
+            )
+        ''')
+    except sqlite3.Error as e:
         print(e)
 
 def initDB():
     conn = create_connection()
     if conn is not None:
-        create_table(conn)
+        create_tables(conn)
         # You can now use 'conn' to log orders to your database
         # For example: log_order(conn, buyresponse, fee, symbol, side, usdtbalance, btcbalance, tp, sl)
     else:

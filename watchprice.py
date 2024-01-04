@@ -1,5 +1,6 @@
 from asyncio import sleep
 import datetime
+from sqlite3 import Error
 from time import time
 import csv
 from check_amount import check_amount, Adjust_Amount_for_fees
@@ -8,14 +9,14 @@ from config import ORDERCOLUMNS
 import asciichartpy
 from binance import ThreadedWebsocketManager
 from KEYS import API_KEY,API_SECRET
-from api import exchange, get_free_balance
+from api import create_connection, exchange, get_free_balance, save_closed_order
 from functions.logger import logger
 from messengerservice import send_telegram_message
 
 from config import TRADINGPAIR
 from pending import getpending, setpending
 
-
+conn = create_connection()
 orders = []
 order_refresh_time = 0
 trade_refresh_time = 0
@@ -37,8 +38,8 @@ def save_updated_prices(conn, orders):
                 price = ?,
                 tp = ?,
                 sl = ?,
-                column1 = ?,
-                column2 = ?,
+                profit = ?,
+                exitprice = ?,
                 column3 = ?
                 WHERE clientOrderId = ?
             ''', (
@@ -52,8 +53,8 @@ def save_updated_prices(conn, orders):
                 order['price'],
                 order['tp'],
                 order['sl'],
-                order['column1'],
-                order['column2'],
+                order['profit'],
+                order['exitprice'],
                 order['column3'],
                 order['clientOrderId']
             ))
@@ -110,8 +111,8 @@ def check_orders(testmode, symbol, market_price):
     orders = get_open_orders()
 
     # Refresh the orders if it has been more than REFRESH_INTERVAL seconds since the last refresh
-    if time() - order_refresh_time > REFRESH_INTERVAL:
-        refresh_orders(create_connection())
+    if (time() - order_refresh_time > REFRESH_INTERVAL):
+        refresh_orders(conn)
         
     # Initialize a boolean flag to False
     changed = False
@@ -119,11 +120,11 @@ def check_orders(testmode, symbol, market_price):
     # Check for open orders that have reached their take profit or stop loss prices
     for order in orders:
         if not order['profit']:
-            entry_price = float(order['entryprice'])
-            take_profit_price = float(order['takeprofitprice'])
-            stop_loss_price = float(order['stoplossprice'])
+            entry_price = float(order['price'])
+            take_profit_price = float(order['tp'])
+            stop_loss_price = float(order['sl'])
             side = order['side'].lower()
-            amount =   float(order['qty']) 
+            amount =   float(order['filled']) 
             new_side = SELL if side == BUY else BUY
 
 
@@ -136,10 +137,11 @@ def check_orders(testmode, symbol, market_price):
                 setpending(True)
 
                 if(error_message ==None):
-                    logger("Closing order ",order['uid'])
+                    logger("Closing order ",order['clientOrderId'])
                     try:
                         order_result = exchange.create_market_order(symbol, new_side, amount)
                         logger("Order closed:",order_result)
+                        save_closed_order(conn,order)
                         fee =order_result['fees'][0]['cost']
                         close_price = order_result['price']
                         # Calculate the profit or loss
@@ -179,6 +181,7 @@ def get_open_orders():
     return orders
 
 def is_number(s):
+    if s=='': return False
     try:
         float(s)
         return True
@@ -198,10 +201,10 @@ def print_orders(entry_price):
     for order in orders:
         if not order['profit']:
             # Format the numbers to two decimal places
-            tp = "{:.2f}".format(float(order['takeprofitprice']))
-            sl = "{:.2f}".format(float(order['stoplossprice']))
-            tp_dist = "{:.2f}".format(float(order['takeprofitprice'])-entry_price)
-            sl_dist = "{:.2f}".format(entry_price-float(order['stoplossprice']) )
+            tp = "{:.2f}".format(float(order['tp']))
+            sl = "{:.2f}".format(float(order['sl']))
+            tp_dist = "{:.2f}".format(float(order['tp'])-entry_price)
+            sl_dist = "{:.2f}".format(entry_price-float(order['sl']) )
             print(tp.rjust(width) + "\t" + sl.rjust(width) + "\t" + tp_dist.rjust(width) + "\t" + sl_dist.rjust(width))
 
         if  is_number(order['profit']):
@@ -224,8 +227,6 @@ def plot_ascii_chart(data):
     global prices
     prices.append(usd_index_price)
 
-
-    
     # Plot the prices using asciichart
     print(asciichartpy.plot(prices[-40:]))
     print("Pending http orders:",getpending())
