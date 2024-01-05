@@ -1,7 +1,7 @@
 from asyncio import sleep
 import datetime
 from sqlite3 import Error
-from time import time
+import time
 import csv
 from check_amount import check_amount, Adjust_Amount_for_fees
 from config import ORDERCOLUMNS
@@ -10,12 +10,11 @@ import asciichartpy
 from binance import ThreadedWebsocketManager
 from KEYS import API_KEY,API_SECRET
 from api import  exchange, get_free_balance
-from db.dbops import fetchAllOrders, save_updated_prices
+from db.dbops import fetchAllOrders, getpending,  save_closed_order, save_updated_prices,  setpending
 from functions.logger import logger
 from messengerservice import send_telegram_message
 
 from config import TRADINGPAIR
-from pending import getpending, setpending
 
 orders = []
 order_refresh_time = 0
@@ -31,7 +30,7 @@ def refresh_orders():
 
         # Convert rows to list of dictionaries
 
-        order_refresh_time = time()
+        order_refresh_time = time.time()
     except Error as e:
         print(e)
 
@@ -58,16 +57,12 @@ def check_price_reached(market_price, take_profit_price, stop_loss_price, side):
 
 def check_orders(testmode, symbol, market_price):
     
-    while getpending()==True:
-        logger("there is a pending order.... returning.")
-        return
-    
-    print("Pending http orders:",getpending())
+
 
     orders = get_open_orders()
 
     # Refresh the orders if it has been more than REFRESH_INTERVAL seconds since the last refresh
-    if (time() - order_refresh_time > REFRESH_INTERVAL):
+    if (time.time() - order_refresh_time > REFRESH_INTERVAL):
         refresh_orders()
         
     # Initialize a boolean flag to False
@@ -90,7 +85,6 @@ def check_orders(testmode, symbol, market_price):
                 usdt = get_free_balance("USDT")
                 btc = get_free_balance("BTC")
                 # Close the order at the market price
-                setpending(True)
 
                 if(error_message ==None):
                     logger("Closing order ",order['clientOrderId'])
@@ -119,7 +113,6 @@ def check_orders(testmode, symbol, market_price):
                     profit = error_message
                     order['profit'] = profit
                     # send_telegram_message(f"Not enough to close|Entry:{entry_price}|Close:NA|Amount|{amount}|P+L:{profit}")
-                setpending(False)
 
 
                 # Set the flag to True
@@ -128,7 +121,6 @@ def check_orders(testmode, symbol, market_price):
     if changed:
         save_updated_prices( orders)
 
-    PENDINGORDER = False
 
 prices = []
 
@@ -216,8 +208,18 @@ def startListening():
         # print(msg)
         if(msg['e']!='error' ):
             twm.stop()
+    #check if pending
+        if(getpending()==1):
+            print("pending")
+        else:
+
+            #if not pending
+            #set to pending while we handle
+            setpending(1)
             handle_message(msg)
-            twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
+            # twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
+
+            setpending(0)
 
     twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
 

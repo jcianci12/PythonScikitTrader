@@ -1,8 +1,6 @@
 
 import datetime
 import sqlite3
-from config import TRADINGPAIR
-from functions.logger import logger
 
 _conn = 0
 
@@ -23,7 +21,6 @@ def getConnection():
         _conn=create_connection()
         return _conn
     
-conn = getConnection()
 
 
 
@@ -67,10 +64,20 @@ def create_tables(conn):
                 column3 TEXT
             )
         ''')
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS state (
+                rowid INTEGER PRIMARY KEY,
+                pendingorder BIT(1)
+            )
+        ''')
+        cur.execute('''
+            INSERT INTO state (rowid, pendingorder) VALUES (?, ?)
+        ''', (1, 0))  # or whatever initial value you want for 'pendingorder'
     except sqlite3.Error as e:
         print(e)
 
 def initDB():
+    global conn
     conn = getConnection()
     if conn is not None:
         create_tables(conn)
