@@ -9,71 +9,27 @@ from config import ORDERCOLUMNS
 import asciichartpy
 from binance import ThreadedWebsocketManager
 from KEYS import API_KEY,API_SECRET
-from api import create_connection, exchange, get_free_balance, save_closed_order
+from api import  exchange, get_free_balance
+from db.dbops import fetchAllOrders, save_updated_prices
 from functions.logger import logger
 from messengerservice import send_telegram_message
 
 from config import TRADINGPAIR
 from pending import getpending, setpending
 
-conn = create_connection()
 orders = []
 order_refresh_time = 0
 trade_refresh_time = 0
 
-def save_updated_prices(conn, orders):
-    """ Save updated prices to the SQLite database """
-    try:
-        cur = conn.cursor()
-        for order in orders:
-            cur.execute('''
-                UPDATE orders SET
-                datetime = ?,
-                symbol = ?,
-                side = ?,
-                usdtbalance = ?,
-                btcbalance = ?,
-                totalbalance = ?,
-                filled = ?,
-                price = ?,
-                tp = ?,
-                sl = ?,
-                profit = ?,
-                exitprice = ?,
-                column3 = ?
-                WHERE clientOrderId = ?
-            ''', (
-                order['datetime'],
-                order['symbol'],
-                order['side'],
-                order['usdtbalance'],
-                order['btcbalance'],
-                order['totalbalance'],
-                order['filled'],
-                order['price'],
-                order['tp'],
-                order['sl'],
-                order['profit'],
-                order['exitprice'],
-                order['column3'],
-                order['clientOrderId']
-            ))
-        conn.commit()
-    except Error as e:
-        print(e)
-
-def refresh_orders(conn):
+def refresh_orders():
     """ Refresh orders from the SQLite database """
     global orders
     global order_refresh_time
 
     try:
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM orders")
-        rows = cur.fetchall()
+        orders = fetchAllOrders()
 
         # Convert rows to list of dictionaries
-        orders = [dict(zip([column[0] for column in cur.description], row)) for row in rows]
 
         order_refresh_time = time()
     except Error as e:
@@ -112,7 +68,7 @@ def check_orders(testmode, symbol, market_price):
 
     # Refresh the orders if it has been more than REFRESH_INTERVAL seconds since the last refresh
     if (time() - order_refresh_time > REFRESH_INTERVAL):
-        refresh_orders(conn)
+        refresh_orders()
         
     # Initialize a boolean flag to False
     changed = False
@@ -141,7 +97,7 @@ def check_orders(testmode, symbol, market_price):
                     try:
                         order_result = exchange.create_market_order(symbol, new_side, amount)
                         logger("Order closed:",order_result)
-                        save_closed_order(conn,order)
+                        save_closed_order(order)
                         fee =order_result['fees'][0]['cost']
                         close_price = order_result['price']
                         # Calculate the profit or loss
@@ -170,7 +126,7 @@ def check_orders(testmode, symbol, market_price):
                 changed = True
             # Save the updated orders back to the CSV file only if the flag is True
     if changed:
-        save_updated_prices(create_connection(), orders)
+        save_updated_prices( orders)
 
     PENDINGORDER = False
 

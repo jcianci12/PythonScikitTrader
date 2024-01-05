@@ -11,13 +11,13 @@ import numpy as np
 
 import joblib
 from KEYS import API_KEY, API_SECRET
+from api import fetch_bybit_data_v5, get_free_balance, get_market_ask_price, get_market_bid_price
 from binance_fetch_balance import get_balance
 from functions.map_range import map_range
 from functions.modelmanagement import ModelManagement
 from get_latest_model_file import get_latest_model_filename, get_model_filename
 from get_last_ohlc_bybit import get_last_ohlc_binance
 from logic.buylogic import buylogic
-from api import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_free_balance,initDB
 
 from TrainingandValidation import TrainingAndValidation
 from datetime import datetime, timedelta
@@ -233,7 +233,6 @@ def startListening():
 
     train_twm.join()
 
-initDB()
 startListening()
 
 

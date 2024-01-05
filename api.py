@@ -10,6 +10,7 @@ import pandas as pd
 import requests
 from KEYS import API_KEY, API_SECRET
 from config import *
+from db.dbops import log_order
 from functions.interval_map import *
 from functions.logger import logger
 
@@ -181,172 +182,19 @@ def place_order_tp_sl(testmode, type, symbol, side,usdtbalance,btcbalance, tp, s
       
         logger(buyresponse)
         fee = buyresponse['fees'][0]['cost']
-        conn = create_connection()
-        log_order(conn,buyresponse,fee,symbol,side,usdtbalance,btcbalance,tp,sl)
+        log_order(buyresponse,fee,symbol,side,usdtbalance,btcbalance,tp,sl)
    
         return buyresponse
     except Exception as e:
         logger(f"An error occurred while placing the order: {e}")
         return None
 
-def log_order(conn, buyresponse, fee, symbol, side, usdtbalance, btcbalance, tp, sl):
-    """ log order to the SQLite database """
-    try:
-        cur = conn.cursor()
-        cur.execute('''
-            INSERT INTO orders (
-                clientOrderId,
-                datetime,
-                symbol,
-                side,
-                usdtbalance,
-                btcbalance,
-                totalbalance,
-                filled,
-                price,
-                tp,
-                sl,
-                profit,
-                exitprice,
-                column3
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (
-            buyresponse['clientOrderId'],
-            datetime.datetime.now(),
-            symbol,
-            side,
-            usdtbalance,
-            btcbalance,
-            usdtbalance + btcbalance*buyresponse['price'],
-            buyresponse['filled']-fee,
-            buyresponse['price'],
-            tp,
-            sl,
-            "",
-            "",
-            ""
-        ))
-        conn.commit()
-    except sqlite3.Error as e:
-        print(e)
-
-def save_closed_order(conn, order):
-    """ Save a closed order to the database """
-    try:
-        cur = conn.cursor()
-        cur.execute('''
-            INSERT INTO closed_orders (
-                clientOrderId,
-                datetime,
-                symbol,
-                side,
-                usdtbalance,
-                btcbalance,
-                totalbalance,
-                filled,
-                price,
-                tp,
-                sl,
-                profit,
-                exitprice,
-                column3
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (
-            order['clientOrderId'],
-            order['datetime'],
-            order['symbol'],
-            order['side'],
-            order['usdt'],
-            order['btc'],
-            order['total'],
-            order['filled'],
-            order['exitprice'],
-            order['tp'],
-            order['sl'],
-            order['profit'],
-            order['exitprice'],
-            order['column3']
-        ))
-        conn.commit()
-    except sqlite3.Error as e:
-        print(e)
-
-    
 def cancel_order(symbol, id):
     try:
         exchange.cancel_order(id,TRADINGPAIR)
 
     except Exception as e:
         logger(f"An error occurred: {e}")
-
-
-import sqlite3
-
-def create_connection():
-    db_file = "orders.db"
-    """ create a database connection to an SQLite database """
-    conn = None;
-    try:
-        conn = sqlite3.connect(db_file)
-        print(f"SQLite version: {sqlite3.version}")
-        return conn
-    except sqlite3.Error as e:
-        print(e)
-    return conn
-
-
-def create_tables(conn):
-    """ create a table in the SQLite database """
-    try:
-        cur = conn.cursor()
-        cur.execute('''
-            CREATE TABLE IF NOT EXISTS orders (
-                clientOrderId TEXT,
-                datetime TEXT,
-                symbol TEXT,
-                side TEXT,
-                usdtbalance REAL,
-                btcbalance REAL,
-                totalbalance REAL,
-                filled REAL,
-                price REAL,
-                tp REAL,
-                sl REAL,
-                profit TEXT,
-                exitprice TEXT,
-                column3 TEXT
-            )
-        ''')
-        cur.execute('''
-            CREATE TABLE IF NOT EXISTS closed_orders (
-                clientOrderId TEXT,
-                datetime TEXT,
-                symbol TEXT,
-                side TEXT,
-                usdtbalance REAL,
-                btcbalance REAL,
-                totalbalance REAL,
-                filled REAL,
-                price REAL,
-                tp REAL,
-                sl REAL,
-                profit TEXT,
-                exitprice TEXT,
-                column3 TEXT
-            )
-        ''')
-    except sqlite3.Error as e:
-        print(e)
-
-def initDB():
-    conn = create_connection()
-    if conn is not None:
-        create_tables(conn)
-        # You can now use 'conn' to log orders to your database
-        # For example: log_order(conn, buyresponse, fee, symbol, side, usdtbalance, btcbalance, tp, sl)
-    else:
-        print("Error! cannot create the database connection.")
-
 
 async def fetch_spot_balance(exchange):
     balance = await exchange.fetch_balance()
