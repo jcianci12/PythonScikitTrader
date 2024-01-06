@@ -3,48 +3,47 @@ import datetime
 import sqlite3
 from config import TRADINGPAIR
 from db.dbinit import conn
-
 def log_order(buyresponse, fee, symbol, side, usdtbalance, btcbalance, tp, sl):
     """ log order to the SQLite database """
     try:
-        cur = conn.cursor()
-        cur.execute('''
-            INSERT INTO orders (
-                clientOrderId,
-                datetime,
+        with sqlite3.connect('orders.db') as conn:
+            cur = conn.cursor()
+            cur.execute('''
+                INSERT INTO orders (
+                    clientOrderId,
+                    datetime,
+                    symbol,
+                    side,
+                    usdtbalance,
+                    btcbalance,
+                    totalbalance,
+                    filled,
+                    price,
+                    tp,
+                    sl,
+                    profit,
+                    exitprice,
+                    column3
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                buyresponse['clientOrderId'],
+                datetime.datetime.now(),
                 symbol,
                 side,
                 usdtbalance,
                 btcbalance,
-                totalbalance,
-                filled,
-                price,
+                usdtbalance + btcbalance*buyresponse['price'],
+                buyresponse['filled']-fee,
+                buyresponse['price'],
                 tp,
                 sl,
-                profit,
-                exitprice,
-                column3
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (
-            buyresponse['clientOrderId'],
-            datetime.datetime.now(),
-            symbol,
-            side,
-            usdtbalance,
-            btcbalance,
-            usdtbalance + btcbalance*buyresponse['price'],
-            buyresponse['filled']-fee,
-            buyresponse['price'],
-            tp,
-            sl,
-            "",
-            "",
-            ""
-        ))
-        conn.commit()
-        conn.close()
+                "",
+                "",
+                ""
+            ))
     except sqlite3.Error as e:
         print(e)
+
 
 
 def setpending(pendingorder):

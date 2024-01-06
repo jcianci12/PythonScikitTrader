@@ -3,6 +3,7 @@ import datetime
 from sqlite3 import Error
 import time
 import csv
+from TrainAndTest import handle_socket_message_train
 from check_amount import check_amount, Adjust_Amount_for_fees
 from config import ORDERCOLUMNS
 
@@ -182,6 +183,9 @@ def plot_ascii_chart(data):
 
 # Define the handle_message function
 def handle_message(message):
+    if(getpending()==1):
+        return
+    setpending(1)
     print(message['k']['c'])
   
 #   if 'topic' in message and message['topic'] == 'tickers.BTCUSDT':
@@ -196,7 +200,7 @@ def handle_message(message):
         print_orders(last_price)
         plot_ascii_chart(message)
         print(datetime.datetime.now())
-
+    setpending(0)
 def startListening():
     symbol = 'BTCUSDT'
     twm = ThreadedWebsocketManager(api_key=API_KEY, api_secret=API_SECRET)
@@ -206,29 +210,15 @@ def startListening():
     def handle_socket_message(msg):
         # print(f"message type: {msg}")
         # print(msg)
-        if(msg['e']!='error' ):
+        if(msg['e']=='error' ):
             twm.stop()
     #check if pending
-        if(getpending()==1):
-            print("pending")
         else:
-
-            #if not pending
-            #set to pending while we handle
-            setpending(1)
-            handle_message(msg)
-            # twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
-
-            setpending(0)
+            handle_message(msg)  
 
     twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)
+    # twm.start_kline_socket(handle_socket_message_train, symbol,'5m')
 
-    # multiple sockets can be started
-    # twm.start_depth_socket(callback=handle_socket_message, symbol=symbol)
-
-    # or a multiplex socket can be started like this
-    # see Binance docs for stream names
-    twm.join()
-
+    twm.join()   
 
 startListening()
