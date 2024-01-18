@@ -3,7 +3,6 @@ import datetime
 from sqlite3 import Error
 import time
 import csv
-from TrainAndTest import handle_socket_message_train
 from check_amount import check_amount, Adjust_Amount_for_fees
 from config import ORDERCOLUMNS
 
@@ -11,7 +10,7 @@ import asciichartpy
 from binance import ThreadedWebsocketManager
 from KEYS import API_KEY,API_SECRET
 from api import  exchange, get_free_balance
-from db.dbops import fetchAllOrders, getpending,  save_closed_order, save_updated_prices,  setpending
+from db.dbops import fetchAllOrders, getpending, remove_closed_order_from_open_orders,  save_closed_order, save_updated_prices,  setpending
 from functions.logger import logger
 from messengerservice import send_telegram_message
 
@@ -20,6 +19,7 @@ from config import TRADINGPAIR
 orders = []
 order_refresh_time = 0
 trade_refresh_time = 0
+dblocked=0
 
 def refresh_orders():
     """ Refresh orders from the SQLite database """
@@ -67,7 +67,6 @@ def check_orders(testmode, symbol, market_price):
         refresh_orders()
         
     # Initialize a boolean flag to False
-    changed = False
 
     # Check for open orders that have reached their take profit or stop loss prices
     for order in orders:
@@ -92,7 +91,8 @@ def check_orders(testmode, symbol, market_price):
                     try:
                         order_result = exchange.create_market_order(symbol, new_side, amount)
                         logger("Order closed:",order_result)
-                        save_closed_order(order)
+
+
                         fee =order_result['fees'][0]['cost']
                         close_price = order_result['price']
                         # Calculate the profit or loss
@@ -103,10 +103,15 @@ def check_orders(testmode, symbol, market_price):
                         order["usdt"]=usdt
                         order['btc']=btc
                         order['total']=(usdt+(btc*close_price))
+
+
                     except Exception as e:
                             logger("Error:", e)
                             order['profit']=e
-                    
+                                                #add the closed order to the table
+                    save_closed_order(order)
+                    #remove closed order from the orders table
+                    remove_closed_order_from_open_orders(order)
 
                     # send_telegram_message(f"Order closed|Entry:{entry_price}|Close:{close_price}|Amount|{amount}|P+L:{profit}")
                 else:
@@ -116,11 +121,9 @@ def check_orders(testmode, symbol, market_price):
                     # send_telegram_message(f"Not enough to close|Entry:{entry_price}|Close:NA|Amount|{amount}|P+L:{profit}")
 
 
-                # Set the flag to True
-                changed = True
+         
             # Save the updated orders back to the CSV file only if the flag is True
-    if changed:
-        save_updated_prices( orders)
+
 
 
 prices = []
@@ -178,14 +181,13 @@ def plot_ascii_chart(data):
 
     # Plot the prices using asciichart
     print(asciichartpy.plot(prices[-40:]))
-    print("Pending http orders:",getpending())
 
 
 # Define the handle_message function
 def handle_message(message):
-    if(getpending()==1):
-        return
-    setpending(1)
+    # if(getpending()==1):
+    #     return
+    # setpending(1)
     print(message['k']['c'])
   
 #   if 'topic' in message and message['topic'] == 'tickers.BTCUSDT':
@@ -200,7 +202,7 @@ def handle_message(message):
         print_orders(last_price)
         plot_ascii_chart(message)
         print(datetime.datetime.now())
-    setpending(0)
+    # setpending(0)
 def startListening():
     symbol = 'BTCUSDT'
     twm = ThreadedWebsocketManager(api_key=API_KEY, api_secret=API_SECRET)
@@ -214,6 +216,7 @@ def startListening():
             twm.stop()
     #check if pending
         else:
+            sleep(5)
             handle_message(msg)  
 
     twm.start_kline_socket(callback=handle_socket_message, symbol=symbol)

@@ -138,9 +138,6 @@ def trade_loop():
     confidence_scoreinc = confinc
     confidence_scoredec = confdec
 
-    confidence_scoreinc = confinc
-    confidence_scoredec = confdec
-
     usdtbalance = decimal.Decimal(get_free_balance( "USDT"))
     btcbalance = decimal.Decimal(get_free_balance( "BTC"))
     bid_price = decimal.Decimal(get_market_bid_price( "BTCUSDT"))
@@ -220,7 +217,7 @@ def handle_socket_message_train(msg):
             pass
 
 
-def startListening():
+def listento5min():
 
     symbol = 'BTCUSDT'
 
@@ -233,7 +230,7 @@ def startListening():
 
     train_twm.join()
 
-startListening()
+listento5min()
 
 
 
