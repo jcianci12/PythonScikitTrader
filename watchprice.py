@@ -2,17 +2,14 @@ from asyncio import sleep
 import datetime
 from sqlite3 import Error
 import time
-import csv
-from check_amount import check_amount, Adjust_Amount_for_fees
-from config import ORDERCOLUMNS
+from check_amount import check_amount
 
 import asciichartpy
 from binance import ThreadedWebsocketManager
 from KEYS import API_KEY,API_SECRET
 from api import  exchange, get_free_balance
-from db.dbops import fetchAllOrders, getpending, remove_closed_order_from_open_orders,  save_closed_order, save_updated_prices,  setpending
+from db.dbops import fetchAllOrders, remove_closed_order_from_open_orders,  save_closed_order
 from functions.logger import logger
-from messengerservice import send_telegram_message
 
 from config import TRADINGPAIR
 
@@ -225,3 +222,4 @@ def startListening():
     twm.join()   
 
 startListening()
+print("watchprice")

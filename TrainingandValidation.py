@@ -1,8 +1,3 @@
-import glob
-import os
-import shutil
-import joblib
-from matplotlib import pyplot as plt
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn.metrics import accuracy_score
@@ -12,10 +7,8 @@ from Simulation.assettracker import AssetTracker
 
 from Simulation.capitaltracker import CapitalTracker
 from config import *
-from functions.logger import plot_graph, logger
+from functions.logger import logger
 from functions.modelmanagement import ModelManagement
-from get_latest_model_file import compare_dates, get_latest_model_filename, get_model_filename
-from prep_data import prep_data
 
 
 class TrainingAndValidation:

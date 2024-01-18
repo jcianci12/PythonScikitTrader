@@ -1,34 +1,26 @@
 # %%
-import asyncio
 import datetime
 import decimal
-import json
 import os
 import time
 import pandas as pd
-import numpy as np
 
 
 import joblib
 from KEYS import API_KEY, API_SECRET
 from api import fetch_bybit_data_v5, get_free_balance, get_market_ask_price, get_market_bid_price
 from binance_fetch_balance import get_balance
-from functions.map_range import map_range
 from functions.modelmanagement import ModelManagement
-from get_latest_model_file import get_latest_model_filename, get_model_filename
-from get_last_ohlc_bybit import get_last_ohlc_binance
+from get_latest_model_file import get_latest_model_filename
 from logic.buylogic import buylogic
 
 from TrainingandValidation import TrainingAndValidation
 from datetime import datetime, timedelta
 
-from functions.clock import call_decide_every_n_seconds
 from config import *
 from functions.logger import logger, plot_graph
 from logic.selllogic import selllogic
 
-import multiprocessing as mp
-from messengerservice import send_telegram_message
 
 from prep_data import prep_data
 from binance import ThreadedWebsocketManager
@@ -232,7 +224,7 @@ def listento5min():
 
 listento5min()
 
-
+print("trainandtest")
 
 
 
