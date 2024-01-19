@@ -10,7 +10,7 @@ import pandas as pd
 import requests
 from KEYS import API_KEY, API_SECRET
 from config import *
-from db.dbops import log_order
+from dbfuncs.dbops import log_order
 from functions.interval_map import *
 from functions.logger import logger
 

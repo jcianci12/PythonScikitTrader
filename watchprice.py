@@ -1,6 +1,5 @@
 from asyncio import sleep
 import datetime
-from sqlite3 import Error
 import time
 from check_amount import check_amount
 
@@ -8,7 +7,7 @@ import asciichartpy
 from binance import ThreadedWebsocketManager
 from KEYS import API_KEY,API_SECRET
 from api import  exchange, get_free_balance
-from db.dbops import fetchAllOrders, remove_closed_order_from_open_orders,  save_closed_order
+from dbfuncs.dbops import fetchAllOrders, remove_closed_order_from_open_orders,  save_closed_order, setpending
 from functions.logger import logger
 
 from config import TRADINGPAIR
@@ -17,20 +16,6 @@ orders = []
 order_refresh_time = 0
 trade_refresh_time = 0
 dblocked=0
-
-def refresh_orders():
-    """ Refresh orders from the SQLite database """
-    global orders
-    global order_refresh_time
-
-    try:
-        orders = fetchAllOrders()
-
-        # Convert rows to list of dictionaries
-
-        order_refresh_time = time.time()
-    except Error as e:
-        print(e)
 
 
 # Define constants
@@ -54,17 +39,16 @@ def check_price_reached(market_price, take_profit_price, stop_loss_price, side):
 
 
 def check_orders(testmode, symbol, market_price):
-    
 
 
-    orders = get_open_orders()
+
+
+    orders = fetchAllOrders()
 
     # Refresh the orders if it has been more than REFRESH_INTERVAL seconds since the last refresh
-    if (time.time() - order_refresh_time > REFRESH_INTERVAL):
-        refresh_orders()
+    # if (time.time() - order_refresh_time > REFRESH_INTERVAL):
+    #     refresh_orders()
         
-    # Initialize a boolean flag to False
-
     # Check for open orders that have reached their take profit or stop loss prices
     for order in orders:
         if not order['profit']:
@@ -115,6 +99,9 @@ def check_orders(testmode, symbol, market_price):
                     logger("Error",error_message)
                     profit = error_message
                     order['profit'] = profit
+                    save_closed_order(order)
+                    remove_closed_order_from_open_orders(order)
+
                     # send_telegram_message(f"Not enough to close|Entry:{entry_price}|Close:NA|Amount|{amount}|P+L:{profit}")
 
 
@@ -125,9 +112,7 @@ def check_orders(testmode, symbol, market_price):
 
 prices = []
 
-def get_open_orders():
-    global orders
-    return orders
+
 
 def is_number(s):
     if s=='': return False
@@ -138,7 +123,7 @@ def is_number(s):
         return False
     
 def print_orders(entry_price):
-    orders = get_open_orders()
+    orders = fetchAllOrders()
     # Define the width of each column
     width = 10
 

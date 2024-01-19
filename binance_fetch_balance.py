@@ -29,7 +29,7 @@ def get_balance() -> float:
     # Print the total balance amount
     return total_balance
 
-# Example usage
-symbol = 'BTC'
-balance = get_balance()
-print(f'Your balance for {symbol} is: {balance}')
+# # Example usage
+# symbol = 'BTC'
+# balance = get_balance()
+# print(f'Your balance for {symbol} is: {balance}')

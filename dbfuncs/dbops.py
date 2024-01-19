@@ -3,7 +3,6 @@ import datetime
 import random
 import sqlite3
 from config import TRADINGPAIR
-from db.dbinit import conn
 import time
 
 
