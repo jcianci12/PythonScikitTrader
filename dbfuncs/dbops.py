@@ -137,7 +137,7 @@ def save_closed_order(conn, order):
         order['btc'],
         order['total'],
         order['filled'],
-        order['exitprice'],
+        order['price'],
         order['tp'],
         order['sl'],
         order['profit'],
