@@ -16,3 +16,4 @@ RUN pip install python-telegram-bot
 RUN pip install asciichartpy
 RUN pip install python-binance
 RUN pip install flask-socketio
+# RUN chown -R vscode:vscode .

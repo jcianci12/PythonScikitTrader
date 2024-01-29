@@ -10,6 +10,7 @@ import pandas as pd
 import requests
 from KEYS import API_KEY, API_SECRET
 from config import *
+from dbfuncs.dbops import log_order
 from functions.interval_map import *
 from functions.logger import logger
 
@@ -188,33 +189,6 @@ def place_order_tp_sl(testmode, type, symbol, side,usdtbalance,btcbalance, tp, s
         logger(f"An error occurred while placing the order: {e}")
         return None
 
-def log_order(buyresponse,fee,symbol,side,usdtbalance,btcbalance,tp,sl):
- # Save the order details to a CSV file
-    with open('orders.csv', mode='a') as file:
-        writer = csv.writer(file)
-
-        # Write the header row if the file is empty
-        if file.tell() == 0:
-            writer.writerow(ORDERCOLUMNS)
-
-        # Write the order details
-        writer.writerow([
-            buyresponse['clientOrderId'],
-            datetime.datetime.now(),
-            symbol,
-            side,
-            usdtbalance,
-            btcbalance,
-            usdtbalance + btcbalance*buyresponse['price'],
-            buyresponse['filled']-fee,
-            buyresponse['price'],
-            tp,
-            sl,
-            "",
-            "",
-            ""
-        ])
-    
 def cancel_order(symbol, id):
     try:
         exchange.cancel_order(id,TRADINGPAIR)
@@ -222,10 +196,6 @@ def cancel_order(symbol, id):
     except Exception as e:
         logger(f"An error occurred: {e}")
 
-
-
-
 async def fetch_spot_balance(exchange):
     balance = await exchange.fetch_balance()
     print("Spot Balance:", balance)
-

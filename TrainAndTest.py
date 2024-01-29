@@ -1,37 +1,30 @@
 # %%
-import asyncio
 import datetime
 import decimal
-import json
 import os
 import time
 import pandas as pd
-import numpy as np
 
 
 import joblib
 from KEYS import API_KEY, API_SECRET
+from api import fetch_bybit_data_v5, get_free_balance, get_market_ask_price, get_market_bid_price
 from binance_fetch_balance import get_balance
-from functions.map_range import map_range
 from functions.modelmanagement import ModelManagement
-from get_latest_model_file import get_latest_model_filename, get_model_filename
-from get_last_ohlc_bybit import get_last_ohlc_binance
+from get_latest_model_file import get_latest_model_filename
 from logic.buylogic import buylogic
-from api import fetch_bybit_data_v5, get_market_ask_price, get_market_bid_price, get_free_balance
 
 from TrainingandValidation import TrainingAndValidation
 from datetime import datetime, timedelta
 
-from functions.clock import call_decide_every_n_seconds
 from config import *
 from functions.logger import logger, plot_graph
 from logic.selllogic import selllogic
 
-import multiprocessing as mp
-from messengerservice import send_telegram_message
 
 from prep_data import prep_data
 from binance import ThreadedWebsocketManager
+
 
 
 # %%
@@ -47,7 +40,7 @@ pd.set_option("display.max_rows", 5)
 
 symbol = "BTCUSD"
 test = True
-days = 2
+days = 14
 
 
 # %%
@@ -137,9 +130,6 @@ def trade_loop():
     confidence_scoreinc = confinc
     confidence_scoredec = confdec
 
-    confidence_scoreinc = confinc
-    confidence_scoredec = confdec
-
     usdtbalance = decimal.Decimal(get_free_balance( "USDT"))
     btcbalance = decimal.Decimal(get_free_balance( "BTC"))
     bid_price = decimal.Decimal(get_market_bid_price( "BTCUSDT"))
@@ -156,6 +146,8 @@ def trade_loop():
     # confidence_scoreinc = 1
     # buylogic(1, usdtbalance)
     if (confidence_scoreinc == 1 and confidence_scoredec == 0):
+        
+
         buylogic(data)
 
         # asyncio.run(send_telegram_message('Update'))
@@ -167,6 +159,7 @@ def trade_loop():
         logger(str("Didnt act"))
     plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
             usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
+
 
 
     
@@ -191,7 +184,7 @@ if (TESTRETRAINATSTART):
 firstrun = False
 ohlvc = pd.DataFrame()
 
-def handle_socket_message(msg):
+def handle_socket_message_train(msg):
     global firstrun
     if msg['e'] != 'error':
         # get the kline data from the message
@@ -205,12 +198,6 @@ def handle_socket_message(msg):
             "volume": float(kline["v"])
         }
 
-        # ohlcv_data = pd.DataFrame(ohlcv_data,index=[0])
-        # ohlcv_data.set_index('time', inplace=True)
-        # ohlcv_data = prep_data(ohlcv_data)
-        # ohlvc.append(ohlcv_data)
-        # print(ohlcv_data, len(ohlvc))
-        # check if the kline is closed
         if firstrun:
             trade_loop()
             firstrun = False
@@ -222,22 +209,22 @@ def handle_socket_message(msg):
             pass
 
 
-def startListening():
+def listento5min():
 
     symbol = 'BTCUSDT'
 
-    twm = ThreadedWebsocketManager(api_key=API_KEY, api_secret=API_SECRET)
+    train_twm = ThreadedWebsocketManager(api_key=API_KEY, api_secret=API_SECRET)
     # start is required to initialise its internal loop
-    twm.start()
+    train_twm.start()
     
 
-    twm.start_kline_socket(handle_socket_message, symbol,'5m')
+    train_twm.start_kline_socket(handle_socket_message_train, symbol,'5m')
 
-    twm.join()
+    train_twm.join()
 
-startListening()
+listento5min()
 
-
+print("trainandtest")
 
 
 
