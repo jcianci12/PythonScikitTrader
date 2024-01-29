@@ -40,7 +40,7 @@ pd.set_option("display.max_rows", 5)
 
 symbol = "BTCUSD"
 test = True
-days = 2
+days = 14
 
 
 # %%
