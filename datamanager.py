@@ -18,6 +18,9 @@ class DataManager:
     @property
     def trainingdata(self):
         data = prep_data(self._data)
+        #remove redundant columns that dont add value to the AI model
+        #leave the prediction columns
+        data = data.drop(EXCLUDECOLUMNS, axis=1)
         return data
     
     @property

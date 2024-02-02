@@ -150,7 +150,7 @@ def trade_loop():
     if (confidence_scoreinc == 1 and confidence_scoredec == 0):
         
 
-        buylogic(data)
+        buylogic(DataManager().tradingdata)
 
         # asyncio.run(send_telegram_message('Update'))
 
@@ -159,8 +159,8 @@ def trade_loop():
         
     else:
         logger(str("Didnt act"))
-    plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
-            usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
+    # plot_graph(bid_price, confidence_scoreinc, confidence_scoredec, portfolio_balance,
+    #         usdtbalance, btcbalance*bid_price, "performance.png", "performance.csv", GRAPHVIEWWINDOW)
 
 
 

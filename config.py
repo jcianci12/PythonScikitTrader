@@ -43,6 +43,8 @@ GRAPHVIEWWINDOW = 30
 ALLOWEDTOSELL = False
 
 ORDERCOLUMNS = ['uid', 'date','symbol', 'side',"usdt","btc","total", 'qty', 'entryprice', 'takeprofitprice', 'stoplossprice', 'takeprofitid', 'stoplossid', 'profit', 'completedtime','exitprice']
+
+
 EXCLUDECOLUMNS = ['opentime', 'open', 'high', 'low', 'close', 
                   'volume', 
                   '14 period RSI',

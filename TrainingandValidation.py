@@ -61,7 +61,7 @@ class TrainingAndValidation:
                 break
 # increase
             features = [x for x in df.columns if x not in (
-                EXCLUDECOLUMNS+PREDCOLUMNS)]
+                PREDCOLUMNS)]
 
             yinc = df["pred"]
             X = df[features]
