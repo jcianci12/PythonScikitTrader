@@ -85,7 +85,7 @@ def get_intervals(start_date, end_date, interval):
         return intervals
 
 
-def fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category):
+def fetch_candle_data(test, start_date, end_date, symbol, interval, category):
     # Get the intervals for the given date range and interval
     intervals = get_intervals(start_date, end_date, interval)
 
@@ -120,7 +120,7 @@ def fetch_bybit_data_v5(test, start_date, end_date, symbol, interval, category):
             print("Retrying after 1 minute...")
             time.sleep(60)  # Wait for 1 minute before retrying
             # Recursive call to retry fetching data
-            return fetch_bybit_data_v5(exchange, start_date, end_date, symbol, interval)
+            return fetch_candle_data(exchange, start_date, end_date, symbol, interval)
 
 # Convert the data to a DataFrame
     df_new = pd.DataFrame(data, columns=[

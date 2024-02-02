@@ -6,7 +6,7 @@ import pandas as pd
 
 
 
-from api import  fetch_bybit_data_v5, get_intervals, get_market_ask_price, get_market_bid_price,  get_free_balance,  place_order_tp_sl
+from api import  fetch_candle_data, get_intervals, get_market_ask_price, get_market_bid_price,  get_free_balance,  place_order_tp_sl
 from config import BUYTHRESHOLD, DATALENGTHFORTRADINGINDAYS, DATALENGTHFORTRAININGINDAYS, INTERVAL, TEST
 from logic.buylogic import buylogic
 from logic.selllogic import selllogic
@@ -37,7 +37,7 @@ class API_Tests(unittest.TestCase):
         symbol = 'BTCUSDT'
         interval = INTERVAL
         category = 'spot'
-        data = fetch_bybit_data_v5(True,start_date,end_date,symbol,interval,category)
+        data = fetch_candle_data(True,start_date,end_date,symbol,interval,category)
         print(data)
         self.assertIsNotNone(data)
     
@@ -88,7 +88,7 @@ class API_Tests(unittest.TestCase):
         start_date = end_date - datetime.timedelta(DATALENGTHFORTRADINGINDAYS)
 
         # fetch the kline (historical data)
-        data = fetch_bybit_data_v5(
+        data = fetch_candle_data(
             TEST, start_date, end_date, "BTCUSDT", INTERVAL, category)
         # data = old_fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",interval,category)
         # smooth the data

@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, Mock
 
-from ..api import fetch_bybit_data_v5, place_order_tp_sl
+from ..api import fetch_candle_data, place_order_tp_sl
 from config import INTERVAL, TEST
 from get_tp_sl import get_tp_sl
 from prep_data import prep_data
@@ -14,7 +14,7 @@ class TestPlaceOrder(unittest.TestCase):
             # fetch the kline (historical data)
         category = 'spot'
 
-        data = fetch_bybit_data_v5(
+        data = fetch_candle_data(
             TEST, "2024/", "end_date", "BTCUSDT", INTERVAL, category)
         # data = old_fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",interval,category)
         # smooth the data

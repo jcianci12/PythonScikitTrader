@@ -8,7 +8,7 @@ import pandas as pd
 
 import joblib
 from KEYS import API_KEY, API_SECRET
-from api import fetch_bybit_data_v5, get_free_balance, get_market_ask_price, get_market_bid_price
+from api import fetch_candle_data, get_free_balance, get_market_ask_price, get_market_bid_price
 from binance_fetch_balance import get_balance
 from datamanager import DataManager
 from functions.modelmanagement import ModelManagement
@@ -57,7 +57,7 @@ def retrain(start_date, end_date):
     # fetch the kline (historical data)
     
     
-    DataManager().data = fetch_bybit_data_v5(
+    DataManager().data = fetch_candle_data(
         True, start_date, end_date, "BTCUSDT", INTERVAL, category)
 
     logger("Training data sample before prep:",
@@ -118,7 +118,7 @@ def trade_loop():
     start_date = end_date - timedelta(DATALENGTHFORTRADINGINDAYS)
 
     # fetch the kline (historical data)
-    DataManager().data = fetch_bybit_data_v5(
+    DataManager().data = fetch_candle_data(
         TEST, start_date, end_date, "BTCUSDT", INTERVAL, category)
     # data = old_fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",interval,category)
     # smooth the data
@@ -172,7 +172,7 @@ if (TESTRETRAINATSTART):
     start_date = end_date-timedelta(1)
     retrain(end_date=datetime.now(), start_date=start_date)
     logger("Testing prediction")
-    data = fetch_bybit_data_v5(
+    data = fetch_candle_data(
         TEST, start_date, end_date, "BTCUSDT", INTERVAL, 'spot')
     confinc = getconfidencescore(data)
     confdec = getconfidencescore(data)
