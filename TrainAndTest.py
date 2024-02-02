@@ -10,6 +10,7 @@ import joblib
 from KEYS import API_KEY, API_SECRET
 from api import fetch_bybit_data_v5, get_free_balance, get_market_ask_price, get_market_bid_price
 from binance_fetch_balance import get_balance
+from datamanager import DataManager
 from functions.modelmanagement import ModelManagement
 from get_latest_model_file import get_latest_model_filename
 from logic.buylogic import buylogic
@@ -54,15 +55,18 @@ def retrain(start_date, end_date):
     category = 'spot'
 
     # fetch the kline (historical data)
-    trainingdata = fetch_bybit_data_v5(
+    
+    
+    DataManager().data = fetch_bybit_data_v5(
         True, start_date, end_date, "BTCUSDT", INTERVAL, category)
+
     logger("Training data sample before prep:",
-           trainingdata.tail(1).to_string())
+           DataManager().sampledata)
 
     # smooth the data
-    trainingdata = prep_data(trainingdata)
+    trainingdata = DataManager().trainingdata
     logger("Training data sample after prep:",
-           trainingdata.tail(1).to_string())
+           trainingdata)
     # trainingdata.tail()
     validator = TrainingAndValidation()
     # retrain the data
@@ -92,7 +96,6 @@ def getconfidencescore(data,modelname):
 
 # we only want the last row to predict on
 
-    data = data.drop(EXCLUDECOLUMNS+PREDCOLUMNS, axis=1)
     model = model[modelname]
     prediction = model.predict(data)
     # logger("prediction",prediction)
@@ -115,14 +118,13 @@ def trade_loop():
     start_date = end_date - timedelta(DATALENGTHFORTRADINGINDAYS)
 
     # fetch the kline (historical data)
-    data = fetch_bybit_data_v5(
+    DataManager().data = fetch_bybit_data_v5(
         TEST, start_date, end_date, "BTCUSDT", INTERVAL, category)
     # data = old_fetch_bybit_data_v5(True,start_date,end_date,"BTCUSDT",interval,category)
     # smooth the data
-    data = prep_data(data)
 
 
-    decisiondata = data.tail(1)
+    decisiondata = DataManager().tradingdata
     logger("making decision based on ", decisiondata.to_json())
     confinc = getconfidencescore(decisiondata,"ensembleinc")
     confdec = getconfidencescore(decisiondata,"ensembledec")
@@ -208,6 +210,7 @@ def handle_socket_message_train(msg):
             # if no, then wait for the next message
             pass
 
+trade_loop()
 
 def listento5min():
 
@@ -225,7 +228,6 @@ def listento5min():
 listento5min()
 
 print("trainandtest")
-
 
 
 

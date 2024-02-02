@@ -113,7 +113,6 @@ def prep_data(data):
     data= _get_indicator_data(data)
     data = _produce_movement_indicators(data)
     data = add_time_columns(data,"opentime")
-    data.to_csv("new.csv")
     #produce indicators
     #drop na data
     data = (
