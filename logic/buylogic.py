@@ -1,5 +1,5 @@
 import decimal
-from api import get_free_balance, get_market_ask_price,  get_min_qty_binance, place_order_tp_sl
+from api import get_current_price, get_free_balance, get_market_ask_price,  get_min_qty_binance, place_order_tp_sl
 from check_amount import get_investment_amount
 from config import *
 from datamanager import DataManager
@@ -18,7 +18,7 @@ def buylogic(data):
     logger("Decided to buy %", MAXBUYPERCENTOFCAPITAL, " of USDT balance. Checking if enough...")
 
     side = 'buy'
-    tp,sl = get_tp_sl(DataManager().data,len(data)-1)
+    tp,sl = get_tp_sl(DataManager().data,len(data)-1,get_current_price(SYMBOL))
     # tp,sl = tpsl_smallest_movement()
     amount,market_price,buyamountinbtc,buyamountinusdt,usdtbalance,error = get_investment_amount(side)
     # Check if the transaction amount is greater than the minimum transaction size

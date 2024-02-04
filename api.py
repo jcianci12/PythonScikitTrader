@@ -84,6 +84,18 @@ def get_intervals(start_date, end_date, interval):
         print(f'intervals: {intervals}')
         return intervals
 
+def get_current_price(symbol):
+    try:
+        ticker = exchange.fetch_ticker(symbol)
+        if 'last' in ticker:
+            return ticker['last']
+        else:
+            print("No 'last' price in the ticker response.")
+            return None
+    except ccxt.BaseError as e:
+        print("An error occurred while fetching the current price:")
+        print(e)
+        return None
 
 def fetch_candle_data(test, start_date, end_date, symbol, interval, category):
     # Get the intervals for the given date range and interval

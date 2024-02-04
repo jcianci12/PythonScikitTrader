@@ -8,7 +8,7 @@ import pandas as pd
 
 import joblib
 from KEYS import API_KEY, API_SECRET
-from api import fetch_candle_data, get_free_balance, get_market_ask_price, get_market_bid_price
+from api import fetch_candle_data, get_current_price, get_free_balance, get_market_ask_price, get_market_bid_price
 from binance_fetch_balance import get_balance
 from datamanager import DataManager
 from functions.modelmanagement import ModelManagement
@@ -209,19 +209,18 @@ def handle_socket_message_train(msg):
         else:
             # if no, then wait for the next message
             pass
-
+print(get_current_price(SYMBOL))
 trade_loop()
 
 def listento5min():
 
-    symbol = 'BTCUSDT'
 
     train_twm = ThreadedWebsocketManager(api_key=API_KEY, api_secret=API_SECRET)
     # start is required to initialise its internal loop
     train_twm.start()
     
 
-    train_twm.start_kline_socket(handle_socket_message_train, symbol,'5m')
+    train_twm.start_kline_socket(handle_socket_message_train, SYMBOL,'5m')
 
     train_twm.join()
 

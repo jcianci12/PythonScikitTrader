@@ -8,9 +8,12 @@ from config import TRADINGPAIR
 
 min_movement = calculate_smallest_movement(20,TRADINGPAIR)
 
-def get_tp_sl(data,row_position):
-
-    entry_price = data['open'][row_position]
+def get_tp_sl(data,row_position,latestprice):
+    # when we are 
+    if(latestprice):
+        entry_price = latestprice
+    else:
+        entry_price = data['open'][row_position]
 
    # shift and roll the data to get the highest high and lowest low in a lookahead window
     highs = getHighs(data,row_position)

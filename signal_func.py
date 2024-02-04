@@ -12,7 +12,7 @@ def signal_func(row, data, window_position):
     row_position = data.index.get_loc(row.name)
 
     # calculate the takeprofit and stoploss thresholds from the average true range and the current price
-    tp, sl = get_tp_sl(data,row_position)
+    tp, sl = get_tp_sl(data,row_position,None)
     # get the integer location of the row in the data index
 
     # shift and roll the data to get the highest high and lowest low in a lookahead window
