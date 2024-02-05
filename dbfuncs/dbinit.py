@@ -1,9 +1,4 @@
-
-
-
-
 from dbfuncs.dbops import with_db_lock
-
 
 @with_db_lock
 def create_tables(conn):
@@ -53,8 +48,9 @@ def create_tables(conn):
         )
     ''')
     cur.execute('''
-        INSERT INTO state (rowid, pendingorder) VALUES (?, ?)
-    ''', (1, 0))  # or whatever initial value you want for 'pendingorder'
+        INSERT OR IGNORE INTO state (rowid, pendingorder) VALUES (?, ?)
+    ''', (1, 0))
+
 
 def initDB():
     create_tables()

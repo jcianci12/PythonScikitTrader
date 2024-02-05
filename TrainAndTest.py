@@ -25,8 +25,7 @@ from logic.selllogic import selllogic
 
 from prep_data import prep_data
 from binance import ThreadedWebsocketManager
-
-
+import dbfuncs.dbinit
 
 # %%
 """

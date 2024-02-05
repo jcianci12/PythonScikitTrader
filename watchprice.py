@@ -9,6 +9,7 @@ from KEYS import API_KEY,API_SECRET
 from api import  exchange, get_free_balance
 from dbfuncs.dbops import fetchAllOrders, remove_closed_order_from_open_orders,  save_closed_order, setpending
 from functions.logger import logger
+import dbfuncs.dbinit
 
 from config import TRADINGPAIR
 
@@ -90,7 +91,11 @@ def check_orders(testmode, symbol, market_price):
                             logger("Error:", e)
                             order['profit']=e
                                                 #add the closed order to the table
+                            
+                    # if (order[9]['profit']!="InvalidOrder('binance {"code":-1013,"msg":"Filter failure: NOTIONAL"}')") :
                     save_closed_order(order)
+
+                           
                     #remove closed order from the orders table
                     remove_closed_order_from_open_orders(order)
 
