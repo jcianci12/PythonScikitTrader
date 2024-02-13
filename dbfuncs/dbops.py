@@ -193,3 +193,40 @@ def fetchAllOrders(conn):
     rows = cur.fetchall()
     orders = [dict(zip([column[0] for column in cur.description], row)) for row in rows]
     return orders
+
+import datetime
+
+@with_db_lock
+def get_last_5_orders(conn):
+    """ Get the last 5 orders with their time elapsed since placement and profit """
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT datetime, profit
+        FROM closed_orders
+        ORDER BY datetime DESC
+        LIMIT 5
+    ''')
+    orders = cur.fetchall()
+    order_texts = []
+    current_time = datetime.datetime.now()
+    for order in orders:
+        order_time = datetime.datetime.strptime(order[0], '%Y-%m-%d %H:%M:%S.%f')
+        time_elapsed = (current_time - order_time).total_seconds() // 60
+        order_texts.append(f"Order placed {int(time_elapsed)} mins ago with profit {order[1]}")
+    return '\n'.join(order_texts)
+
+import datetime
+
+import decimal
+
+@with_db_lock
+def sum_all_profits(conn):
+    """ Get the sum of profits from all orders """
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT SUM(CAST(profit AS DECIMAL)) AS total_profit
+        FROM closed_orders
+    ''')
+    total_profit = cur.fetchone()[0]
+    return decimal.Decimal(total_profit)
+

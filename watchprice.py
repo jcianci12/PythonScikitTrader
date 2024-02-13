@@ -7,7 +7,7 @@ import asciichartpy
 from binance import ThreadedWebsocketManager
 from KEYS import API_KEY,API_SECRET
 from api import  exchange, get_free_balance
-from dbfuncs.dbops import fetchAllOrders, remove_closed_order_from_open_orders,  save_closed_order, setpending
+from dbfuncs.dbops import fetchAllOrders, get_last_5_orders, remove_closed_order_from_open_orders,  save_closed_order, setpending, sum_all_profits
 from functions.logger import logger
 import dbfuncs.dbinit
 
@@ -92,9 +92,10 @@ def check_orders(testmode, symbol, market_price):
                             order['profit']=e
                                                 #add the closed order to the table
                             
-                    # if (order[9]['profit']!="InvalidOrder('binance {"code":-1013,"msg":"Filter failure: NOTIONAL"}')") :
-                    save_closed_order(order)
-
+                    if ('usdt' in order):                    
+                        save_closed_order(order)
+                    else:
+                        logger("Could not close order",order)
                            
                     #remove closed order from the orders table
                     remove_closed_order_from_open_orders(order)
@@ -185,10 +186,14 @@ def handle_message(message):
             check_orders(True, TRADINGPAIR, last_price)
         # Call the plot_ascii_chart function with the message as an argument
             # Clear the console
+
         print("\033[H\033[J")
         print_orders(last_price)
+        # print(get_last_5_orders())
         plot_ascii_chart(message)
-        print(datetime.datetime.now())
+
+        print(sum_all_profits())
+        # print(datetime.datetime.now())
     # setpending(0)
 def startListening():
     symbol = 'BTCUSDT'
